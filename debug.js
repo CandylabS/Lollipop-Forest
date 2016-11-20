@@ -5,3 +5,7 @@
 // ===================================================
 
 require('total.js').http('debug');
+
+// F.on('load', function(){
+// 	F.install('module', 'paper');
+// })

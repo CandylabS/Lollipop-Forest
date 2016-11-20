@@ -1,3 +1,2 @@
-name	:	Lollipop-Forest
-author	:	Alice Chen
-version	:	1.0.0
+allow-compile-script        : false
+directory-public-virtual    : /bower_components/
