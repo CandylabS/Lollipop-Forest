@@ -56,14 +56,14 @@ RUN BY ITSELF (system music by Brian Eno)
 **AudioBuffer.SourceNode**
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
 1. Major / Minor
-	</br>* key -> scale
-	</br>* 3rd / 5th / 7th …
+* key -> scale
+* 3rd / 5th / 7th …
 <br>2. Arpeggiator
-	</br>* C2, C3, C4, C5, C6 …
+* C2, C3, C4, C5, C6 …
 <br>3. Arpeggiator
-	* up & down
-	* random
-	* …
+* up & down
+* random
+* …
 <br>4. Chord Progression
 
 ### FX	
