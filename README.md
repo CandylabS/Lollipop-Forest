@@ -55,21 +55,21 @@
 ### II. Notes/Beats	
 **AudioBuffer.SourceNode**
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
-</br>1. Major / Minor
-> key -> scale
-> 3rd / 5th / 7th …
-<br>2. Octave
-> C2, C3, C4, C5, C6 …
-<br>3. Arpeggiator
-> up & down
-> random
-> …
-<br>4. Chord Progression
+</br>* Major / Minor
+</br>** key -> scale
+</br> ** 3rd / 5th / 7th …
+</br>* Octave
+</br>** C2, C3, C4, C5, C6 …
+</br>* Arpeggiator
+</br>** up & down
+</br>** random
+</br> …
+</br>4. Chord Progression
 
 ### FX	
 SYNTHI
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/SYNTHI.jpeg?raw=true)
-AudioContext.FilterNode
+</br>AudioContext.FilterNode
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-discreet-full.png?raw=true)
 * Reverberation
 * EQ (convolution & graphic)
