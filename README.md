@@ -58,13 +58,13 @@ RUN BY ITSELF (system music by Brian Eno)
 1. Major / Minor
 	* key -> scale
 	* 3rd / 5th / 7th …
-2. Octaves
+<br>2. Arpeggiator
 	* C2, C3, C4, C5, C6 …
-3. Arpeggiator
+<br>3. Arpeggiator
 	* up & down
 	* random
 	* …
-4. Chord Progression
+<br>4. Chord Progression
 
 ### FX	
 SYNTHI
@@ -95,7 +95,7 @@ Interaction in “forest”
 * switch background music to different mood
 * throw in some “noise”
 
-## VARIARION
+## VARIATION
 spiral rasterization
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Rasterize.png?raw=true)
 
