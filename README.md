@@ -20,8 +20,8 @@ Method B: **Synthesizer** (stripes)
 
 ### COMPANION’s MODE
 *arrange drums or baseline for an existing melody*
-start from a melody track (ON/OFF)
-melody can be (i)made from loop-editor (“lollipops”) OR (ii)~~feed from music box tape holes~~ **
+</br>start from a melody track (ON/OFF)
+</br>melody can be (i)made from loop-editor (“lollipops”) OR (ii)~~feed from music box tape holes~~ **
 
 ### EVOLUTION MODE
 *ambient music*
@@ -34,6 +34,7 @@ RUN BY ITSELF (system music by Brian Eno)
 
 ## UI
 ### I. Dynamics
+
 ##### User Scenario:
 * Create the lollipop
 * Get notes
@@ -41,6 +42,7 @@ RUN BY ITSELF (system music by Brian Eno)
 * Playback
 * Reset /Preset
 * …
+
 ##### Checklist:
 * Roll the tape (starting point)
 * Roll different layers
@@ -49,6 +51,7 @@ RUN BY ITSELF (system music by Brian Eno)
 * Preview of a lollipop playback
 * move one layer to another???
 * …
+
 ### II. Notes/Beats	
 **AudioBuffer.SourceNode**
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
@@ -61,7 +64,8 @@ RUN BY ITSELF (system music by Brian Eno)
 	* up & down
 	* random
 	* …
-4. Chord Progression	
+4. Chord Progression
+
 ### FX	
 SYNTHI
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/SYNTHI.jpeg?raw=true)
@@ -73,13 +77,16 @@ AudioContext.FilterNode
 * Chorus
 * Fading (ASDR)
 * …
+
 ### Mastering
 Interaction in “forest”
+
 ##### Global:
 * play / pause all
 * set starting point
 * set tempo
 * settings…
+
 ##### While playing:
 * pan & volume
 * mute track
@@ -87,6 +94,7 @@ Interaction in “forest”
 * add track (* wait until next available beat!! )
 * switch background music to different mood
 * throw in some “noise”
+
 ## VARIARION
 spiral rasterization
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Rasterize.png?raw=true)
