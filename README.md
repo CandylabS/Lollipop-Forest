@@ -55,10 +55,10 @@
 ### II. Notes/Beats	
 **AudioBuffer.SourceNode**
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
-1. Major / Minor
+</br>1. Major / Minor
 > key -> scale
 > 3rd / 5th / 7th …
-<br>2. Arpeggiator
+<br>2. Octave
 > C2, C3, C4, C5, C6 …
 <br>3. Arpeggiator
 > up & down
@@ -70,7 +70,7 @@
 SYNTHI
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/SYNTHI.jpeg?raw=true)
 AudioContext.FilterNode
-![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-discreet-full.png?raw=true)
+</br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-discreet-full.png?raw=true)
 * Reverberation
 * EQ (convolution & graphic)
 * Echo
@@ -97,7 +97,7 @@ Interaction in “forest”
 
 ## VARIATION
 spiral rasterization
-![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Rasterize.png?raw=true)
+</br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Rasterize.png?raw=true)
 
 
 
