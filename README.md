@@ -1,27 +1,28 @@
 # Proposal
-## DEMO
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/demo.png?raw=true)
 ## SKELETON
 ### BEGINNER’s MODE
 *Lollipops are pre-made.*
-</br><strong>Class A: Drums.</strong>
+Class A: Drums.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
-</br><strong>Class B: Bass.</strong>
+Class B: Bass.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
-</br><strong>Class C: Sounds.</strong>
+Class C: Sounds.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon3.png?raw=true)
 ### LOOP-EDITOR MODE
 *“dry” music*
 * Drum Tempo
 * Monophonic Rhythm
-<br>Method A: **Sampler** (dots)
+Method A: **Sampler** (dots)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Sampler.png?raw=true)
-<br>Method B: **Synthesizer** (stripes)
+Method B: **Synthesizer** (stripes)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Synthesizer.png?raw=true)
-### COMPANION MODE
+
+### COMPANION’s MODE
 *arrange drums or baseline for an existing melody*
-</br>start from a melody track (ON/OFF)
-</br>melody can be (i)made from loop-editor (“lollipops”) OR (ii)feed from music box tape holes
+start from a melody track (ON/OFF)
+melody can be (i)made from loop-editor (“lollipops”) OR (ii)~~feed from music box tape holes~~ **
+
 ### EVOLUTION MODE
 *ambient music*
 RUN BY ITSELF (system music by Brian Eno)
@@ -30,6 +31,7 @@ RUN BY ITSELF (system music by Brian Eno)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Circles.png?raw=true)
 **trajectory change
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/MetaBalls.png?raw=true)
+
 ## UI
 ### I. Dynamics
 ##### User Scenario:
@@ -84,8 +86,8 @@ Interaction in “forest”
 * delete / unable track
 * add track (* wait until next available beat!! )
 * switch background music to different mood
-* throw in some “noise” (AH~~)
-## VARIATIONS
+* throw in some “noise”
+## VARIARION
 spiral rasterization
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Rasterize.png?raw=true)
 
