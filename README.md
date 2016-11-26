@@ -6,9 +6,9 @@
 *Lollipops are pre-made.*
 </br></br><strong>Class A: Drums.</strong>
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
-</br>Class B: Bass.
+</br><strong>Class B: Bass.</strong>
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
-</br>Class C: Sounds.
+</br><strong>Class C: Sounds.</strong>
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon3.png?raw=true)
 ### LOOP-EDITOR MODE
 *“dry” music*
@@ -18,6 +18,7 @@
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Sampler.png?raw=true)
 <br>Method B: **Synthesizer** (stripes)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Synthesizer.png?raw=true)
+</br>
 ### COMPANION MODE
 *arrange drums or baseline for an existing melody*
 </br>start from a melody track (ON/OFF)
