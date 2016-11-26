@@ -1,12 +1,10 @@
 # Proposal
-#lollipop-forest/PaperDraft
-
 ## DEMO
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/demo.png?raw=true)
 ## SKELETON
 ### BEGINNER’s MODE
 *Lollipops are pre-made.*
-Class A: Drums.
+</br>Class A: Drums.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
 Class B: Bass.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
