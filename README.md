@@ -27,9 +27,9 @@
 *ambient music*
 <br>RUN BY ITSELF (system music by Brian Eno)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/discreetmusic.jpg?raw=true)
-</br>**add self rotation
+</br>* add self rotation
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Circles.png?raw=true)
-</br>**<strong>trajectory change</strong>
+</br>* trajectory change
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/MetaBalls.png?raw=true)
 
 ## UI
