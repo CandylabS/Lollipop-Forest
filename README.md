@@ -4,7 +4,7 @@
 ## SKELETON
 ### BEGINNER’s MODE
 *Lollipops are pre-made.*
-</br></br><strong>Class A: Drums.</strong>
+</br><strong>Class A: Drums.</strong>
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
 </br><strong>Class B: Bass.</strong>
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
@@ -18,11 +18,10 @@
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Sampler.png?raw=true)
 <br>Method B: **Synthesizer** (stripes)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Synthesizer.png?raw=true)
-</br>
 ### COMPANION MODE
 *arrange drums or baseline for an existing melody*
 </br>start from a melody track (ON/OFF)
-</br>melody can be ①made from loop-editor (“lollipops”) OR ② ~~feed from music box tape holes~~ **
+</br>melody can be (i)made from loop-editor (“lollipops”) OR (ii)feed from music box tape holes
 ### EVOLUTION MODE
 *ambient music*
 RUN BY ITSELF (system music by Brian Eno)
