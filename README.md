@@ -1,5 +1,5 @@
 # Proposal
-![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/demo.png?raw=true)
+![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/demo.png?raw=true =250x)
 ## SKELETON
 ### BEGINNER’s MODE
 *Lollipops are pre-made.*
