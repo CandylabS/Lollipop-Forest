@@ -3,7 +3,7 @@
 ## SKELETON
 ### BEGINNER’s MODE
 *Lollipops are pre-made.*
-Class A: Drums.
+</br>Class A: Drums.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
 Class B: Bass.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
@@ -56,10 +56,10 @@ RUN BY ITSELF (system music by Brian Eno)
 **AudioBuffer.SourceNode**
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
 1. Major / Minor
-	* key -> scale
-	* 3rd / 5th / 7th …
+	</br>* key -> scale
+	</br>* 3rd / 5th / 7th …
 <br>2. Arpeggiator
-	* C2, C3, C4, C5, C6 …
+	</br>* C2, C3, C4, C5, C6 …
 <br>3. Arpeggiator
 	* up & down
 	* random
