@@ -6,22 +6,22 @@
 *Lollipops are pre-made.*
 </br></br><strong>Class A: Drums.</strong>
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
-Class B: Bass.
+</br>Class B: Bass.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
-Class C: Sounds.
+</br>Class C: Sounds.
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon3.png?raw=true)
 ### LOOP-EDITOR MODE
 *“dry” music*
 * Drum Tempo
 * Monophonic Rhythm
-Method A: **Sampler** (dots)
+<br>Method A: **Sampler** (dots)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Sampler.png?raw=true)
-Method B: **Synthesizer** (stripes)
+<br>Method B: **Synthesizer** (stripes)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Synthesizer.png?raw=true)
-### COMPANION’s MODE
+### COMPANION MODE
 *arrange drums or baseline for an existing melody*
-start from a melody track (ON/OFF)
-melody can be ①made from loop-editor (“lollipops”) OR ② ~~feed from music box tape holes~~ **
+</br>start from a melody track (ON/OFF)
+</br>melody can be ①made from loop-editor (“lollipops”) OR ② ~~feed from music box tape holes~~ **
 ### EVOLUTION MODE
 *ambient music*
 RUN BY ITSELF (system music by Brian Eno)
