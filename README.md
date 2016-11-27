@@ -19,7 +19,7 @@
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Sampler.png?raw=true)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Synthesizer.png?raw=true)
 
-### COMPANION’s MODE
+### COMPANION MODE
 *arrange drums or baseline for an existing melody*
 </br>start from a melody track (ON/OFF)
 </br>melody can be (i)made from loop-editor (“lollipops”) OR (ii)~~feed from music box tape holes~~ **
