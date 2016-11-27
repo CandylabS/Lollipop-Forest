@@ -53,7 +53,7 @@
 * …
 
 ### II. Notes/Beats	
-**AudioBuffer.SourceNode**
+[**AudioBuffer.SourceNode**](http://teropa.info/blog/2016/07/28/javascript-systems-music.html)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
 </br> 1. Major / Minor
 * key -> scale
@@ -73,7 +73,7 @@
 ### FX	
 SYNTHI
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/SYNTHI.jpeg?raw=true)
-</br>AudioContext.FilterNode
+</br>[AudioContext.FilterNode](http://teropa.info/blog/2016/07/28/javascript-systems-music.html)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-discreet-full.png?raw=true)
 * Reverberation
 * EQ (convolution & graphic)
