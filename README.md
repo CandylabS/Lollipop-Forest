@@ -12,7 +12,7 @@
 
 ### LOOP-EDITOR MODE
 *“dry” music*
-(i)Drum Tempo OR (ii)Monophonic Rhythm
+</br>(i)Drum Tempo OR (ii)Monophonic Rhythm
 * Method A: **Sampler** (dots)
 * Method B: **Synthesizer** (stripes)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Sampler.png?raw=true)
