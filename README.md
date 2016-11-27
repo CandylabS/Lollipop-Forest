@@ -79,8 +79,7 @@
 * Reverberation
 * EQ (convolution & graphic)
 * Echo
-* Chorus
-* Fading (ASDR)
+* Envelope
 * …
 
 ### Mastering
