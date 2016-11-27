@@ -6,6 +6,7 @@
 * Class A: Drums.
 * Class B: Bass.
 * Class C: Sounds.
+</br> [Example: Adventure Machine](http://www.madeon.fr/adventuremachine/)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon3.png?raw=true)
@@ -53,7 +54,7 @@
 * …
 
 ### II. Notes/Beats	
-[**AudioBuffer.SourceNode**](http://teropa.info/blog/2016/07/28/javascript-systems-music.html)
+[AudioBuffer.SourceNode](http://teropa.info/blog/2016/07/28/javascript-systems-music.html)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
 </br> 1. Major / Minor
 * key -> scale
@@ -71,7 +72,7 @@
 </br> 4. Chord Progression
 
 ### FX	
-SYNTHI
+[SYNTHI](https://github.com/AlexNisnevich/synthi-js)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/SYNTHI.jpeg?raw=true)
 </br>[AudioContext.FilterNode](http://teropa.info/blog/2016/07/28/javascript-systems-music.html)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-discreet-full.png?raw=true)
