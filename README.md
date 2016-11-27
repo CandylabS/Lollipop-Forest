@@ -3,9 +3,9 @@
 ## SKELETON
 ### BEGINNER’s MODE
 *Lollipops are pre-made.*
-</br>Class A: Drums.
-</br>Class B: Bass.
-</br>Class C: Sounds.
+</br>* Class A: Drums.
+</br>* Class B: Bass.
+</br>* Class C: Sounds.
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon1.png?raw=true)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon2.png?raw=true)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Madeon3.png?raw=true)
