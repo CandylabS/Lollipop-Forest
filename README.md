@@ -22,7 +22,7 @@
 ### COMPANION MODE
 *arrange drums or baseline for an existing melody*
 </br>start from a melody track (ON/OFF)
-</br>melody can be (i)made from loop-editor (“lollipops”) OR (ii)~~feed from music box tape holes~~ **
+</br>melody can be (i)made from loop-editor (“lollipops”) OR (ii)feed from graphics, see also in VARIATION.
 
 ### EVOLUTION MODE
 *ambient music*
