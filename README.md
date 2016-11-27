@@ -54,7 +54,7 @@
 
 ### II. Notes/Beats	
 **AudioBuffer.SourceNode**
-![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
+</br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-airports-system.png?raw=true)
 </br> 1. Major / Minor
 * key -> scale
 * 3rd / 5th / 7th 
