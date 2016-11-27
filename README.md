@@ -28,7 +28,7 @@
 *ambient music*
 <br>RUN BY ITSELF (system music by Brian Eno)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/discreetmusic.jpg?raw=true)
-</br>* add self rotation
+</br></br>* add self rotation
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/Circles.png?raw=true)
 </br>* trajectory change
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/MetaBalls.png?raw=true)
@@ -74,7 +74,7 @@
 ### FX	
 [SYNTHI](https://github.com/AlexNisnevich/synthi-js)
 ![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/SYNTHI.jpeg?raw=true)
-</br>[AudioContext.FilterNode](http://teropa.info/blog/2016/07/28/javascript-systems-music.html)
+</br></br>[AudioContext.FilterNode](http://teropa.info/blog/2016/07/28/javascript-systems-music.html)
 </br>![Alt text](https://github.com/CandylabS/Lollipop-Forest/blob/master/public/img/screenshots/webaudio-graph-discreet-full.png?raw=true)
 * Reverberation
 * EQ (convolution & graphic)
