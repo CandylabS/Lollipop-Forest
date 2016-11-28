@@ -1,126 +1,86 @@
-   var leftPath = new Path({
-        strokeColor: 'red',
-        opacity: 0.5
-    });
+var values = {
+    paths: 100,
+    minPoints: 5,
+    maxPoints: 15,
+    minRadius: 30,
+    maxRadius: 90
+};
 
-    var rightPath = new Path({
-        strokeColor: 'green',
-        opacity: 0.5
-    });
+var hitOptions = {
+    segments: true,
+    stroke: true,
+    fill: true,
+    tolerance: 5
+};
 
-    var amount = 8;
-    var step = view.size.width / (amount + 1);
-    var flip = false;
+var radiusDelta = values.maxRadius - values.minRadius;
+var pointsDelta = values.maxPoints - values.minPoints;
+for (var i = 0; i < values.paths; i++) {
+    var radius = values.minRadius + Math.random() * radiusDelta;
+    var points = values.minPoints + Math.floor(Math.random() * pointsDelta);
+    var path = createBlob(view.size * Point.random(), radius, points);
+    var lightness = (Math.random() - 0.5) * 0.4 + 0.4;
+    var hue = Math.random() * 360;
+    path.fillColor = {
+        hue: hue,
+        saturation: 1,
+        lightness: lightness
+    };
+    path.strokeColor = 'black';
+};
 
-    for (var i = 0; i <= amount; i++) {
-        leftPath.add(new Point(i * step, 0));
-        rightPath.add(new Point(i * step, 0));
+function createBlob(center, maxRadius, points) {
+    var path = new Path();
+    path.closed = true;
+    for (var i = 0; i < points; i++) {
+        var delta = new Point({
+            length: (maxRadius * 0.5) + (Math.random() * maxRadius * 0.5),
+            angle: (360 / points) * i
+        });
+        path.add(center + delta);
     }
+    path.smooth();
+    return path;
+}
 
-    var group = new Group({
-        children: [leftPath, rightPath],
-        applyMatrix: false,
-        strokeWidth: 30,
-        strokeJoin: 'round',
-        strokeCap: 'butt',
-        pivot: leftPath.position,
-        position: view.center
-    });
+var segment, path;
 
-    function onMouseDown() {
-        flip = !flip;
+// function onMouseDown(event) {
+//     segment = path = null;
+//     var hitResult = project.hitTest(event.point, hitOptions);
+
+//     if (event.modifiers.shift) {
+//         if (hitResult.type == 'segment') {
+//             hitResult.segment.remove();
+//         };
+//         return;
+//     }
+
+//     if (hitResult) {
+//         path = hitResult.item;
+//         if (hitResult.type == 'segment') {
+//             segment = hitResult.segment;
+//         } else if (hitResult.type == 'stroke') {
+//             var location = hitResult.location;
+//             segment = path.insert(location.index + 1, event.point);
+//             path.smooth();
+//         }
+//         hitResult.item.bringToFront();
+//     }
+// }
+
+function onMouseMove(event) {
+    var hitResult = project.hitTest(event.point, hitOptions);
+    project.activeLayer.selected = false;
+    if (hitResult && hitResult.item)
+        hitResult.item.selected = true;
+}
+
+function onMouseDrag(event) {
+    if (segment) {
+        segment.point += event.delta;
+        path.smooth();
+    } else if (path) {
+        path.position += event.delta;
     }
-
-    function onKeyDown(event) {
-        if (event.key === 'space')
-            group.fullySelected = !group.fullySelected;
-    }
-
-    var audio, source, analyserL, analyserR, freqByteData;
-
-    view.onFrame = function() {
-        var step = view.size.width / (amount + 1);
-        var scale = view.size.height / 1.5;
-        analyserL.getByteFrequencyData(freqByteData);
-        var leftBands = getEqualizerBands(freqByteData, true);
-        analyserR.getByteFrequencyData(freqByteData);
-        var rightBands = getEqualizerBands(freqByteData, true);
-        for (var i = 1; i <= amount; i++) {
-            leftPath.segments[i].point = [i * step, -leftBands[i - 1] * scale];
-            rightPath.segments[i].point = [i * step, -rightBands[i - 1] * scale * (flip ? -1 : 1)];
-        }
-        leftPath.smooth();
-        rightPath.smooth();
-        group.pivot = [leftPath.position.x, 0];
-        group.position = view.center;
-    }
-
-    // Pause animation until we have data
-    view.pause();
-
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
-        audio = new AudioContext();
-        source = audio.createBufferSource();
-        // Create two separate analyzers for left and right channel.
-        analyserL = audio.createAnalyser();
-        analyserL.smoothingTimeConstant = 0.25;
-        analyserL.fftSize = Math.pow(2, amount) * 2;
-        analyserR = audio.createAnalyser();
-        analyserR.smoothingTimeConstant = analyserL.smoothingTimeConstant;
-        analyserR.fftSize = analyserL.fftSize;
-        // Create the buffer to receive the analyzed data.
-        freqByteData = new Uint8Array(analyserL.frequencyBinCount);
-        // Create a splitter to feed them both
-        var splitter = audio.createChannelSplitter();
-        // Connect audio processing graph
-        source.connect(splitter);
-        splitter.connect(analyserL, 0, 0);
-        splitter.connect(analyserR, 1, 0);
-        // Connect source to output also so we can hear it
-        source.connect(audio.destination);
-        loadAudioBuffer('http://assets.paperjs.org/audio/gnossienne.mp3');
-    } else {
-        // TODO: Print error message
-        alert('Audio not supported');
-    }
-
-    function loadAudioBuffer(url) {
-        // Load asynchronously
-        var request = new XMLHttpRequest();
-        request.open("GET", url, true);
-        request.responseType = "arraybuffer";
-
-        request.onload = function() {
-            audio.decodeAudioData(
-                request.response,
-                function(buffer) {
-                    source.buffer = buffer;
-                    source.loop = true;
-                    source.start(0);
-                    view.play();
-                },
-
-                function(buffer) {
-                    alert("Error loading MP3");
-                }
-            );
-        };
-        request.send();
-    }
-
-    function getEqualizerBands(data) {
-        var bands = [];
-        var amount = Math.sqrt(data.length) / 2;
-        for(var i = 0; i < amount; i++) {
-            var start = Math.pow(2, i) - 1;
-            var end = start * 2 + 1;
-            var sum = 0;
-            for (var j = start; j < end; j++) {
-                sum += data[j];
-            }
-            var avg = sum / (255 * (end - start));
-            bands[i] = Math.sqrt(avg / Math.sqrt(2));
-        }
-        return bands;
-    }
+}

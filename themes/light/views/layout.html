@@ -2,12 +2,14 @@
 <html>
 <head>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<!-- <link rel="stylesheet" href="paper/examples/css/style.css"> -->
     <script type="text/javascript" src="paper/dist/paper-full.js"></script>
-    <script type="text/paperscript" src="/custom/solarBeat.js" canvas="canvas"></script>
+    <script type="text/paperscript" src="custom/lollipop.js" canvas="canvas"></script>
+    <!-- <script type="text/paperscript" src="custom/test.js" canvas="canvas"></script> -->
 	@{import('light-theme.css')}
 </head>
 <body>
+<!--     <a href="#" onclick="tool.activate();">Draw</a></br>
+    <a href="#" onclick="toolPos.activate();">Drag</a> -->
 	<canvas id="canvas" resize stats hidpi="off"></canvas>
 	@{body}
 </body>
