@@ -15,14 +15,19 @@ draw.onMouseDrag = function(event) {
         radius: (event.downPoint - event.point).length,
         fillColor: mColor
     });
-    var group = new Group();
+    var lollipopContainer = new Group();
+    var dotContainer = new Group();
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    group.removeOnDrag();
-    group.addChild(circle);
-    layer.addChild(group);
-    console.log("group has children: " + group.children.length);
-    console.log("layer has children: " + layer.children.length);
+    // dotContainer.removeOnDrag();
+    // lollipopContainer.removeOnDrag();
+    dotContainer.addChild(circle);
+    lollipopContainer.addChild(dotContainer);
+    layer.addChild(lollipopContainer);
+    console.log(dotContainer.firstChild);
+    console.log("dot has children: " + dotContainer.children.length);
+    // console.log("lollipop has children: " + lollipopContainer.children.length);
+    // console.log("layer has children: " + layer.children.length);
 }
 
 // change color on next lollipop
@@ -34,9 +39,12 @@ draw.onMouseDown = function(event) {
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // Scale the path by 110%:
-        circle = layer.lastChild.lastChild.clone();
+        var lollipopContainer = layer.lastChild;
+        circle = lollipopContainer.lastChild.firstChild.clone();
         circle.scale(0.8);
-        layer.lastChild.addChild(circle);
+        var dotContainer = new Group();
+        dotContainer.addChild(circle);
+        lollipopContainer.addChild(dotContainer);
         console.log("layer has children: " + layer.children.length);
         // Prevent the key event from bubbling
         return false;
