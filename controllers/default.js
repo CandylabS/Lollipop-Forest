@@ -2,7 +2,7 @@ exports.install = function(){
 	F.route('/', viewTheme);
 	F.route('/paper/', viewPaper);
 	// F.redirect('/', 'paper/examples/Paperjs.org/SatieLikedToDraw.html');
-	F.map('/custom/', '~/public/js/')
+	F.map('/custom/', '~/public/js/');
 }
 
 function viewTheme(){
