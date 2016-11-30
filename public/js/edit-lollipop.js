@@ -68,27 +68,26 @@ edit.onKeyDown = function(event) {
     if (event.key == 'enter') {
         draw.activate();
     }
-    if (event.key == 'space') {
-        playback = 1 - playback;    // playback: 1-play, 0-pause
-    }
-    if (event.key == '=') {
-        if (hitResult) {
+    if (hitResult) {
+        if (event.key == '=') {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
             circle = hitResult.item.parent.parent.lastChild.lastChild.clone();
             circle.scale(0.8);
-            dotContainer = new Group();
-            dotContainer.addChild(circle);
-            hitResult.item.parent.parent.addChild(dotContainer);
+            mDotContainer = new Group();
+            mDotContainer.addChild(circle);
+            hitResult.item.parent.parent.addChild(mDotContainer);
         }
-    }
-    if (event.key == '-') {
-        if (hitResult) {
+        if (event.key == '-') {
             if (hitResult.item.parent.parent.children.length <= 1) {
                 hitResult.item.parent.parent.remove();
             } else {
                 hitResult.item.parent.parent.removeChildren(hitResult.item.parent.parent.children.length - 1);
             }
+        }
+        if (event.key == 'space') {
+            // playback: 1-play, 0-pause
+            setPlayback(hitResult.item.parent.parent);
         }
     }
 }

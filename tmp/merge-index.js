@@ -15,13 +15,33 @@
 // 	</lollipopContainer>
 // </layer>
 var layer = new Layer();
-var lollipopContainer, dotContainer;
+var mLollipopContainer, mDotContainer;
+/*
+_lollipopContainer.data = {
+	playback: [0, 1],
+	speed: 	[1x, 2x, 3x],
+	orientation: [1, -1],
+    octave: [2, 3, 4, 5, 6],
+    key: 	[C, F, G, A],
+    chord: 	[1, 3, 5],
+    instrument: ['piano']
+};
+_dotContainer.data = {
+    audioBuffer: 'sound.wav',
+    reverb: 'room.wav',
+    delay: 2s,
+    echo: 6s,
+    synth: true/false,
+    ...
+};
+*/
 var circle;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
     fillColor: 'white',
-    strokeColor: 'black'
+    strokeColor: 'black',
+    strokeWidth: 0.5
 });	// Class for dots, presets
 var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the path
 
@@ -41,10 +61,6 @@ var mColor = {
     alpha: 0.1
 }
 
-// global playback
-playback = 1;	// 1---play, 0---pause
-speed = 1;		// angular speed of ratation
-orientation = 1;	// 1---clockwise, -1---antiClockwise
 
 /********** edit-lollipop.js **********/
 // edit tool path editing
@@ -69,17 +85,18 @@ draw.onMouseDrag = function(event) {
         radius: (event.downPoint - event.point).length,
         fillColor: mColor
     });
-    dotContainer = new Group();
-    lollipopContainer = new Group();
+    mDotContainer = new Group();
+    mLollipopContainer = new Group();
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    lollipopContainer.removeOnDrag();
+    mLollipopContainer.removeOnDrag();
     // wrap containers up
-    dotContainer.addChild(circle);
-    lollipopContainer.addChild(dotContainer);
-    layer.addChild(lollipopContainer);
-    console.log("dot has children: " + dotContainer.children.length);
-    console.log("lollipop has children: " + lollipopContainer.children.length);
+    mDotContainer.addChild(circle);
+    mLollipopContainer.addChild(mDotContainer);
+    lollipopInit(mLollipopContainer);
+    layer.addChild(mLollipopContainer);
+    console.log("dot has children: " + mDotContainer.children.length);
+    console.log("lollipop has children: " + mLollipopContainer.children.length);
     console.log("layer has children: " + layer.children.length);
 }
 
@@ -92,12 +109,12 @@ draw.onMouseDown = function(event) {
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // add circle
-        lollipopContainer = layer.lastChild;
-        circle = lollipopContainer.lastChild.firstChild.clone();
+        mLollipopContainer = layer.lastChild;
+        circle = mLollipopContainer.lastChild.firstChild.clone();
         circle.scale(0.8);
-        dotContainer = new Group();
-        dotContainer.addChild(circle);
-        lollipopContainer.addChild(dotContainer);
+        mDotContainer = new Group();
+        mDotContainer.addChild(circle);
+        mLollipopContainer.addChild(mDotContainer);
         console.log("layer has children: " + layer.children.length);
         // Prevent the key event from bubbling
         return false;
@@ -193,27 +210,26 @@ edit.onKeyDown = function(event) {
     if (event.key == 'enter') {
         draw.activate();
     }
-    if (event.key == 'space') {
-        playback = 1 - playback;    // playback: 1-play, 0-pause
-    }
-    if (event.key == '=') {
-        if (hitResult) {
+    if (hitResult) {
+        if (event.key == '=') {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
             circle = hitResult.item.parent.parent.lastChild.lastChild.clone();
             circle.scale(0.8);
-            dotContainer = new Group();
-            dotContainer.addChild(circle);
-            hitResult.item.parent.parent.addChild(dotContainer);
+            mDotContainer = new Group();
+            mDotContainer.addChild(circle);
+            hitResult.item.parent.parent.addChild(mDotContainer);
         }
-    }
-    if (event.key == '-') {
-        if (hitResult) {
+        if (event.key == '-') {
             if (hitResult.item.parent.parent.children.length <= 1) {
                 hitResult.item.parent.parent.remove();
             } else {
                 hitResult.item.parent.parent.removeChildren(hitResult.item.parent.parent.children.length - 1);
             }
+        }
+        if (event.key == 'space') {
+            // playback: 1-play, 0-pause
+            setPlayback(hitResult.item.parent.parent);
         }
     }
 };
@@ -230,14 +246,29 @@ function onFrame(event) {
     if (layer.hasChildren()) {
         for (var i = 0; i < layer.children.length; i++) {
             for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(angularPerFrame(), layer.children[i].children[j].center);
+                layer.children[i].children[j].rotate(angularPerFrame(i, j), layer.children[i].children[j].center);
             }
         }
     }
 }
 
-function angularPerFrame() {
+function angularPerFrame(_i, _j) {
+	var playback = layer.children[_i].data.playback;
+	var orientation = layer.children[_i].data.orientation;
+	var speed = layer.children[_i].data.speed;
 	return playback * orientation * speed;
+}
+
+function lollipopInit(_lollipopContainer) {
+	_lollipopContainer.data = {
+			playback: 1,
+			speed: 	1,
+			orientation: 1
+	}
+}
+
+function setPlayback(_lollipopContainer) {
+	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
 };
 
 /*

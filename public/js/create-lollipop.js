@@ -5,17 +5,18 @@ draw.onMouseDrag = function(event) {
         radius: (event.downPoint - event.point).length,
         fillColor: mColor
     });
-    dotContainer = new Group();
-    lollipopContainer = new Group();
+    mDotContainer = new Group();
+    mLollipopContainer = new Group();
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    lollipopContainer.removeOnDrag();
+    mLollipopContainer.removeOnDrag();
     // wrap containers up
-    dotContainer.addChild(circle);
-    lollipopContainer.addChild(dotContainer);
-    layer.addChild(lollipopContainer);
-    console.log("dot has children: " + dotContainer.children.length);
-    console.log("lollipop has children: " + lollipopContainer.children.length);
+    mDotContainer.addChild(circle);
+    mLollipopContainer.addChild(mDotContainer);
+    lollipopInit(mLollipopContainer);
+    layer.addChild(mLollipopContainer);
+    console.log("dot has children: " + mDotContainer.children.length);
+    console.log("lollipop has children: " + mLollipopContainer.children.length);
     console.log("layer has children: " + layer.children.length);
 }
 
@@ -28,12 +29,12 @@ draw.onMouseDown = function(event) {
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // add circle
-        lollipopContainer = layer.lastChild;
-        circle = lollipopContainer.lastChild.firstChild.clone();
+        mLollipopContainer = layer.lastChild;
+        circle = mLollipopContainer.lastChild.firstChild.clone();
         circle.scale(0.8);
-        dotContainer = new Group();
-        dotContainer.addChild(circle);
-        lollipopContainer.addChild(dotContainer);
+        mDotContainer = new Group();
+        mDotContainer.addChild(circle);
+        mLollipopContainer.addChild(mDotContainer);
         console.log("layer has children: " + layer.children.length);
         // Prevent the key event from bubbling
         return false;

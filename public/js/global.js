@@ -9,13 +9,33 @@
 // 	</lollipopContainer>
 // </layer>
 var layer = new Layer();
-var lollipopContainer, dotContainer;
+var mLollipopContainer, mDotContainer;
+/*
+_lollipopContainer.data = {
+	playback: [0, 1],
+	speed: 	[1x, 2x, 3x],
+	orientation: [1, -1],
+    octave: [2, 3, 4, 5, 6],
+    key: 	[C, F, G, A],
+    chord: 	[1, 3, 5],
+    instrument: ['piano']
+};
+_dotContainer.data = {
+    audioBuffer: 'sound.wav',
+    reverb: 'room.wav',
+    delay: 2s,
+    echo: 6s,
+    synth: true/false,
+    ...
+};
+*/
 var circle;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
     fillColor: 'white',
-    strokeColor: 'black'
+    strokeColor: 'black',
+    strokeWidth: 0.5
 });	// Class for dots, presets
 var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the path
 
@@ -35,10 +55,6 @@ var mColor = {
     alpha: 0.1
 }
 
-// global playback
-playback = 1;	// 1---play, 0---pause
-speed = 1;		// angular speed of ratation
-orientation = 1;	// 1---clockwise, -1---antiClockwise
 
 /********** edit-lollipop.js **********/
 // edit tool path editing

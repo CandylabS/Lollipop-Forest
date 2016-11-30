@@ -4,12 +4,27 @@ function onFrame(event) {
     if (layer.hasChildren()) {
         for (var i = 0; i < layer.children.length; i++) {
             for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(angularPerFrame(), layer.children[i].children[j].center);
+                layer.children[i].children[j].rotate(angularPerFrame(i, j), layer.children[i].children[j].center);
             }
         }
     }
 }
 
-function angularPerFrame() {
+function angularPerFrame(_i, _j) {
+	var playback = layer.children[_i].data.playback;
+	var orientation = layer.children[_i].data.orientation;
+	var speed = layer.children[_i].data.speed;
 	return playback * orientation * speed;
+}
+
+function lollipopInit(_lollipopContainer) {
+	_lollipopContainer.data = {
+			playback: 1,
+			speed: 	1,
+			orientation: 1
+	}
+}
+
+function setPlayback(_lollipopContainer) {
+	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
 }
