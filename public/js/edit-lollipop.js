@@ -55,14 +55,21 @@ edit.onMouseDrag = function(event) {
         segment.point += event.delta;
         path.smooth();
     } else if (path) {
-        path.parent.position += event.delta;
+        if (MODE == 1) {
+            path.parent.position += event.delta;
+        } else {
+            path.parent.parent.position += event.delta;
+        }
     }
 }
 
 // add circle and remove circle
 edit.onKeyDown = function(event) {
-    if (event.key == 'space') {
+    if (event.key == 'enter') {
         draw.activate();
+    }
+    if (event.key == 'space') {
+        playback = 1 - playback;    // playback: 1-play, 0-pause
     }
     if (event.key == '=') {
         if (hitResult) {

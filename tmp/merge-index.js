@@ -25,6 +25,9 @@ var _dot = new Path.Circle({
 });	// Class for dots, presets
 var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the path
 
+/*********** MODE **********/
+var MODE = 0;
+
 /*********** GLOBAL VARIABLES *************/
 // global mouseEvent tools
 var draw = new Tool();	//create-lollipop.js
@@ -37,6 +40,11 @@ var mColor = {
     brightness: 1,
     alpha: 0.1
 }
+
+// global playback
+playback = 1;	// 1---play, 0---pause
+speed = 1;		// angular speed of ratation
+orientation = 1;	// 1---clockwise, -1---antiClockwise
 
 /********** edit-lollipop.js **********/
 // edit tool path editing
@@ -107,9 +115,6 @@ draw.onKeyDown = function(event) {
     if (event.key == 'enter') {
         edit.activate();
     }
-    if (event.key == 'space') {
-        layer.removeChildren(layer.children.length - 1);
-    }
 };
 
 /*
@@ -175,14 +180,21 @@ edit.onMouseDrag = function(event) {
         segment.point += event.delta;
         path.smooth();
     } else if (path) {
-        path.parent.position += event.delta;
+        if (MODE == 1) {
+            path.parent.position += event.delta;
+        } else {
+            path.parent.parent.position += event.delta;
+        }
     }
 }
 
 // add circle and remove circle
 edit.onKeyDown = function(event) {
-    if (event.key == 'space') {
+    if (event.key == 'enter') {
         draw.activate();
+    }
+    if (event.key == 'space') {
+        playback = 1 - playback;    // playback: 1-play, 0-pause
     }
     if (event.key == '=') {
         if (hitResult) {
@@ -218,10 +230,14 @@ function onFrame(event) {
     if (layer.hasChildren()) {
         for (var i = 0; i < layer.children.length; i++) {
             for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
+                layer.children[i].children[j].rotate(angularPerFrame(), layer.children[i].children[j].center);
             }
         }
     }
+}
+
+function angularPerFrame() {
+	return playback * orientation * speed;
 };
 
 /*

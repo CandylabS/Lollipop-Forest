@@ -51,7 +51,4 @@ draw.onKeyDown = function(event) {
     if (event.key == 'enter') {
         edit.activate();
     }
-    if (event.key == 'space') {
-        layer.removeChildren(layer.children.length - 1);
-    }
 }

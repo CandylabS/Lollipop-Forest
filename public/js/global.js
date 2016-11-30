@@ -19,6 +19,9 @@ var _dot = new Path.Circle({
 });	// Class for dots, presets
 var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the path
 
+/*********** MODE **********/
+var MODE = 0;
+
 /*********** GLOBAL VARIABLES *************/
 // global mouseEvent tools
 var draw = new Tool();	//create-lollipop.js
@@ -31,6 +34,11 @@ var mColor = {
     brightness: 1,
     alpha: 0.1
 }
+
+// global playback
+playback = 1;	// 1---play, 0---pause
+speed = 1;		// angular speed of ratation
+orientation = 1;	// 1---clockwise, -1---antiClockwise
 
 /********** edit-lollipop.js **********/
 // edit tool path editing
