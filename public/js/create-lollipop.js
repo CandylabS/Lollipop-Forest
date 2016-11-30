@@ -26,8 +26,8 @@ draw.onMouseDrag = function(event) {
     layer.addChild(lollipopContainer);
     console.log(dotContainer.firstChild);
     console.log("dot has children: " + dotContainer.children.length);
-    // console.log("lollipop has children: " + lollipopContainer.children.length);
-    // console.log("layer has children: " + layer.children.length);
+    console.log("lollipop has children: " + lollipopContainer.children.length);
+    console.log("layer has children: " + layer.children.length);
 }
 
 // change color on next lollipop

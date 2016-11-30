@@ -50,8 +50,8 @@ draw.onMouseDrag = function(event) {
     layer.addChild(lollipopContainer);
     console.log(dotContainer.firstChild);
     console.log("dot has children: " + dotContainer.children.length);
-    // console.log("lollipop has children: " + lollipopContainer.children.length);
-    // console.log("layer has children: " + layer.children.length);
+    console.log("lollipop has children: " + lollipopContainer.children.length);
+    console.log("layer has children: " + layer.children.length);
 }
 
 // change color on next lollipop
@@ -161,7 +161,7 @@ edit.onMouseDown = function(event) {
 
             // form a group
             console.log(hitResult.item);
-            path.parent.addChild(mDot);
+            path.parent.appendBottom(mDot);
             mDot.name = 'dot';
             console.log(path.parent.children.length);
         } else {
@@ -198,7 +198,7 @@ edit.onKeyDown = function(event) {
         if (hitResult) {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
-            circle = hitResult.item.parent.parent.lastChild.firstChild.clone();
+            circle = hitResult.item.parent.parent.lastChild.lastChild.clone();
             circle.scale(0.8);
             var dotContainer = new Group();
             dotContainer.addChild(circle);
@@ -218,23 +218,25 @@ edit.onKeyDown = function(event) {
 
 /*
  * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/dot.js
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/animation.js
  * ===========================================================================================
  */
 
-// function onMouseDown(event) {
-//     // Create a new circle shaped path at the position
-//     // of the mouse:
-//     var path = new Path.Circle(event.point, 5);
-//     path.fillColor = 'black';
-
-//     // Add the path to the group's children list:
-//     group.addChild(path);
+// function onFrame(event) {
+//     // Rotate the group by 1 degree from
+//     // the centerpoint of the view:
+//     if (layer.hasChildren()) {
+//         for (var i = 0; i < layer.children.length; i++) {
+//             for (var j = 0; j < layer.children[i].children.length; j++) {
+//                 layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
+//             }
+//         }
+//     }
 // };
 
 /*
  * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/rod.js
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/timing.js
  * ===========================================================================================
  */
 

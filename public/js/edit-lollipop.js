@@ -63,7 +63,7 @@ edit.onMouseDown = function(event) {
 
             // form a group
             console.log(hitResult.item);
-            path.parent.addChild(mDot);
+            path.parent.appendBottom(mDot);
             mDot.name = 'dot';
             console.log(path.parent.children.length);
         } else {
@@ -100,7 +100,7 @@ edit.onKeyDown = function(event) {
         if (hitResult) {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
-            circle = hitResult.item.parent.parent.lastChild.firstChild.clone();
+            circle = hitResult.item.parent.parent.lastChild.lastChild.clone();
             circle.scale(0.8);
             var dotContainer = new Group();
             dotContainer.addChild(circle);
