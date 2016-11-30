@@ -1,11 +1,11 @@
-// function onFrame(event) {
-//     // Rotate the group by 1 degree from
-//     // the centerpoint of the view:
-//     if (layer.hasChildren()) {
-//         for (var i = 0; i < layer.children.length; i++) {
-//             for (var j = 0; j < layer.children[i].children.length; j++) {
-//                 layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
-//             }
-//         }
-//     }
-// }
+function onFrame(event) {
+    // Rotate the group by 1 degree from
+    // the centerpoint of the view:
+    if (layer.hasChildren()) {
+        for (var i = 0; i < layer.children.length; i++) {
+            for (var j = 0; j < layer.children[i].children.length; j++) {
+                layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
+            }
+        }
+    }
+}

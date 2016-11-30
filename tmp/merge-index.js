@@ -5,24 +5,30 @@
  */
 
 // lollipop prototype
-// HIERARCHY
-// Layer(active): current editing lollipop
-// Group: circle of lollipop, one lollipop can have several groups
-// Dots: basic symbol
 
-// a layer for lollipop
+/********** HIERARCHY *********/
+// <layer>
+// 	<lollipopContainer>
+// 		<dotContainer>
+// 			<dot></dot>
+// 		</dotContainer>
+// 	</lollipopContainer>
+// </layer>
 var layer = new Layer();
-var lollipopContainer;
-// var dotContainer = new Group();
+var lollipopContainer, dotContainer;
 var circle;
+var _dot = new Path.Circle({
+    center: new Point(0, 0),
+    radius: 5,
+    fillColor: 'white',
+    strokeColor: 'black'
+});	// Class for dots, presets
+var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the path
 
-/*
- * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/create-lollipop.js
- * ===========================================================================================
- */
-
-var draw = new Tool();
+/*********** GLOBAL VARIABLES *************/
+// global mouseEvent tools
+var draw = new Tool();	//create-lollipop.js
+var edit = new Tool();	// edit-lollipop.js
 
 // global color
 var mColor = {
@@ -32,6 +38,22 @@ var mColor = {
     alpha: 0.1
 }
 
+/********** edit-lollipop.js **********/
+// edit tool path editing
+var hitOptions = {
+    segments: false,
+    stroke: true,
+    fill: true,
+    tolerance: 5
+};
+var segment, path, hitResult;
+
+/*
+ * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/create-lollipop.js
+ * ===========================================================================================
+ */
+
 // draw lollipop outline
 draw.onMouseDrag = function(event) {
     circle = new Path.Circle({
@@ -39,12 +61,12 @@ draw.onMouseDrag = function(event) {
         radius: (event.downPoint - event.point).length,
         fillColor: mColor
     });
+    dotContainer = new Group();
     lollipopContainer = new Group();
-    var dotContainer = new Group();
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    // dotContainer.removeOnDrag();
     lollipopContainer.removeOnDrag();
+    // wrap up
     dotContainer.addChild(circle);
     lollipopContainer.addChild(dotContainer);
     layer.addChild(lollipopContainer);
@@ -62,11 +84,11 @@ draw.onMouseDown = function(event) {
 // add circle and remove circle
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
-        // Scale the path by 110%:
+        // add circle
         lollipopContainer = layer.lastChild;
         circle = lollipopContainer.lastChild.firstChild.clone();
         circle.scale(0.8);
-        var dotContainer = new Group();
+        dotContainer = new Group();
         dotContainer.addChild(circle);
         lollipopContainer.addChild(dotContainer);
         console.log("layer has children: " + layer.children.length);
@@ -74,6 +96,7 @@ draw.onKeyDown = function(event) {
         return false;
     }
     if (event.key == '-') {
+        // remove circle
         if (layer.lastChild.children.length <= 1) {
             layer.lastChild.remove();
         } else {
@@ -95,38 +118,6 @@ draw.onKeyDown = function(event) {
  * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/edit-lollipop.js
  * ===========================================================================================
  */
-
-var edit = new Tool();
-
-// edit tool path editing
-var hitOptions = {
-    segments: false,
-    stroke: true,
-    fill: true,
-    tolerance: 5
-};
-var segment, path, hitResult;
-
-function onFrame(event) {
-    // Rotate the group by 1 degree from
-    // the centerpoint of the view:
-    if (layer.hasChildren()) {
-        for (var i = 0; i < layer.children.length; i++) {
-            for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
-            }
-        }
-    }
-}
-// Class for dots
-var _dot = new Path.Circle({
-    center: new Point(0, 0),
-    radius: 5,
-    fillColor: 'white',
-    strokeColor: 'black'
-});
-// Create a symbol definition from the path:
-var dot = new SymbolDefinition(_dot);
 
 edit.onMouseDown = function(event) {
     segment = path = null;
@@ -200,7 +191,7 @@ edit.onKeyDown = function(event) {
             // console.log(hitResult.item.parent.children.length);
             circle = hitResult.item.parent.parent.lastChild.lastChild.clone();
             circle.scale(0.8);
-            var dotContainer = new Group();
+            dotContainer = new Group();
             dotContainer.addChild(circle);
             hitResult.item.parent.parent.addChild(dotContainer);
         }
@@ -222,17 +213,17 @@ edit.onKeyDown = function(event) {
  * ===========================================================================================
  */
 
-// function onFrame(event) {
-//     // Rotate the group by 1 degree from
-//     // the centerpoint of the view:
-//     if (layer.hasChildren()) {
-//         for (var i = 0; i < layer.children.length; i++) {
-//             for (var j = 0; j < layer.children[i].children.length; j++) {
-//                 layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
-//             }
-//         }
-//     }
-// };
+function onFrame(event) {
+    // Rotate the group by 1 degree from
+    // the centerpoint of the view:
+    if (layer.hasChildren()) {
+        for (var i = 0; i < layer.children.length; i++) {
+            for (var j = 0; j < layer.children[i].children.length; j++) {
+                layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
+            }
+        }
+    }
+};
 
 /*
  * ===========================================================================================

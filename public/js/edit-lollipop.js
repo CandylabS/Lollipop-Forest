@@ -1,35 +1,3 @@
-var edit = new Tool();
-
-// edit tool path editing
-var hitOptions = {
-    segments: false,
-    stroke: true,
-    fill: true,
-    tolerance: 5
-};
-var segment, path, hitResult;
-
-function onFrame(event) {
-    // Rotate the group by 1 degree from
-    // the centerpoint of the view:
-    if (layer.hasChildren()) {
-        for (var i = 0; i < layer.children.length; i++) {
-            for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(1, layer.children[i].children[j].center);
-            }
-        }
-    }
-}
-// Class for dots
-var _dot = new Path.Circle({
-    center: new Point(0, 0),
-    radius: 5,
-    fillColor: 'white',
-    strokeColor: 'black'
-});
-// Create a symbol definition from the path:
-var dot = new SymbolDefinition(_dot);
-
 edit.onMouseDown = function(event) {
     segment = path = null;
     hitResult = project.hitTest(event.point, hitOptions);
@@ -102,7 +70,7 @@ edit.onKeyDown = function(event) {
             // console.log(hitResult.item.parent.children.length);
             circle = hitResult.item.parent.parent.lastChild.lastChild.clone();
             circle.scale(0.8);
-            var dotContainer = new Group();
+            dotContainer = new Group();
             dotContainer.addChild(circle);
             hitResult.item.parent.parent.addChild(dotContainer);
         }

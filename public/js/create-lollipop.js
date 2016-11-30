@@ -1,13 +1,3 @@
-var draw = new Tool();
-
-// global color
-var mColor = {
-    hue: 360 * Math.random(),
-    saturation: 1,
-    brightness: 1,
-    alpha: 0.1
-}
-
 // draw lollipop outline
 draw.onMouseDrag = function(event) {
     circle = new Path.Circle({
@@ -15,16 +5,15 @@ draw.onMouseDrag = function(event) {
         radius: (event.downPoint - event.point).length,
         fillColor: mColor
     });
+    dotContainer = new Group();
     lollipopContainer = new Group();
-    var dotContainer = new Group();
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    // dotContainer.removeOnDrag();
     lollipopContainer.removeOnDrag();
+    // wrap containers up
     dotContainer.addChild(circle);
     lollipopContainer.addChild(dotContainer);
     layer.addChild(lollipopContainer);
-    console.log(dotContainer.firstChild);
     console.log("dot has children: " + dotContainer.children.length);
     console.log("lollipop has children: " + lollipopContainer.children.length);
     console.log("layer has children: " + layer.children.length);
@@ -38,11 +27,11 @@ draw.onMouseDown = function(event) {
 // add circle and remove circle
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
-        // Scale the path by 110%:
+        // add circle
         lollipopContainer = layer.lastChild;
         circle = lollipopContainer.lastChild.firstChild.clone();
         circle.scale(0.8);
-        var dotContainer = new Group();
+        dotContainer = new Group();
         dotContainer.addChild(circle);
         lollipopContainer.addChild(dotContainer);
         console.log("layer has children: " + layer.children.length);
@@ -50,6 +39,7 @@ draw.onKeyDown = function(event) {
         return false;
     }
     if (event.key == '-') {
+        // remove circle
         if (layer.lastChild.children.length <= 1) {
             layer.lastChild.remove();
         } else {
