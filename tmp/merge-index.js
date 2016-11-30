@@ -12,7 +12,7 @@
 
 // a layer for lollipop
 var layer = new Layer();
-// var lollipopContainer = new Group();
+var lollipopContainer;
 // var dotContainer = new Group();
 var circle;
 
@@ -39,12 +39,12 @@ draw.onMouseDrag = function(event) {
         radius: (event.downPoint - event.point).length,
         fillColor: mColor
     });
-    var lollipopContainer = new Group();
+    lollipopContainer = new Group();
     var dotContainer = new Group();
     // Remove this path on the next drag event:
     circle.removeOnDrag();
     // dotContainer.removeOnDrag();
-    // lollipopContainer.removeOnDrag();
+    lollipopContainer.removeOnDrag();
     dotContainer.addChild(circle);
     lollipopContainer.addChild(dotContainer);
     layer.addChild(lollipopContainer);
@@ -63,7 +63,7 @@ draw.onMouseDown = function(event) {
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // Scale the path by 110%:
-        var lollipopContainer = layer.lastChild;
+        lollipopContainer = layer.lastChild;
         circle = lollipopContainer.lastChild.firstChild.clone();
         circle.scale(0.8);
         var dotContainer = new Group();

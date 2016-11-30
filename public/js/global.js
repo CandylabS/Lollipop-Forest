@@ -6,6 +6,6 @@
 
 // a layer for lollipop
 var layer = new Layer();
-// var lollipopContainer = new Group();
+var lollipopContainer;
 // var dotContainer = new Group();
 var circle;
