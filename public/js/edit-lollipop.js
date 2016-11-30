@@ -55,7 +55,7 @@ edit.onMouseDrag = function(event) {
         segment.point += event.delta;
         path.smooth();
     } else if (path) {
-        path.position += event.delta;
+        path.parent.position += event.delta;
     }
 }
 

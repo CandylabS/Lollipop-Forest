@@ -66,11 +66,10 @@ draw.onMouseDrag = function(event) {
     // Remove this path on the next drag event:
     circle.removeOnDrag();
     lollipopContainer.removeOnDrag();
-    // wrap up
+    // wrap containers up
     dotContainer.addChild(circle);
     lollipopContainer.addChild(dotContainer);
     layer.addChild(lollipopContainer);
-    console.log(dotContainer.firstChild);
     console.log("dot has children: " + dotContainer.children.length);
     console.log("lollipop has children: " + lollipopContainer.children.length);
     console.log("layer has children: " + layer.children.length);
@@ -176,7 +175,7 @@ edit.onMouseDrag = function(event) {
         segment.point += event.delta;
         path.smooth();
     } else if (path) {
-        path.position += event.delta;
+        path.parent.position += event.delta;
     }
 }
 
