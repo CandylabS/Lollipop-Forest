@@ -21,6 +21,7 @@ _lollipopContainer.data = {
     instrument: ['piano']
 };
 _dotContainer.data = {
+    rod : 0,
     audioBuffer: 'sound.wav',
     reverb: 'room.wav',
     delay: 2s,

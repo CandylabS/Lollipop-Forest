@@ -28,6 +28,8 @@ edit.onMouseDown = function(event) {
             var mDot = new SymbolItem(dot);
             mDot.removeOnDrag();
             mDot.position = nearestPoint;
+            mDot.data.initAngle = (mDot.position - path.position).angle + path.parent.data.rod;
+            console.log(mDot.data.initAngle);
 
             // form a group
             console.log(hitResult.item);
@@ -88,6 +90,12 @@ edit.onKeyDown = function(event) {
         if (event.key == 'space') {
             // playback: 1-play, 0-pause
             setPlayback(hitResult.item.parent.parent);
+        }
+    }
+    if (event.key == 'a') {
+        for (var i=0; i<layer.firstChild.firstChild.children.length -1; i++) {
+            var myHit = layer.firstChild.firstChild.children[i].rotation + layer.firstChild.firstChild.children[i].data.initAngle;
+            console.log("rotation angle: " + myHit);
         }
     }
 }

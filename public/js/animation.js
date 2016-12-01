@@ -4,7 +4,7 @@ function onFrame(event) {
     if (layer.hasChildren()) {
         for (var i = 0; i < layer.children.length; i++) {
             for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(angularPerFrame(i, j), layer.children[i].children[j].center);
+                layer.children[i].children[j].rotate(angularPerFrame(i, j), layer.children[i].center);	// layer.children.[i].children[j].center;
             }
         }
     }
@@ -17,11 +17,18 @@ function angularPerFrame(_i, _j) {
 	return playback * orientation * speed;
 }
 
+// initiation
 function lollipopInit(_lollipopContainer) {
 	_lollipopContainer.data = {
 			playback: 1,
 			speed: 	1,
 			orientation: 1
+	}
+}
+
+function dotContainerInit(_dotContainer) {
+	_dotContainer.data = {
+		rod: -90
 	}
 }
 

@@ -27,6 +27,7 @@ _lollipopContainer.data = {
     instrument: ['piano']
 };
 _dotContainer.data = {
+    rod : 0,
     audioBuffer: 'sound.wav',
     reverb: 'room.wav',
     delay: 2s,
@@ -94,10 +95,11 @@ draw.onMouseDrag = function(event) {
     mDotContainer.addChild(circle);
     mLollipopContainer.addChild(mDotContainer);
     lollipopInit(mLollipopContainer);
+    dotContainerInit(mDotContainer);
     layer.addChild(mLollipopContainer);
-    console.log("dot has children: " + mDotContainer.children.length);
-    console.log("lollipop has children: " + mLollipopContainer.children.length);
-    console.log("layer has children: " + layer.children.length);
+    // console.log("dot has children: " + mDotContainer.children.length);
+    // console.log("lollipop has children: " + mLollipopContainer.children.length);
+    // console.log("layer has children: " + layer.children.length);
 }
 
 // change color on next lollipop
@@ -170,6 +172,8 @@ edit.onMouseDown = function(event) {
             var mDot = new SymbolItem(dot);
             mDot.removeOnDrag();
             mDot.position = nearestPoint;
+            mDot.data.initAngle = (mDot.position - path.position).angle + path.parent.data.rod;
+            console.log(mDot.data.initAngle);
 
             // form a group
             console.log(hitResult.item);
@@ -232,6 +236,12 @@ edit.onKeyDown = function(event) {
             setPlayback(hitResult.item.parent.parent);
         }
     }
+    if (event.key == 'a') {
+        for (var i=0; i<layer.firstChild.firstChild.children.length -1; i++) {
+            var myHit = layer.firstChild.firstChild.children[i].rotation + layer.firstChild.firstChild.children[i].data.initAngle;
+            console.log("rotation angle: " + myHit);
+        }
+    }
 };
 
 /*
@@ -246,7 +256,7 @@ function onFrame(event) {
     if (layer.hasChildren()) {
         for (var i = 0; i < layer.children.length; i++) {
             for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(angularPerFrame(i, j), layer.children[i].children[j].center);
+                layer.children[i].children[j].rotate(angularPerFrame(i, j), layer.children[i].center);	// layer.children.[i].children[j].center;
             }
         }
     }
@@ -259,11 +269,18 @@ function angularPerFrame(_i, _j) {
 	return playback * orientation * speed;
 }
 
+// initiation
 function lollipopInit(_lollipopContainer) {
 	_lollipopContainer.data = {
 			playback: 1,
 			speed: 	1,
 			orientation: 1
+	}
+}
+
+function dotContainerInit(_dotContainer) {
+	_dotContainer.data = {
+		rod: -90
 	}
 }
 

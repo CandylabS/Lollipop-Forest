@@ -14,10 +14,11 @@ draw.onMouseDrag = function(event) {
     mDotContainer.addChild(circle);
     mLollipopContainer.addChild(mDotContainer);
     lollipopInit(mLollipopContainer);
+    dotContainerInit(mDotContainer);
     layer.addChild(mLollipopContainer);
-    console.log("dot has children: " + mDotContainer.children.length);
-    console.log("lollipop has children: " + mLollipopContainer.children.length);
-    console.log("layer has children: " + layer.children.length);
+    // console.log("dot has children: " + mDotContainer.children.length);
+    // console.log("lollipop has children: " + mLollipopContainer.children.length);
+    // console.log("layer has children: " + layer.children.length);
 }
 
 // change color on next lollipop
