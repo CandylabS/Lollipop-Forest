@@ -14,7 +14,7 @@
 // 		</dotContainer>
 // 	</lollipopContainer>
 // </layer>
-var layer = new Layer();
+var mLayer = new Layer();
 var mLollipopContainer, mDotContainer;
 var rods = new Group();
 /*
@@ -102,7 +102,7 @@ draw.onMouseUp = function(event) {
         // wrap containers up
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
-        layer.addChild(mLollipopContainer);
+        mLayer.addChild(mLollipopContainer);
         // initialize
         lollipopInit(mLollipopContainer);
         // dotContainerInit(mDotContainer);
@@ -120,25 +120,25 @@ draw.onMouseDown = function(event) {
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // add circle
-        mLollipopContainer = layer.lastChild;
+        mLollipopContainer = mLayer.lastChild;
         circle = mLollipopContainer.lastChild.lastChild.clone();
         circle.scale(0.8);
         mDotContainer = new Group();
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
         // dotContainerInit(mDotContainer);
-        console.log("layer has children: " + layer.children.length);
+        console.log("layer has children: " + mLayer.children.length);
         // Prevent the key event from bubbling
         return false;
     }
     if (event.key == '-') {
         // remove circle
-        if (layer.lastChild.children.length <= 2) {
-            layer.lastChild.remove();
+        if (mLayer.lastChild.children.length <= 2) {
+            mLayer.lastChild.remove();
         } else {
-            layer.lastChild.removeChildren(layer.lastChild.children.length - 1);
+            mLayer.lastChild.removeChildren(mLayer.lastChild.children.length - 1);
         }
-        console.log("layer has children: " + layer.children.length);
+        console.log("layer has children: " + mLayer.children.length);
         return false;
     }
     if (event.key == 'enter') {
@@ -238,6 +238,7 @@ edit.onKeyDown = function(event) {
         if (event.key == '-') {
             if (hitResult.item.parent.parent.children.length <= 2) {
                 hitResult.item.parent.parent.remove();
+                draw.activate();
             } else {
                 hitResult.item.parent.parent.removeChildren(hitResult.item.parent.parent.children.length - 1);
             }
@@ -247,6 +248,7 @@ edit.onKeyDown = function(event) {
             setPlayback(hitResult.item.parent.parent);
         }
     }
+    // test
     if (event.key == 'a') {
         for (var i=0; i<layer.firstChild.firstChild.children.length -1; i++) {
             var myHit = layer.firstChild.firstChild.children[i].rotation + layer.firstChild.firstChild.children[i].data.initAngle;
@@ -264,13 +266,14 @@ edit.onKeyDown = function(event) {
 function onFrame(event) {
 	// Rotate the group by 1 degree from
 	// the centerpoint of the view:
-	if (layer.hasChildren()) {
-		for (var i = 0; i < layer.children.length; i++) {
-			if (layer.children[i].hasChildren()) {
-				for (var j = 0; j < layer.children[i].children.length; j++) {
-					if (layer.children[i].children[j].hasChildren()) {
-						for (var k = 0; k < layer.children[i].children[j].children.length; k++) {
-							layer.children[i].children[j].children[k].rotate(angularPerFrame(i, j), layer.children[i].children[j].position); // layer.children.[i].children[j].center;
+	if (mLayer.hasChildren()) {
+		for (var i = 0; i < mLayer.children.length; i++) {
+			if (mLayer.children[i].hasChildren()) {
+				for (var j = 0; j < mLayer.children[i].children.length; j++) {
+					if (mLayer.children[i].children[j].hasChildren()) {
+						for (var k = 0; k < mLayer.children[i].children[j].children.length; k++) {
+							// rotationStep(layer.children[i].children[j].children[k]);
+							mLayer.children[i].children[j].children[k].rotate(angularPerFrame(i, j), mLayer.children[i].children[j].position); // layer.children.[i].children[j].center;
 						}
 					}
 				}
@@ -279,10 +282,31 @@ function onFrame(event) {
 	}
 }
 
+// function onFrame(event) {
+// 	// iterate each lollipop in the view
+// 	rotationStep(layer);
+// }
+
+// function rotationStep(_item) {
+// 	if (_item.hasChildren()) {
+// 		for (var i=0; i< _item.children.length; i++){
+// 			rotationStep(_item.children[i]);
+// 		}
+// 	} else {
+// 		_item.rotate(angularPerFrame(layer.firstChild), _item.parent.position);
+// 	}
+// }
+// function angularPerFrame(_item) {
+// 	var playback = _item.data.playback;
+// 	var orientation = _item.data.orientation;
+// 	var speed = _item.data.speed;
+// 	return playback * orientation * speed;
+// }
+
 function angularPerFrame(_i, _j) {
-	var playback = layer.children[_i].data.playback;
-	var orientation = layer.children[_i].data.orientation;
-	var speed = layer.children[_i].data.speed;
+	var playback = mLayer.children[_i].data.playback;
+	var orientation = mLayer.children[_i].data.orientation;
+	var speed = mLayer.children[_i].data.speed;
 	return playback * orientation * speed;
 }
 
@@ -307,11 +331,12 @@ function createRod(_lollipopContainer) {
 	var length = _lollipopContainer.firstChild.lastChild.toShape(false).radius;
 	var angle = _lollipopContainer.data.rod;
 	var from = _lollipopContainer.position;
-	var to = new Point(from.x + length * 2, from.y);
+	var to = new Point(from.x + length * 1.8, from.y);
 	// to.rotate(angle, from);
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
 	mRod.strokeColor = 'black';
+	mRod.name = 'rod';
 	return mRod;
 }
 

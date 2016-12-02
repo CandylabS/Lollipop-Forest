@@ -84,6 +84,7 @@ edit.onKeyDown = function(event) {
         if (event.key == '-') {
             if (hitResult.item.parent.parent.children.length <= 2) {
                 hitResult.item.parent.parent.remove();
+                draw.activate();
             } else {
                 hitResult.item.parent.parent.removeChildren(hitResult.item.parent.parent.children.length - 1);
             }
@@ -93,6 +94,7 @@ edit.onKeyDown = function(event) {
             setPlayback(hitResult.item.parent.parent);
         }
     }
+    // test
     if (event.key == 'a') {
         for (var i=0; i<layer.firstChild.firstChild.children.length -1; i++) {
             var myHit = layer.firstChild.firstChild.children[i].rotation + layer.firstChild.firstChild.children[i].data.initAngle;

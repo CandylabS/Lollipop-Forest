@@ -19,7 +19,7 @@ draw.onMouseUp = function(event) {
         // wrap containers up
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
-        layer.addChild(mLollipopContainer);
+        mLayer.addChild(mLollipopContainer);
         // initialize
         lollipopInit(mLollipopContainer);
         // dotContainerInit(mDotContainer);
@@ -37,25 +37,25 @@ draw.onMouseDown = function(event) {
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // add circle
-        mLollipopContainer = layer.lastChild;
+        mLollipopContainer = mLayer.lastChild;
         circle = mLollipopContainer.lastChild.lastChild.clone();
         circle.scale(0.8);
         mDotContainer = new Group();
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
         // dotContainerInit(mDotContainer);
-        console.log("layer has children: " + layer.children.length);
+        console.log("layer has children: " + mLayer.children.length);
         // Prevent the key event from bubbling
         return false;
     }
     if (event.key == '-') {
         // remove circle
-        if (layer.lastChild.children.length <= 2) {
-            layer.lastChild.remove();
+        if (mLayer.lastChild.children.length <= 2) {
+            mLayer.lastChild.remove();
         } else {
-            layer.lastChild.removeChildren(layer.lastChild.children.length - 1);
+            mLayer.lastChild.removeChildren(mLayer.lastChild.children.length - 1);
         }
-        console.log("layer has children: " + layer.children.length);
+        console.log("layer has children: " + mLayer.children.length);
         return false;
     }
     if (event.key == 'enter') {

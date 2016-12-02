@@ -8,7 +8,7 @@
 // 		</dotContainer>
 // 	</lollipopContainer>
 // </layer>
-var layer = new Layer();
+var mLayer = new Layer();
 var mLollipopContainer, mDotContainer;
 var rods = new Group();
 /*
