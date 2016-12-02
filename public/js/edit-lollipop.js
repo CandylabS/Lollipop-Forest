@@ -28,8 +28,10 @@ edit.onMouseDown = function(event) {
             var mDot = new SymbolItem(dot);
             mDot.removeOnDrag();
             mDot.position = nearestPoint;
-            mDot.data.initAngle = (mDot.position - path.position).angle - path.parent.parent.data.rod;
+            mDot.data.hit = false;
+            mDot.data.initAngle = (mDot.position - path.position).angle - doubleParent(path).data.rod;
             console.log(mDot.data.initAngle);
+            console.log(mDot.data.hit);
 
             // form a group
             console.log(hitResult.item);
@@ -60,7 +62,7 @@ edit.onMouseDrag = function(event) {
         if (MODE == 1) {
             path.parent.position += event.delta;
         } else {
-            path.parent.parent.position += event.delta;
+            doubleParent(path).position += event.delta;
         }
     }
 }
@@ -74,31 +76,24 @@ edit.onKeyDown = function(event) {
         if (event.key == '=') {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
-            circle = hitResult.item.parent.parent.lastChild.lastChild.clone();
+            circle = doubleParent(hitResult.item).lastChild.lastChild.clone();
             circle.scale(0.8);
             mDotContainer = new Group();
             mDotContainer.addChild(circle);
             // dotContainerInit(mDotContainer);
-            hitResult.item.parent.parent.appendTop(mDotContainer);
+            doubleParent(hitResult.item).appendTop(mDotContainer);
         }
         if (event.key == '-') {
-            if (hitResult.item.parent.parent.children.length <= 2) {
-                hitResult.item.parent.parent.remove();
+            if (doubleParent(hitResult.item).children.length <= 2) {
+                doubleParent(hitResult.item).remove();
                 draw.activate();
             } else {
-                hitResult.item.parent.parent.removeChildren(hitResult.item.parent.parent.children.length - 1);
+                doubleParent(hitResult.item).removeChildren(doubleParent(hitResult.item).children.length - 1);
             }
         }
         if (event.key == 'space') {
             // playback: 1-play, 0-pause
-            setPlayback(hitResult.item.parent.parent);
-        }
-    }
-    // test
-    if (event.key == 'a') {
-        for (var i=0; i<layer.firstChild.firstChild.children.length -1; i++) {
-            var myHit = layer.firstChild.firstChild.children[i].rotation + layer.firstChild.firstChild.children[i].data.initAngle;
-            console.log("rotation angle: " + myHit);
+            setPlayback(doubleParent(hitResult.item));
         }
     }
 }
