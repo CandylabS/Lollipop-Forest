@@ -21,6 +21,7 @@ function rotationStep(_item) {
 					}
 				} else if (_item.data.hit) {
 					_item.data.hit = false;
+					dot2rod(_item).visible = false;
 				}
 			}
 		}
