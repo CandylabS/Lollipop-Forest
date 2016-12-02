@@ -61,7 +61,7 @@ var mColor = {
     alpha: 0.3
 }
 // styles
-mDashArray = [4, 8];
+mDashArray = [5, 5];
 
 // octave band
 var bandNum = 3;

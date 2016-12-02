@@ -1,6 +1,6 @@
 /*
  * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/global.js
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/global.js
  * ===========================================================================================
  */
 
@@ -67,7 +67,7 @@ var mColor = {
     alpha: 0.3
 }
 // styles
-mDashArray = [4, 8];
+mDashArray = [5, 5];
 
 // octave band
 var bandNum = 3;
@@ -100,7 +100,7 @@ var segment, path, hitResult;
 
 /*
  * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/misc.js
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/misc.js
  * ===========================================================================================
  */
 
@@ -149,7 +149,7 @@ function setOctave(_lollipopContainer) {
 
 /*
  * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/create-lollipop.js
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/create-lollipop.js
  * ===========================================================================================
  */
 
@@ -226,7 +226,7 @@ draw.onKeyDown = function(event) {
 
 /*
  * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/edit-lollipop.js
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/edit-lollipop.js
  * ===========================================================================================
  */
 
@@ -340,7 +340,7 @@ edit.onKeyDown = function(event) {
 
 /*
  * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/animation.js
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/animation.js
  * ===========================================================================================
  */
 
@@ -378,7 +378,6 @@ function hitDot(_item) {
 			} else {
 				playSample('Grand Piano', 'F6', audioContext.destination);
 			}
-
 			console.log('hit');
 			console.log(_item.rotation + _item.data.initAngle);
 		}

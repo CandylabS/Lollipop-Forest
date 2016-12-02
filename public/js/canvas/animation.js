@@ -32,7 +32,6 @@ function hitDot(_item) {
 			} else {
 				playSample('Grand Piano', 'F6', audioContext.destination);
 			}
-
 			console.log('hit');
 			console.log(_item.rotation + _item.data.initAngle);
 		}

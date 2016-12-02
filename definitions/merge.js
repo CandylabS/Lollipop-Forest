@@ -1,9 +1,15 @@
 // Merging Files
 F.merge(
-	'index.js', 
-	'/js/global.js', 
-	'/js/misc.js',
-	'/js/create-lollipop.js', 
-	'/js/edit-lollipop.js',
-	'/js/animation.js'
+	'myPaper.js', 
+	'/js/canvas/global.js', 
+	'/js/canvas/misc.js',
+	'/js/canvas/create-lollipop.js', 
+	'/js/canvas/edit-lollipop.js',
+	'/js/canvas/animation.js'
+);
+
+F.merge(
+	'myTone.js',
+	'/js/web_audio/sampler.js',
+	'/js/web_audio/timing.js'
 );

@@ -1,3 +1,9 @@
+/*
+ * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/sampler.js
+ * ===========================================================================================
+ */
+
 const OCTAVE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 const SAMPLE_LIBRARY = {
@@ -108,4 +114,12 @@ function playSample(instrument, note, destination, delaySeconds = 0){
 //   	startLoop('Grand Piano', 'Eb5', convolver, 18.4, 9.2);
 //   	startLoop('Grand Piano', 'F5',  convolver, 20.0, 14.1);
 //   	startLoop('Grand Piano', 'Ab5', convolver, 17.7, 3.1);
-// })
+// });
+
+/*
+ * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/timing.js
+ * ===========================================================================================
+ */
+
+;
