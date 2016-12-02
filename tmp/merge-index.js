@@ -51,7 +51,7 @@ var _dot = new Path.Circle({
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
 /*********** MODE **********/
-var MODE = 0;
+var MODE = 0;   // if inner cicle can be dragged
 var drawState = false;
 
 /*********** GLOBAL VARIABLES *************/
@@ -69,23 +69,17 @@ var mColor = {
 
 // octave band
 bandsInit(3);
-        // var band = new Shape.Rectangle({
-        //     point: [0, view.size.height / 3 * 1],
-        //     size: [view.size.width, view.size.height / 3],
-        //     dashArray: [10, 10],
-        //     strokeColor: 'black'
-        // });
 
 function bandsInit(num) {
     for (var i = 0; i < num; i++) {
         band = new Shape.Rectangle({
             point: [0, view.size.height / num * i],
             size: [view.size.width, view.size.height / num],
-            dashArray: [10, 10],
-            strokeColor: 'black'
+            fillColor: { hue: 43, saturation: 6/100, brightness: (94-i*2)/100 }
         });
         mBands.addChild(band);
     }
+    mBands.visible = false;
 }
 
 
@@ -281,6 +275,7 @@ edit.onMouseMove = function(event) {
 }
 
 edit.onMouseDrag = function(event) {
+    mBands.visible = true;
     if (segment) {
         segment.point += event.delta;
         path.smooth();
@@ -291,6 +286,10 @@ edit.onMouseDrag = function(event) {
             doubleParent(path).position += event.delta;
         }
     }
+}
+
+edit.onMouseUp = function(event) {
+    mBands.visible = false;
 }
 
 // add circle and remove circle

@@ -55,6 +55,7 @@ edit.onMouseMove = function(event) {
 }
 
 edit.onMouseDrag = function(event) {
+    mBands.visible = true;
     if (segment) {
         segment.point += event.delta;
         path.smooth();
@@ -65,6 +66,10 @@ edit.onMouseDrag = function(event) {
             doubleParent(path).position += event.delta;
         }
     }
+}
+
+edit.onMouseUp = function(event) {
+    mBands.visible = false;
 }
 
 // add circle and remove circle
