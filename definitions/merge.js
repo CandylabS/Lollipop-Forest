@@ -5,7 +5,5 @@ F.merge(
 	'/js/misc.js',
 	'/js/create-lollipop.js', 
 	'/js/edit-lollipop.js',
-	'/js/animation.js',
-	'/js/timing.js',
-	'/js/sampler.js'
+	'/js/animation.js'
 );

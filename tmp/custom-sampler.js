@@ -2,18 +2,18 @@ const OCTAVE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 const SAMPLE_LIBRARY = {
 	'Grand Piano' : [
-	{ note: 'A',  octave: 4, file: '/music/Grand Piano/piano-f-a4.wav' },
-	{ note: 'A',  octave: 5, file: '/music/Grand Piano/piano-f-a5.wav' },
-    { note: 'A',  octave: 6, file: '/music/Grand Piano/piano-f-a6.wav' },
-    { note: 'C',  octave: 4, file: '/music/Grand Piano/piano-f-c4.wav' },
-    { note: 'C',  octave: 5, file: '/music/Grand Piano/piano-f-c5.wav' },
-    { note: 'C',  octave: 6, file: '/music/Grand Piano/piano-f-c6.wav' },
-    { note: 'D#',  octave: 4, file: '/music/Grand Piano/piano-f-ds4.wav' },
-    { note: 'D#',  octave: 5, file: '/music/Grand Piano/piano-f-ds5.wav' },
-    { note: 'D#',  octave: 6, file: '/music/Grand Piano/piano-f-ds6.wav' },
-    { note: 'F#',  octave: 4, file: '/music/Grand Piano/piano-f-fs4.wav' },
-    { note: 'F#',  octave: 5, file: '/music/Grand Piano/piano-f-fs5.wav' },
-    { note: 'F#',  octave: 6, file: '/music/Grand Piano/piano-f-fs6.wav' }
+	{ note: 'A',  octave: 4, file: '../audio/Grand Piano/piano-f-a4.wav' },
+	{ note: 'A',  octave: 5, file: '../audio/Grand Piano/piano-f-a5.wav' },
+    { note: 'A',  octave: 6, file: '../audio/Grand Piano/piano-f-a6.wav' },
+    { note: 'C',  octave: 4, file: '../audio/Grand Piano/piano-f-c4.wav' },
+    { note: 'C',  octave: 5, file: '../audio/Grand Piano/piano-f-c5.wav' },
+    { note: 'C',  octave: 6, file: '../audio/Grand Piano/piano-f-c6.wav' },
+    { note: 'D#',  octave: 4, file: '../audio/Grand Piano/piano-f-ds4.wav' },
+    { note: 'D#',  octave: 5, file: '../audio/Grand Piano/piano-f-ds5.wav' },
+    { note: 'D#',  octave: 6, file: '../audio/Grand Piano/piano-f-ds6.wav' },
+    { note: 'F#',  octave: 4, file: '../audio/Grand Piano/piano-f-fs4.wav' },
+    { note: 'F#',  octave: 5, file: '../audio/Grand Piano/piano-f-fs5.wav' },
+    { note: 'F#',  octave: 6, file: '../audio/Grand Piano/piano-f-fs6.wav' }
 	]
 };
 
