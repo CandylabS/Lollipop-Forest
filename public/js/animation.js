@@ -1,6 +1,6 @@
 function onFrame(event) {
 	// iterate each lollipop in the view
-	rotationStep(mLayer);
+	rotationStep(mForest);
 }
 
 function rotationStep(_item) {
@@ -14,8 +14,8 @@ function rotationStep(_item) {
 			if (_item.name == 'dot') {
 				if (_item.intersects(dot2rod(_item))) {
 					if (!_item.data.hit) {
-						_item.data.hit = true;
 						dot2rod(_item).visible = true;
+						_item.data.hit = true;
 						console.log('hit');
 						console.log(_item.rotation + _item.data.initAngle);
 					}

@@ -15,8 +15,11 @@
 // 	</lollipopContainer>
 // </layer>
 var mLayer = new Layer();
+var mForest = new Group();
+var mBands = new Group();
+mLayer.addChild(mForest);
+mLayer.addChild(mBands);
 var mLollipopContainer, mDotContainer;
-var rods = new Group();
 /*
 _lollipopContainer.data = {
 	playback: [0, 1],
@@ -44,8 +47,8 @@ var _dot = new Path.Circle({
     fillColor: 'white',
     strokeColor: 'black',
     strokeWidth: 0.5
-});	// Class for dots, presets
-var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the path
+}); // Class for dots, presets
+var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
 /*********** MODE **********/
 var MODE = 0;
@@ -53,15 +56,36 @@ var drawState = false;
 
 /*********** GLOBAL VARIABLES *************/
 // global mouseEvent tools
-var draw = new Tool();	//create-lollipop.js
-var edit = new Tool();	// edit-lollipop.js
+var draw = new Tool(); //create-lollipop.js
+var edit = new Tool(); // edit-lollipop.js
 
 // global color
 var mColor = {
     hue: 360 * Math.random(),
-    saturation: 1,
+    saturation: 0.5,
     brightness: 1,
-    alpha: 0.1
+    alpha: 0.3
+}
+
+// octave band
+bandsInit(3);
+        // var band = new Shape.Rectangle({
+        //     point: [0, view.size.height / 3 * 1],
+        //     size: [view.size.width, view.size.height / 3],
+        //     dashArray: [10, 10],
+        //     strokeColor: 'black'
+        // });
+
+function bandsInit(num) {
+    for (var i = 0; i < num; i++) {
+        band = new Shape.Rectangle({
+            point: [0, view.size.height / num * i],
+            size: [view.size.width, view.size.height / num],
+            dashArray: [10, 10],
+            strokeColor: 'black'
+        });
+        mBands.addChild(band);
+    }
 }
 
 
@@ -148,7 +172,7 @@ draw.onMouseUp = function(event) {
         // wrap containers up
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
-        mLayer.addChild(mLollipopContainer);
+        mForest.addChild(mLollipopContainer);
         // rod
         mRod = createRod(mLollipopContainer);
         mLollipopContainer.appendBottom(mRod);
@@ -156,6 +180,7 @@ draw.onMouseUp = function(event) {
         // draw state
         drawState = false;
     }
+    console.log(project.layers);
 }
 
 // change color on next lollipop
@@ -167,25 +192,25 @@ draw.onMouseDown = function(event) {
 draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // add circle
-        mLollipopContainer = mLayer.lastChild;
+        mLollipopContainer = mForest.lastChild;
         circle = mLollipopContainer.lastChild.lastChild.clone();
         circle.scale(0.8);
         mDotContainer = new Group();
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
         // dotContainerInit(mDotContainer);
-        console.log("layer has children: " + mLayer.children.length);
+        console.log("layer has children: " + mForest.children.length);
         // Prevent the key event from bubbling
         return false;
     }
     if (event.key == '-') {
         // remove circle
-        if (mLayer.lastChild.children.length <= 2) {
-            mLayer.lastChild.remove();
+        if (mForest.lastChild.children.length <= 2) {
+            mForest.lastChild.remove();
         } else {
-            mLayer.lastChild.removeChildren(mLayer.lastChild.children.length - 1);
+            mLayer.lastChild.removeChildren(mForest.lastChild.children.length - 1);
         }
-        console.log("layer has children: " + mLayer.children.length);
+        console.log("layer has children: " + mForest.children.length);
         return false;
     }
     if (event.key == 'enter') {
@@ -307,7 +332,7 @@ edit.onKeyDown = function(event) {
 
 function onFrame(event) {
 	// iterate each lollipop in the view
-	rotationStep(mLayer);
+	rotationStep(mForest);
 }
 
 function rotationStep(_item) {
@@ -321,8 +346,8 @@ function rotationStep(_item) {
 			if (_item.name == 'dot') {
 				if (_item.intersects(dot2rod(_item))) {
 					if (!_item.data.hit) {
-						_item.data.hit = true;
 						dot2rod(_item).visible = true;
+						_item.data.hit = true;
 						console.log('hit');
 						console.log(_item.rotation + _item.data.initAngle);
 					}

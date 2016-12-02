@@ -9,8 +9,11 @@
 // 	</lollipopContainer>
 // </layer>
 var mLayer = new Layer();
+var mForest = new Group();
+var mBands = new Group();
+mLayer.addChild(mForest);
+mLayer.addChild(mBands);
 var mLollipopContainer, mDotContainer;
-var rods = new Group();
 /*
 _lollipopContainer.data = {
 	playback: [0, 1],
@@ -38,8 +41,8 @@ var _dot = new Path.Circle({
     fillColor: 'white',
     strokeColor: 'black',
     strokeWidth: 0.5
-});	// Class for dots, presets
-var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the path
+}); // Class for dots, presets
+var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
 /*********** MODE **********/
 var MODE = 0;
@@ -47,15 +50,36 @@ var drawState = false;
 
 /*********** GLOBAL VARIABLES *************/
 // global mouseEvent tools
-var draw = new Tool();	//create-lollipop.js
-var edit = new Tool();	// edit-lollipop.js
+var draw = new Tool(); //create-lollipop.js
+var edit = new Tool(); // edit-lollipop.js
 
 // global color
 var mColor = {
     hue: 360 * Math.random(),
-    saturation: 1,
+    saturation: 0.5,
     brightness: 1,
-    alpha: 0.1
+    alpha: 0.3
+}
+
+// octave band
+bandsInit(3);
+        // var band = new Shape.Rectangle({
+        //     point: [0, view.size.height / 3 * 1],
+        //     size: [view.size.width, view.size.height / 3],
+        //     dashArray: [10, 10],
+        //     strokeColor: 'black'
+        // });
+
+function bandsInit(num) {
+    for (var i = 0; i < num; i++) {
+        band = new Shape.Rectangle({
+            point: [0, view.size.height / num * i],
+            size: [view.size.width, view.size.height / num],
+            dashArray: [10, 10],
+            strokeColor: 'black'
+        });
+        mBands.addChild(band);
+    }
 }
 
 
