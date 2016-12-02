@@ -69,7 +69,7 @@ var mColor = {
 
 // octave band
 var bandNum = 3;
-var band0 = 4
+var bandCeil = 6;
 var bandWidth = view.size.height / bandNum;
 bandsInit(bandNum);
 
@@ -122,7 +122,8 @@ function lollipopInit(_lollipopContainer) {
 			speed: 0.5,
 			orientation: 1,
 		}
-		// console.log("lollipop init");
+	setOctave(_lollipopContainer);
+	console.log("octave: " + _lollipopContainer.data.octave);
 }
 
 function createRod(_lollipopContainer) {
@@ -138,6 +139,10 @@ function createRod(_lollipopContainer) {
 	mRod.name = 'rod';
 	mRod.visible = false;
 	return mRod;
+}
+
+function setOctave(_lollipopContainer) {
+	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.position.y/bandWidth);
 };
 
 /*
@@ -294,6 +299,8 @@ edit.onMouseDrag = function(event) {
 
 edit.onMouseUp = function(event) {
     mBands.visible = false;
+    setOctave(doubleParent(path));
+    console.log("octave: " + doubleParent(path).data.octave);
 }
 
 // add circle and remove circle

@@ -18,7 +18,8 @@ function lollipopInit(_lollipopContainer) {
 			speed: 0.5,
 			orientation: 1,
 		}
-		// console.log("lollipop init");
+	setOctave(_lollipopContainer);
+	console.log("octave: " + _lollipopContainer.data.octave);
 }
 
 function createRod(_lollipopContainer) {
@@ -34,4 +35,8 @@ function createRod(_lollipopContainer) {
 	mRod.name = 'rod';
 	mRod.visible = false;
 	return mRod;
+}
+
+function setOctave(_lollipopContainer) {
+	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.position.y/bandWidth);
 }

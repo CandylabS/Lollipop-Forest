@@ -63,7 +63,7 @@ var mColor = {
 
 // octave band
 var bandNum = 3;
-var band0 = 4
+var bandCeil = 6;
 var bandWidth = view.size.height / bandNum;
 bandsInit(bandNum);
 

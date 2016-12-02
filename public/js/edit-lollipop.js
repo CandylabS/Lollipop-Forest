@@ -71,6 +71,8 @@ edit.onMouseDrag = function(event) {
 
 edit.onMouseUp = function(event) {
     mBands.visible = false;
+    setOctave(doubleParent(path));
+    console.log("octave: " + doubleParent(path).data.octave);
 }
 
 // add circle and remove circle
