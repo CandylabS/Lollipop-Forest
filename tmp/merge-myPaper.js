@@ -302,7 +302,9 @@ edit.onMouseMove = function(event) {
     /*** FOR LATER USE ONLY ***/
     // This is for dragging event
     if (hitResult && hitResult.item)
-        hitResult.item.selected = true;
+        if (hitResult.item.name != 'rod') {
+            hitResult.item.selected = true;
+        }
 }
 
 edit.onMouseDrag = function(event) {
