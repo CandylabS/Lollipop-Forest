@@ -28,7 +28,7 @@ edit.onMouseDown = function(event) {
             var mDot = new SymbolItem(dot);
             mDot.removeOnDrag();
             mDot.position = nearestPoint;
-            mDot.data.initAngle = (mDot.position - path.position).angle - path.parent.data.rod;
+            mDot.data.initAngle = (mDot.position - path.position).angle - path.parent.parent.data.rod;
             console.log(mDot.data.initAngle);
 
             // form a group
