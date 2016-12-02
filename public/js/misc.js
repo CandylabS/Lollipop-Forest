@@ -31,9 +31,9 @@ function createRod(_lollipopContainer) {
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
 	mRod.strokeColor = '#9C9C9A';
-	mRod.dashArray = [4, 8];
+	mRod.dashArray = mDashArray;
 	mRod.name = 'rod';
-	mRod.visible = false;
+	mRod.visible = true;
 	return mRod;
 }
 

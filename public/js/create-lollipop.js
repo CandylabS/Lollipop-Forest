@@ -30,6 +30,8 @@ draw.onMouseUp = function(event) {
         drawState = false;
     }
     console.log(project.layers);
+    // change tool to edit mode
+    edit.activate();
 }
 
 // change color on next lollipop

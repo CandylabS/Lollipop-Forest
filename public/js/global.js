@@ -60,6 +60,8 @@ var mColor = {
     brightness: 1,
     alpha: 0.3
 }
+// styles
+mDashArray = [4, 8];
 
 // octave band
 var bandNum = 3;

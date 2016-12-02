@@ -66,6 +66,8 @@ var mColor = {
     brightness: 1,
     alpha: 0.3
 }
+// styles
+mDashArray = [4, 8];
 
 // octave band
 var bandNum = 3;
@@ -135,9 +137,9 @@ function createRod(_lollipopContainer) {
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
 	mRod.strokeColor = '#9C9C9A';
-	mRod.dashArray = [4, 8];
+	mRod.dashArray = mDashArray;
 	mRod.name = 'rod';
-	mRod.visible = false;
+	mRod.visible = true;
 	return mRod;
 }
 
@@ -183,6 +185,8 @@ draw.onMouseUp = function(event) {
         drawState = false;
     }
     console.log(project.layers);
+    // change tool to edit mode
+    edit.activate();
 }
 
 // change color on next lollipop
@@ -354,27 +358,34 @@ function rotationStep(_item) {
 		if (doubleParent(_item) != null) {
 			_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.position);
 			if (_item.name == 'dot') {
-				if (_item.intersects(dot2rod(_item))) {
-					if (!_item.data.hit) {
-						dot2rod(_item).visible = true;
-						_item.data.hit = true;
-						if (doubleParent(_item).data.octave == 4) {
-							playSample('Grand Piano', 'F4',  audioContext.destination);
-						} else if (doubleParent(_item).data.octave == 5) {
-							playSample('Grand Piano', 'F5',  audioContext.destination);
-						} else {
-							playSample('Grand Piano', 'F6',  audioContext.destination);
-						}
-						
-						console.log('hit');
-						console.log(_item.rotation + _item.data.initAngle);
-					}
-				} else if (_item.data.hit) {
-					_item.data.hit = false;
-					dot2rod(_item).visible = false;
-				}
+				hitDot(_item);
 			}
 		}
+	}
+}
+
+// when a dot is hit..
+function hitDot(_item) {
+	if (_item.intersects(dot2rod(_item))) {
+		if (!_item.data.hit) {
+			// dot2rod(_item).visible = true;
+			dot2rod(_item).dashArray = [];
+			_item.data.hit = true;
+			if (doubleParent(_item).data.octave == 4) {
+				playSample('Grand Piano', 'F4', audioContext.destination);
+			} else if (doubleParent(_item).data.octave == 5) {
+				playSample('Grand Piano', 'F5', audioContext.destination);
+			} else {
+				playSample('Grand Piano', 'F6', audioContext.destination);
+			}
+
+			console.log('hit');
+			console.log(_item.rotation + _item.data.initAngle);
+		}
+	} else if (_item.data.hit) {
+		_item.data.hit = false;
+		// dot2rod(_item).visible = false;
+		dot2rod(_item).dashArray = mDashArray;
 	}
 }
 
