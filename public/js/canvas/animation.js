@@ -1,6 +1,7 @@
 function onFrame(event) {
 	// iterate each lollipop in the view
 	rotationStep(mForest);
+	setRod();
 }
 
 function rotationStep(_item) {

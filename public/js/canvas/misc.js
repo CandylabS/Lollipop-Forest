@@ -13,11 +13,11 @@ function setPlayback(_lollipopContainer) {
 // initialization
 function lollipopInit(_lollipopContainer) {
 	_lollipopContainer.data = {
-			rod: 90,
-			playback: 1,
-			speed: 1,
-			orientation: 1,
-		}
+		rod: 90,
+		playback: 1,
+		speed: 1,
+		orientation: 1,
+	}
 	setOctave(_lollipopContainer);
 	console.log("octave: " + _lollipopContainer.data.octave);
 }
@@ -30,13 +30,31 @@ function createRod(_lollipopContainer) {
 	// to.rotate(angle, from);
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
-	mRod.strokeColor = '#9C9C9A';
-	mRod.dashArray = mDashArray;
 	mRod.name = 'rod';
-	mRod.visible = true;
+	mRod.style = {
+		strokeColor: '#9C9C9A',
+		dashArray: mDashArray,
+		visible: true
+	}
+	mRod.data.from = from;
 	return mRod;
 }
 
+function setRod() {
+	if (hitResult) {
+		if (Key.isDown('up')) {
+			doubleParent(hitResult.item).firstChild.rotate(-1, doubleParent(hitResult.item).firstChild.data.from);
+			doubleParent(hitResult.item).data.rod -= 1;
+		}
+		if (Key.isDown('down')) {
+			doubleParent(hitResult.item).firstChild.rotate(1, doubleParent(hitResult.item).firstChild.data.from);
+			doubleParent(hitResult.item).data.rod += 1;
+		}
+	}
+	// console.log("deltaAngle: " + deltaAngle);
+	// _lollipopContainer.firstChild.rotate(_deltaAngle, _lollipopContainer.firstChild.data.from);
+}
+
 function setOctave(_lollipopContainer) {
-	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.position.y/bandWidth);
+	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.position.y / bandWidth);
 }

@@ -91,3 +91,4 @@ var hitOptions = {
     tolerance: 5
 };
 var segment, path, hitResult;
+var deltaAngle = 0; // use rod position

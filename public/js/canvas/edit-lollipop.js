@@ -103,5 +103,8 @@ edit.onKeyDown = function(event) {
             // playback: 1-play, 0-pause
             setPlayback(doubleParent(hitResult.item));
         }
+        if (event.key == 'a') {
+            console.log("angle now:" + doubleParent(hitResult.item).data.rod);
+        }
     }
 }
