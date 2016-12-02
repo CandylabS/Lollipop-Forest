@@ -62,13 +62,16 @@ var mColor = {
 }
 
 // octave band
-bandsInit(3);
+var bandNum = 3;
+var band0 = 4
+var bandWidth = view.size.height / bandNum;
+bandsInit(bandNum);
 
 function bandsInit(num) {
     for (var i = 0; i < num; i++) {
         band = new Shape.Rectangle({
-            point: [0, view.size.height / num * i],
-            size: [view.size.width, view.size.height / num],
+            point: [0, bandWidth * i],
+            size: [view.size.width, bandWidth],
             fillColor: { hue: 43, saturation: 6/100, brightness: (94-i*2)/100 }
         });
         mBands.addChild(band);
