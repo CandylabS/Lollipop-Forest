@@ -15,7 +15,7 @@ function lollipopInit(_lollipopContainer) {
 	_lollipopContainer.data = {
 			rod: 90,
 			playback: 1,
-			speed: 0.5,
+			speed: 1,
 			orientation: 1,
 		}
 	setOctave(_lollipopContainer);
