@@ -276,6 +276,7 @@ edit.onMouseMove = function(event) {
 
 edit.onMouseDrag = function(event) {
     mBands.visible = true;
+    mBands.sendToBack();
     if (segment) {
         segment.point += event.delta;
         path.smooth();
