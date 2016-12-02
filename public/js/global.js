@@ -10,6 +10,7 @@
 // </layer>
 var layer = new Layer();
 var mLollipopContainer, mDotContainer;
+var rods = new Group();
 /*
 _lollipopContainer.data = {
 	playback: [0, 1],
@@ -30,7 +31,7 @@ _dotContainer.data = {
     ...
 };
 */
-var circle;
+var circle, mRod;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
@@ -42,6 +43,7 @@ var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the pat
 
 /*********** MODE **********/
 var MODE = 0;
+var drawState = false;
 
 /*********** GLOBAL VARIABLES *************/
 // global mouseEvent tools

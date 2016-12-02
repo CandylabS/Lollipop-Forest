@@ -16,6 +16,7 @@
 // </layer>
 var layer = new Layer();
 var mLollipopContainer, mDotContainer;
+var rods = new Group();
 /*
 _lollipopContainer.data = {
 	playback: [0, 1],
@@ -36,7 +37,7 @@ _dotContainer.data = {
     ...
 };
 */
-var circle;
+var circle, mRod;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
@@ -48,6 +49,7 @@ var dot = new SymbolDefinition(_dot);	// Create a symbol definition from the pat
 
 /*********** MODE **********/
 var MODE = 0;
+var drawState = false;
 
 /*********** GLOBAL VARIABLES *************/
 // global mouseEvent tools
@@ -86,20 +88,27 @@ draw.onMouseDrag = function(event) {
         radius: (event.downPoint - event.point).length,
         fillColor: mColor
     });
-    mDotContainer = new Group();
-    mLollipopContainer = new Group();
+
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    mLollipopContainer.removeOnDrag();
-    // wrap containers up
-    mDotContainer.addChild(circle);
-    mLollipopContainer.addChild(mDotContainer);
-    lollipopInit(mLollipopContainer);
-    dotContainerInit(mDotContainer);
-    layer.addChild(mLollipopContainer);
-    // console.log("dot has children: " + mDotContainer.children.length);
-    // console.log("lollipop has children: " + mLollipopContainer.children.length);
-    // console.log("layer has children: " + layer.children.length);
+    if (circle.area > 100) drawState = true;
+}
+
+draw.onMouseUp = function(event) {
+    // set container
+    if (drawState) {
+        mDotContainer = new Group();
+        mLollipopContainer = new Group();
+        // wrap containers up
+        mDotContainer.addChild(circle);
+        mLollipopContainer.addChild(mDotContainer);
+        layer.addChild(mLollipopContainer);
+        // initialize
+        lollipopInit(mLollipopContainer);
+        // dotContainerInit(mDotContainer);
+        // draw state
+        drawState = false;
+    }
 }
 
 // change color on next lollipop
@@ -112,18 +121,19 @@ draw.onKeyDown = function(event) {
     if (event.key == '=') {
         // add circle
         mLollipopContainer = layer.lastChild;
-        circle = mLollipopContainer.lastChild.firstChild.clone();
+        circle = mLollipopContainer.lastChild.lastChild.clone();
         circle.scale(0.8);
         mDotContainer = new Group();
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
+        // dotContainerInit(mDotContainer);
         console.log("layer has children: " + layer.children.length);
         // Prevent the key event from bubbling
         return false;
     }
     if (event.key == '-') {
         // remove circle
-        if (layer.lastChild.children.length <= 1) {
+        if (layer.lastChild.children.length <= 2) {
             layer.lastChild.remove();
         } else {
             layer.lastChild.removeChildren(layer.lastChild.children.length - 1);
@@ -172,7 +182,7 @@ edit.onMouseDown = function(event) {
             var mDot = new SymbolItem(dot);
             mDot.removeOnDrag();
             mDot.position = nearestPoint;
-            mDot.data.initAngle = (mDot.position - path.position).angle + path.parent.data.rod;
+            mDot.data.initAngle = (mDot.position - path.position).angle - path.parent.data.rod;
             console.log(mDot.data.initAngle);
 
             // form a group
@@ -222,10 +232,11 @@ edit.onKeyDown = function(event) {
             circle.scale(0.8);
             mDotContainer = new Group();
             mDotContainer.addChild(circle);
-            hitResult.item.parent.parent.addChild(mDotContainer);
+            // dotContainerInit(mDotContainer);
+            hitResult.item.parent.parent.appendTop(mDotContainer);
         }
         if (event.key == '-') {
-            if (hitResult.item.parent.parent.children.length <= 1) {
+            if (hitResult.item.parent.parent.children.length <= 2) {
                 hitResult.item.parent.parent.remove();
             } else {
                 hitResult.item.parent.parent.removeChildren(hitResult.item.parent.parent.children.length - 1);
@@ -251,15 +262,21 @@ edit.onKeyDown = function(event) {
  */
 
 function onFrame(event) {
-    // Rotate the group by 1 degree from
-    // the centerpoint of the view:
-    if (layer.hasChildren()) {
-        for (var i = 0; i < layer.children.length; i++) {
-            for (var j = 0; j < layer.children[i].children.length; j++) {
-                layer.children[i].children[j].rotate(angularPerFrame(i, j), layer.children[i].center);	// layer.children.[i].children[j].center;
-            }
-        }
-    }
+	// Rotate the group by 1 degree from
+	// the centerpoint of the view:
+	if (layer.hasChildren()) {
+		for (var i = 0; i < layer.children.length; i++) {
+			if (layer.children[i].hasChildren()) {
+				for (var j = 0; j < layer.children[i].children.length; j++) {
+					if (layer.children[i].children[j].hasChildren()) {
+						for (var k = 0; k < layer.children[i].children[j].children.length; k++) {
+							layer.children[i].children[j].children[k].rotate(angularPerFrame(i, j), layer.children[i].children[j].position); // layer.children.[i].children[j].center;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 function angularPerFrame(_i, _j) {
@@ -269,20 +286,41 @@ function angularPerFrame(_i, _j) {
 	return playback * orientation * speed;
 }
 
-// initiation
+// initialization
 function lollipopInit(_lollipopContainer) {
 	_lollipopContainer.data = {
-			playback: 1,
-			speed: 	1,
-			orientation: 1
+		rod: 90,
+		playback: 1,
+		speed: 1,
+		orientation: 1,
 	}
+	mRod = createRod(_lollipopContainer);
+	_lollipopContainer.appendBottom(mRod);
+	// console.log("lollipop init");
 }
 
-function dotContainerInit(_dotContainer) {
-	_dotContainer.data = {
-		rod: -90
-	}
+// function dotContainerInit(_dotContainer) {
+// 	// console.log("dot init");
+// }
+
+function createRod(_lollipopContainer) {
+	var length = _lollipopContainer.firstChild.lastChild.toShape(false).radius;
+	var angle = _lollipopContainer.data.rod;
+	var from = _lollipopContainer.position;
+	var to = new Point(from.x + length * 2, from.y);
+	// to.rotate(angle, from);
+	console.log("from, to: " + from + '-' + to);
+	var mRod = new Path.Line(from, to).rotate(angle, from);
+	mRod.strokeColor = 'black';
+	return mRod;
 }
+
+// intersection and hide/show
+// Hide the path:
+// path.visible = false;
+// Check whether the bounding box of the two circle
+// shaped paths intersect:
+// if (largeCircle.bounds.intersects(circle.bounds)
 
 function setPlayback(_lollipopContainer) {
 	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;

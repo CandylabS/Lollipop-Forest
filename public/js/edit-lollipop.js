@@ -28,7 +28,7 @@ edit.onMouseDown = function(event) {
             var mDot = new SymbolItem(dot);
             mDot.removeOnDrag();
             mDot.position = nearestPoint;
-            mDot.data.initAngle = (mDot.position - path.position).angle + path.parent.data.rod;
+            mDot.data.initAngle = (mDot.position - path.position).angle - path.parent.data.rod;
             console.log(mDot.data.initAngle);
 
             // form a group
@@ -78,10 +78,11 @@ edit.onKeyDown = function(event) {
             circle.scale(0.8);
             mDotContainer = new Group();
             mDotContainer.addChild(circle);
-            hitResult.item.parent.parent.addChild(mDotContainer);
+            // dotContainerInit(mDotContainer);
+            hitResult.item.parent.parent.appendTop(mDotContainer);
         }
         if (event.key == '-') {
-            if (hitResult.item.parent.parent.children.length <= 1) {
+            if (hitResult.item.parent.parent.children.length <= 2) {
                 hitResult.item.parent.parent.remove();
             } else {
                 hitResult.item.parent.parent.removeChildren(hitResult.item.parent.parent.children.length - 1);
