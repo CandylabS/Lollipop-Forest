@@ -107,7 +107,7 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
-            showGeo(hitResult.item, 5);
+            showGeo(hitResult.item, 1);
         }
     }
 }

@@ -251,16 +251,18 @@ function setOctave(_lollipopContainer) {
 function intersections() {
 	if (hitResult) {
 		if (Key.modifiers.shift) {
-			var _path1 = hitResult.item.parent.children[5];
-			var _path2 = hitResult.item;
-			var intersections = _path1.getIntersections(_path2);
-			// console.log("sides: " + _path1.sides);
-			console.log("intersects: " + intersections.length);
+			var index = 3; // sides
+			var path = hitResult.item.parent.children[index - 2];
+			var offset = path.length / index;
+			// var _path2 = hitResult.item;
+			// var intersections = _path1.getIntersections(_path2);
+			// // console.log("sides: " + _path1.sides);
+			// console.log("intersects: " + intersections.length);
 			intersectionGroup.removeChildren();
 
-			for (var i = 0; i < intersections.length; i++) {
+			for (var i = 0; i < index; i++) {
 				var intersectionPath = new Path.Circle({
-					center: intersections[i].point,
+					center: path.getPointAt(offset * i),
 					radius: 4,
 					fillColor: 'white',
 					parent: intersectionGroup
@@ -423,7 +425,7 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
-            showGeo(hitResult.item, 5);
+            showGeo(hitResult.item, 1);
         }
     }
 }
