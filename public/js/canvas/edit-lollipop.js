@@ -106,12 +106,14 @@ edit.onKeyDown = function(event) {
             // playback: 1-play, 0-pause
             setPlayback(doubleParent(hitResult.item));
         }
+        // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
         }
     }
 }
 
+// press shift to hide reference
 edit.onKeyUp = function(event) {
     if (hitResult) {
         if (!Key.modifiers.shift) {

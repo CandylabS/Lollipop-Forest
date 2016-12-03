@@ -13,7 +13,7 @@ var mForest = new Group();
 var mBands = new Group();
 mLayer.addChild(mForest);
 mLayer.addChild(mBands);
-var mLollipopContainer, mDotContainer;
+
 /*
 _lollipopContainer.data = {
 	playback: [0, 1],
@@ -34,6 +34,10 @@ _dotContainer.data = {
     ...
 };
 */
+
+/*********** GLOBAL VARIABLES *************/
+// my instance
+var mLollipopContainer, mDotContainer;
 var circle, mRod;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
@@ -44,14 +48,13 @@ var _dot = new Path.Circle({
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
-/*********** MODE **********/
+// mode
 var MODE = 0;   // if inner cicle can be dragged
-var drawState = false;
 
-/*********** GLOBAL VARIABLES *************/
 // global mouseEvent tools
 var draw = new Tool(); //create-lollipop.js
 var edit = new Tool(); // edit-lollipop.js
+var drawState = false;  // use when drawing, if circle is too small then it's not a lollipop
 
 // global color
 var mColor = {
@@ -60,9 +63,10 @@ var mColor = {
     brightness: 1,
     alpha: 0.3
 }
-// styles
+// global styles
 mDashArray = [5, 5];
 
+/*********** GLOBAL INITIALIZE *************/
 // octave band
 var bandNum = 3;
 var bandCeil = 6;
