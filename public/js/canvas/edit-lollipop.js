@@ -38,7 +38,7 @@ edit.onMouseDown = function(event) {
             doubleParent(hitResult.item).appendBottom(mDot);
             mDot.name = 'dot';
             // console.log(tripleParent(path).children.length);
-        } else {
+        } else if (path.name == 'dot') {
             // remove dots
             path.remove();
         }
@@ -50,11 +50,13 @@ edit.onMouseMove = function(event) {
     project.activeLayer.selected = false;
     /*** FOR LATER USE ONLY ***/
     // This is for dragging event
-    if (hitResult && hitResult.item)
-        if (hitResult.item.name != 'rod') {
+    if (hitResult && hitResult.item) {
+        if (hitResult.item.name == 'dot' || hitResult.item.name == 'circle')
             hitResult.item.selected = true;
-        }
+    }
 }
+
+// if (tripleParent(hitResult.item).data.playback == 0)
 
 edit.onMouseDrag = function(event) {
     mBands.visible = true;
@@ -73,7 +75,7 @@ edit.onMouseDrag = function(event) {
 
 edit.onMouseUp = function(event) {
     mBands.visible = false;
-    if (path) {
+    if (path && path.name == 'circle') {
         setOctave(tripleParent(path));
         console.log("octave: " + tripleParent(path).data.octave);
     }
@@ -89,6 +91,7 @@ edit.onKeyDown = function(event) {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
             circle = tripleLastChild(tripleParent(hitResult.item)).clone();
+            circle.name = 'circle';
             circle.scale(0.8);
             referenceInit();
             dotContainerInit();
