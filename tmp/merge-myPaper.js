@@ -17,6 +17,7 @@
 var mLayer = new Layer();
 var mForest = new Group();
 var mBands = new Group();
+
 mLayer.addChild(mForest);
 mLayer.addChild(mBands);
 
@@ -42,9 +43,10 @@ _dotContainer.data = {
 */
 
 /*********** GLOBAL VARIABLES *************/
-// my instance
+// common instance
 var mLollipopContainer, mDotContainer;
 var circle, mRod;
+var mReference;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
@@ -54,7 +56,7 @@ var _dot = new Path.Circle({
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
-// mode
+// MODE section
 var MODE = 0;   // if inner cicle can be dragged
 
 // global mouseEvent tools
@@ -105,12 +107,28 @@ var deltaAngle = 0; // use rod position;
 
 /*
  * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/geometry.js
+ * ===========================================================================================
+ */
+
+// definition of mGeometry Group
+// mGeometry.style = {
+// 	visible: false;
+// }
+
+// // generate instances of unit polygon
+// for (var i = 3; i < 8; i++) {
+// 	_geometry = new Path.RegularPolygon(center, i, 1);
+// };
+
+/*
+ * ===========================================================================================
  * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/misc.js
  * ===========================================================================================
  */
 
-function dot2rod(_dot) {
-	return _dot.parent.parent.firstChild;
+function path2rod(_path) {
+	return _path.parent.parent.firstChild.firstChild;
 }
 
 function doubleParent(_item) {
@@ -141,7 +159,6 @@ function createRod(_lollipopContainer) {
 	// to.rotate(angle, from);
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
-	mRod.name = 'rod';
 	mRod.style = {
 		strokeColor: '#9C9C9A',
 		dashArray: mDashArray,
@@ -154,11 +171,11 @@ function createRod(_lollipopContainer) {
 function setRod() {
 	if (hitResult) {
 		if (Key.isDown('up')) {
-			doubleParent(hitResult.item).firstChild.rotate(-1, doubleParent(hitResult.item).firstChild.data.from);
+			path2rod(hitResult.item).rotate(-1, path2rod(hitResult.item).parent.nextSibling.position);
 			doubleParent(hitResult.item).data.rod -= 1;
 		}
 		if (Key.isDown('down')) {
-			doubleParent(hitResult.item).firstChild.rotate(1, doubleParent(hitResult.item).firstChild.data.from);
+			path2rod(hitResult.item).rotate(1, path2rod(hitResult.item).parent.nextSibling.position);
 			doubleParent(hitResult.item).data.rod += 1;
 		}
 	}
@@ -194,15 +211,18 @@ draw.onMouseUp = function(event) {
     if (drawState) {
         mDotContainer = new Group();
         mLollipopContainer = new Group();
+        mReference = new Group();
+        // mReference.name = 'ref';
         // wrap containers up
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
         mForest.addChild(mLollipopContainer);
-                // initialize
+        // initialize
         lollipopInit(mLollipopContainer);
-        // rod
+        // reference group
         mRod = createRod(mLollipopContainer);
-        mLollipopContainer.appendBottom(mRod);
+        mReference.addChild(mRod);
+        mLollipopContainer.appendBottom(mReference);
         // dotContainerInit(mDotContainer);
         // draw state
         drawState = false;
@@ -385,31 +405,44 @@ edit.onKeyUp = function(event) {
 
 function onFrame(event) {
 	// iterate each lollipop in the view
-	rotationStep(mForest);
+	rotationLoop(mForest);
 	setRod();
 }
 
-function rotationStep(_item) {
+function rotationLoop(_item) {
 	if (_item.hasChildren()) {
 		for (var i = 0; i < _item.children.length; i++) {
-			rotationStep(_item.children[i]);
+			rotationLoop(_item.children[i]);
 		}
-	} else if (_item.name != 'rod') {
-		if (doubleParent(_item) != null) {
-			_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.position);
-			if (_item.name == 'dot') {
-				hitDot(_item);
+	} else {
+		rotationStep(_item);
+	}
+}
+
+function rotationStep(_item) {
+	// all components rotate other than
+	if (doubleParent(_item) != null) {
+		if (_item.parent.index == 0) {
+			// this is inside reference group, but do not rotate rod 
+			if (_item.index != 0) {
+				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.nextSibling.position);
 			}
+		} else {
+			// this is inside dotContainer
+			_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.position);
+		}
+		if (_item.name == 'dot') {
+			hitDot(_item);
 		}
 	}
 }
 
 // when a dot is hit..
 function hitDot(_item) {
-	if (_item.intersects(dot2rod(_item))) {
+	if (_item.intersects(path2rod(_item))) {
 		if (!_item.data.hit) {
 			// dot2rod(_item).visible = true;
-			dot2rod(_item).dashArray = [];
+			path2rod(_item).dashArray = [];
 			_item.data.hit = true;
 			if (doubleParent(_item).data.octave == 4) {
 				playSample('Grand Piano', 'F4', audioContext.destination);
@@ -424,7 +457,7 @@ function hitDot(_item) {
 	} else if (_item.data.hit) {
 		_item.data.hit = false;
 		// dot2rod(_item).visible = false;
-		dot2rod(_item).dashArray = mDashArray;
+		path2rod(_item).dashArray = mDashArray;
 	}
 }
 

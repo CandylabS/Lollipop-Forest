@@ -2,6 +2,7 @@
 F.merge(
 	'myPaper.js', 
 	'/js/canvas/global.js', 
+	'/js/canvas/geometry.js',
 	'/js/canvas/misc.js',
 	'/js/canvas/create-lollipop.js', 
 	'/js/canvas/edit-lollipop.js',

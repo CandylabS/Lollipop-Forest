@@ -16,15 +16,18 @@ draw.onMouseUp = function(event) {
     if (drawState) {
         mDotContainer = new Group();
         mLollipopContainer = new Group();
+        mReference = new Group();
+        // mReference.name = 'ref';
         // wrap containers up
         mDotContainer.addChild(circle);
         mLollipopContainer.addChild(mDotContainer);
         mForest.addChild(mLollipopContainer);
-                // initialize
+        // initialize
         lollipopInit(mLollipopContainer);
-        // rod
+        // reference group
         mRod = createRod(mLollipopContainer);
-        mLollipopContainer.appendBottom(mRod);
+        mReference.addChild(mRod);
+        mLollipopContainer.appendBottom(mReference);
         // dotContainerInit(mDotContainer);
         // draw state
         drawState = false;

@@ -1,5 +1,5 @@
-function dot2rod(_dot) {
-	return _dot.parent.parent.firstChild;
+function path2rod(_path) {
+	return _path.parent.parent.firstChild.firstChild;
 }
 
 function doubleParent(_item) {
@@ -30,24 +30,21 @@ function createRod(_lollipopContainer) {
 	// to.rotate(angle, from);
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
-	mRod.name = 'rod';
 	mRod.style = {
 		strokeColor: '#9C9C9A',
 		dashArray: mDashArray,
 		visible: true
-	}
-	mRod.data.from = from;
 	return mRod;
 }
 
 function setRod() {
 	if (hitResult) {
 		if (Key.isDown('up')) {
-			doubleParent(hitResult.item).firstChild.rotate(-1, doubleParent(hitResult.item).firstChild.data.from);
+			path2rod(hitResult.item).rotate(-1, path2rod(hitResult.item).parent.nextSibling.position);
 			doubleParent(hitResult.item).data.rod -= 1;
 		}
 		if (Key.isDown('down')) {
-			doubleParent(hitResult.item).firstChild.rotate(1, doubleParent(hitResult.item).firstChild.data.from);
+			path2rod(hitResult.item).rotate(1, path2rod(hitResult.item).parent.nextSibling.position);
 			doubleParent(hitResult.item).data.rod += 1;
 		}
 	}

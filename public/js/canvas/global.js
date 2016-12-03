@@ -11,6 +11,7 @@
 var mLayer = new Layer();
 var mForest = new Group();
 var mBands = new Group();
+
 mLayer.addChild(mForest);
 mLayer.addChild(mBands);
 
@@ -36,9 +37,10 @@ _dotContainer.data = {
 */
 
 /*********** GLOBAL VARIABLES *************/
-// my instance
+// common instance
 var mLollipopContainer, mDotContainer;
 var circle, mRod;
+var mReference;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
@@ -48,7 +50,7 @@ var _dot = new Path.Circle({
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
-// mode
+// MODE section
 var MODE = 0;   // if inner cicle can be dragged
 
 // global mouseEvent tools
