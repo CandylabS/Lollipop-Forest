@@ -14,6 +14,10 @@ function tripleParent(_item) {
 	return _item.parent.parent.parent;
 }
 
+function tripleLastChild(_item) {
+	return _item.lastChild.lastChild.lastChild;
+}
+
 function setPlayback(_lollipopContainer) {
 	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
 }
@@ -43,7 +47,6 @@ function dotContainerInit() {
 
 function referenceInit() {
 	mReference = new Group();
-	mReference.addChild(circle);
 	var center = circle.position;
 	var rr = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
@@ -52,10 +55,12 @@ function referenceInit() {
 		geometry.visible = false;
 		mReference.addChild(geometry);
 	}
+	mReference.addChild(circle);
 }
 
 function showGeo(_item, _index) {
 	var ref = _item.parent.children[_index];
+	console.log("geolength: " + _item.parent.children.length);
 	if (!ref.visible) {
 		ref.visible = true;
 		lastGeo = ref;
@@ -118,16 +123,16 @@ function setOctave(_lollipopContainer) {
 // var point = path.getPointAt(offset);
 
 function intersections() {
+	intersectionGroup.removeChildren();
 	if (hitResult) {
 		if (Key.modifiers.shift) {
 			var index = 3; // sides
-			var path = hitResult.item.parent.children[index - 2];
+			var path = hitResult.item.parent.children[index - 3];
 			var offset = path.length / index;
 			// var _path2 = hitResult.item;
 			// var intersections = _path1.getIntersections(_path2);
 			// // console.log("sides: " + _path1.sides);
 			// console.log("intersects: " + intersections.length);
-			intersectionGroup.removeChildren();
 
 			for (var i = 0; i < index; i++) {
 				var intersectionPath = new Path.Circle({

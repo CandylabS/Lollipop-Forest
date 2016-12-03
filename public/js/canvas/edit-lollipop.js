@@ -11,7 +11,7 @@ edit.onMouseDown = function(event) {
 
     if (hitResult) {
         path = hitResult.item;
-        if (path.name == null) {
+        if (path.name == 'circle') {
             if (hitResult.type == 'segment') {
                 segment = hitResult.segment;
             } else if (hitResult.type == 'stroke') {
@@ -35,9 +35,9 @@ edit.onMouseDown = function(event) {
 
             // form a group
             console.log(hitResult.item);
-            doubleParent(path).appendBottom(mDot);
+            doubleParent(hitResult.item).appendBottom(mDot);
             mDot.name = 'dot';
-            console.log(tripleParent(path).children.length);
+            // console.log(tripleParent(path).children.length);
         } else {
             // remove dots
             path.remove();
@@ -73,8 +73,10 @@ edit.onMouseDrag = function(event) {
 
 edit.onMouseUp = function(event) {
     mBands.visible = false;
-    setOctave(tripleParent(path));
-    console.log("octave: " + tripleParent(path).data.octave);
+    if (path) {
+        setOctave(tripleParent(path));
+        console.log("octave: " + tripleParent(path).data.octave);
+    }
 }
 
 // add circle and remove circle
@@ -86,7 +88,7 @@ edit.onKeyDown = function(event) {
         if (event.key == '=') {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
-            circle = tripleParent(hitResult.item).lastChild.lastChild.firstChild.clone();
+            circle = tripleLastChild(tripleParent(hitResult.item)).clone();
             circle.scale(0.8);
             referenceInit();
             dotContainerInit();
@@ -107,7 +109,7 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
-            showGeo(hitResult.item, 1);
+            showGeo(hitResult.item, 0);
         }
     }
 }

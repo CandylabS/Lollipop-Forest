@@ -145,6 +145,10 @@ function tripleParent(_item) {
 	return _item.parent.parent.parent;
 }
 
+function tripleLastChild(_item) {
+	return _item.lastChild.lastChild.lastChild;
+}
+
 function setPlayback(_lollipopContainer) {
 	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
 }
@@ -174,7 +178,6 @@ function dotContainerInit() {
 
 function referenceInit() {
 	mReference = new Group();
-	mReference.addChild(circle);
 	var center = circle.position;
 	var rr = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
@@ -183,10 +186,12 @@ function referenceInit() {
 		geometry.visible = false;
 		mReference.addChild(geometry);
 	}
+	mReference.addChild(circle);
 }
 
 function showGeo(_item, _index) {
 	var ref = _item.parent.children[_index];
+	console.log("geolength: " + _item.parent.children.length);
 	if (!ref.visible) {
 		ref.visible = true;
 		lastGeo = ref;
@@ -249,16 +254,16 @@ function setOctave(_lollipopContainer) {
 // var point = path.getPointAt(offset);
 
 function intersections() {
+	intersectionGroup.removeChildren();
 	if (hitResult) {
 		if (Key.modifiers.shift) {
 			var index = 3; // sides
-			var path = hitResult.item.parent.children[index - 2];
+			var path = hitResult.item.parent.children[index - 3];
 			var offset = path.length / index;
 			// var _path2 = hitResult.item;
 			// var intersections = _path1.getIntersections(_path2);
 			// // console.log("sides: " + _path1.sides);
 			// console.log("intersects: " + intersections.length);
-			intersectionGroup.removeChildren();
 
 			for (var i = 0; i < index; i++) {
 				var intersectionPath = new Path.Circle({
@@ -286,9 +291,9 @@ draw.onMouseDrag = function(event) {
     circle = new Path.Circle({
         center: event.downPoint,
         radius: (event.downPoint - event.point).length,
-        fillColor: mColor
+        fillColor: mColor,
+        name : 'circle'
     });
-
     // Remove this path on the next drag event:
     circle.removeOnDrag();
     if (circle.area > 100) drawState = true;
@@ -332,7 +337,7 @@ edit.onMouseDown = function(event) {
 
     if (hitResult) {
         path = hitResult.item;
-        if (path.name == null) {
+        if (path.name == 'circle') {
             if (hitResult.type == 'segment') {
                 segment = hitResult.segment;
             } else if (hitResult.type == 'stroke') {
@@ -356,9 +361,9 @@ edit.onMouseDown = function(event) {
 
             // form a group
             console.log(hitResult.item);
-            doubleParent(path).appendBottom(mDot);
+            doubleParent(hitResult.item).appendBottom(mDot);
             mDot.name = 'dot';
-            console.log(tripleParent(path).children.length);
+            // console.log(tripleParent(path).children.length);
         } else {
             // remove dots
             path.remove();
@@ -394,8 +399,10 @@ edit.onMouseDrag = function(event) {
 
 edit.onMouseUp = function(event) {
     mBands.visible = false;
-    setOctave(tripleParent(path));
-    console.log("octave: " + tripleParent(path).data.octave);
+    if (path) {
+        setOctave(tripleParent(path));
+        console.log("octave: " + tripleParent(path).data.octave);
+    }
 }
 
 // add circle and remove circle
@@ -407,7 +414,7 @@ edit.onKeyDown = function(event) {
         if (event.key == '=') {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
-            circle = tripleParent(hitResult.item).lastChild.lastChild.firstChild.clone();
+            circle = tripleLastChild(tripleParent(hitResult.item)).clone();
             circle.scale(0.8);
             referenceInit();
             dotContainerInit();
@@ -428,7 +435,7 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
-            showGeo(hitResult.item, 1);
+            showGeo(hitResult.item, 0);
         }
     }
 }

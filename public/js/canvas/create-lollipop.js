@@ -3,9 +3,9 @@ draw.onMouseDrag = function(event) {
     circle = new Path.Circle({
         center: event.downPoint,
         radius: (event.downPoint - event.point).length,
-        fillColor: mColor
+        fillColor: mColor,
+        name : 'circle'
     });
-
     // Remove this path on the next drag event:
     circle.removeOnDrag();
     if (circle.area > 100) drawState = true;
