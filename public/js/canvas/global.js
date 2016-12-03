@@ -49,6 +49,9 @@ var _dot = new Path.Circle({
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
+var intersectionGroup = new Group();
+var lastGeo;
+
 // MODE section
 var MODE = 0;   // if inner cicle can be dragged
 

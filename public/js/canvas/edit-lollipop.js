@@ -54,7 +54,6 @@ edit.onMouseMove = function(event) {
         if (hitResult.item.name != 'rod') {
             hitResult.item.selected = true;
         }
-
 }
 
 edit.onMouseDrag = function(event) {
@@ -96,7 +95,7 @@ edit.onKeyDown = function(event) {
         if (event.key == '-') {
             if (tripleParent(hitResult.item).children.length <= 2) {
                 tripleParent(hitResult.item).remove();
-                if (!mForest.hasChildren()) draw.activate();    // when there is no lollipop, switch into draw tool
+                if (!mForest.hasChildren()) draw.activate(); // when there is no lollipop, switch into draw tool
             } else {
                 tripleParent(hitResult.item).removeChildren(tripleParent(hitResult.item).children.length - 1);
             }
@@ -108,17 +107,15 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
-            showGeo(hitResult.item, 1);
+            showGeo(hitResult.item, 5);
         }
     }
 }
 
 // press shift to hide reference
 edit.onKeyUp = function(event) {
-    if (hitResult) {
-        if (!Key.modifiers.shift) {
-            hitResult.item.selected = true;
-            hideGeo(hitResult.item, 1);
-        }
+    if (!Key.modifiers.shift) {
+        if (hitResult) hitResult.item.selected = true;
+        hideGeo(lastGeo);
     }
 }

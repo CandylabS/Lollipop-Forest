@@ -45,7 +45,7 @@ function referenceInit() {
 	mReference = new Group();
 	mReference.addChild(circle);
 	var center = circle.position;
-	var rr = circle.bounds.width / 2;
+	var rr = circle.bounds.width / 2;	// must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
 		geometry = new Path.RegularPolygon(center, i, rr);
 		geometry.strokeColor = "black";
@@ -58,15 +58,17 @@ function showGeo(_item, _index) {
 	var ref = _item.parent.children[_index];
 	if (!ref.visible) {
 		ref.visible = true;
+		lastGeo = ref;
 		// console.log(ref.radius);
 	}
 }
 
-function hideGeo(_item, _index) {
-	var ref = _item.parent.children[_index];
+function hideGeo(ref) {
+	// var ref = _item.parent.children[_index];
 	if (ref.visible) {
 		ref.visible = false;
 	}
+	if (intersectionGroup.hasChildren()) intersectionGroup.removeChildren();	// make sure all reference dots are removed)
 }
 
 
@@ -104,4 +106,25 @@ function setRod() {
 
 function setOctave(_lollipopContainer) {
 	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.firstChild.position.y / bandWidth);
+}
+
+function intersections() {
+	if (path) {
+		if (Key.modifiers.shift) {
+			var _path1 = path.parent.children[5];
+			var _path2 = path;
+			var intersections = _path1.getIntersections(_path2);
+            console.log("intersects: " + intersections.length);
+			intersectionGroup.removeChildren();
+
+			for (var i = 0; i < intersections.length; i++) {
+				var intersectionPath = new Path.Circle({
+					center: intersections[i].point,
+					radius: 4,
+					fillColor: 'white',
+					parent: intersectionGroup
+				});
+			}
+		}
+	}
 }

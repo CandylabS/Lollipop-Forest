@@ -55,6 +55,9 @@ var _dot = new Path.Circle({
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
+var intersectionGroup = new Group();
+var lastGeo;
+
 // MODE section
 var MODE = 0;   // if inner cicle can be dragged
 
@@ -173,7 +176,7 @@ function referenceInit() {
 	mReference = new Group();
 	mReference.addChild(circle);
 	var center = circle.position;
-	var rr = circle.bounds.width / 2;
+	var rr = circle.bounds.width / 2;	// must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
 		geometry = new Path.RegularPolygon(center, i, rr);
 		geometry.strokeColor = "black";
@@ -186,15 +189,17 @@ function showGeo(_item, _index) {
 	var ref = _item.parent.children[_index];
 	if (!ref.visible) {
 		ref.visible = true;
+		lastGeo = ref;
 		// console.log(ref.radius);
 	}
 }
 
-function hideGeo(_item, _index) {
-	var ref = _item.parent.children[_index];
+function hideGeo(ref) {
+	// var ref = _item.parent.children[_index];
 	if (ref.visible) {
 		ref.visible = false;
 	}
+	if (intersectionGroup.hasChildren()) intersectionGroup.removeChildren();	// make sure all reference dots are removed)
 }
 
 
@@ -232,6 +237,27 @@ function setRod() {
 
 function setOctave(_lollipopContainer) {
 	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.firstChild.position.y / bandWidth);
+}
+
+function intersections() {
+	if (path) {
+		if (Key.modifiers.shift) {
+			var _path1 = path.parent.children[5];
+			var _path2 = path;
+			var intersections = _path1.getIntersections(_path2);
+            console.log("intersects: " + intersections.length);
+			intersectionGroup.removeChildren();
+
+			for (var i = 0; i < intersections.length; i++) {
+				var intersectionPath = new Path.Circle({
+					center: intersections[i].point,
+					radius: 4,
+					fillColor: 'white',
+					parent: intersectionGroup
+				});
+			}
+		}
+	}
 };
 
 /*
@@ -334,7 +360,6 @@ edit.onMouseMove = function(event) {
         if (hitResult.item.name != 'rod') {
             hitResult.item.selected = true;
         }
-
 }
 
 edit.onMouseDrag = function(event) {
@@ -376,7 +401,7 @@ edit.onKeyDown = function(event) {
         if (event.key == '-') {
             if (tripleParent(hitResult.item).children.length <= 2) {
                 tripleParent(hitResult.item).remove();
-                if (!mForest.hasChildren()) draw.activate();    // when there is no lollipop, switch into draw tool
+                if (!mForest.hasChildren()) draw.activate(); // when there is no lollipop, switch into draw tool
             } else {
                 tripleParent(hitResult.item).removeChildren(tripleParent(hitResult.item).children.length - 1);
             }
@@ -388,18 +413,16 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
-            showGeo(hitResult.item, 1);
+            showGeo(hitResult.item, 5);
         }
     }
 }
 
 // press shift to hide reference
 edit.onKeyUp = function(event) {
-    if (hitResult) {
-        if (!Key.modifiers.shift) {
-            hitResult.item.selected = true;
-            hideGeo(hitResult.item, 1);
-        }
+    if (!Key.modifiers.shift) {
+        if (hitResult) hitResult.item.selected = true;
+        hideGeo(lastGeo);
     }
 };
 
@@ -411,8 +434,9 @@ edit.onKeyUp = function(event) {
 
 function onFrame(event) {
 	// iterate each lollipop in the view
-	rotationLoop(mForest);
-	setRod();
+	rotationLoop(mForest);		// defalut
+	setRod();					// when key == "up" || key == "down"
+	intersections();			// when key.modifier.shift
 }
 
 function rotationLoop(_item) {
