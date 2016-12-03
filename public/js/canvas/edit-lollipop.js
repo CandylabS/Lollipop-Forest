@@ -29,15 +29,15 @@ edit.onMouseDown = function(event) {
             mDot.removeOnDrag();
             mDot.position = nearestPoint;
             mDot.data.hit = false;
-            mDot.data.initAngle = (mDot.position - path.position).angle - doubleParent(path).data.rod;
+            mDot.data.initAngle = (mDot.position - path.position).angle - tripleParent(path).data.rod;
             console.log(mDot.data.initAngle);
             console.log(mDot.data.hit);
 
             // form a group
             console.log(hitResult.item);
-            path.parent.appendBottom(mDot);
+            doubleParent(path).appendBottom(mDot);
             mDot.name = 'dot';
-            console.log(path.parent.children.length);
+            console.log(tripleParent(path).children.length);
         } else {
             // remove dots
             path.remove();
@@ -65,17 +65,17 @@ edit.onMouseDrag = function(event) {
         path.smooth();
     } else if (path) {
         if (MODE == 1) {
-            path.parent.position += event.delta;
-        } else {
             doubleParent(path).position += event.delta;
+        } else {
+            tripleParent(path).position += event.delta;
         }
     }
 }
 
 edit.onMouseUp = function(event) {
     mBands.visible = false;
-    setOctave(doubleParent(path));
-    console.log("octave: " + doubleParent(path).data.octave);
+    setOctave(tripleParent(path));
+    console.log("octave: " + tripleParent(path).data.octave);
 }
 
 // add circle and remove circle
@@ -87,24 +87,23 @@ edit.onKeyDown = function(event) {
         if (event.key == '=') {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
-            circle = doubleParent(hitResult.item).lastChild.lastChild.clone();
+            circle = tripleParent(hitResult.item).lastChild.lastChild.firstChild.clone();
             circle.scale(0.8);
-            mDotContainer = new Group();
-            mDotContainer.addChild(circle);
-            // dotContainerInit(mDotContainer);
-            doubleParent(hitResult.item).appendTop(mDotContainer);
+            referenceInit();
+            dotContainerInit();
+            tripleParent(hitResult.item).appendTop(mDotContainer);
         }
         if (event.key == '-') {
-            if (doubleParent(hitResult.item).children.length <= 2) {
-                doubleParent(hitResult.item).remove();
-                draw.activate();
+            if (tripleParent(hitResult.item).children.length <= 2) {
+                tripleParent(hitResult.item).remove();
+                if (!mForest.hasChildren()) draw.activate();    // when there is no lollipop, switch into draw tool
             } else {
-                doubleParent(hitResult.item).removeChildren(doubleParent(hitResult.item).children.length - 1);
+                tripleParent(hitResult.item).removeChildren(tripleParent(hitResult.item).children.length - 1);
             }
         }
         if (event.key == 'space') {
             // playback: 1-play, 0-pause
-            setPlayback(doubleParent(hitResult.item));
+            setPlayback(tripleParent(hitResult.item));
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
@@ -119,7 +118,7 @@ edit.onKeyUp = function(event) {
     if (hitResult) {
         if (!Key.modifiers.shift) {
             hitResult.item.selected = true;
-            // hideGeo(hitResult.item, 1);
+            hideGeo(hitResult.item, 1);
         }
     }
 }

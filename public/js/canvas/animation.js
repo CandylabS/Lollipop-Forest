@@ -17,27 +17,24 @@ function rotationLoop(_item) {
 function rotationStep(_item) {
 	// all components rotate other than
 	if (doubleParent(_item) != null) {
-		if (_item.parent.index == 0) {
-			// this is inside reference group, but do not rotate rod 
-			if (_item.index != 0) {
-				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).data.anchor);
+		// this is inside reference group, but do not rotate rod 
+		if (_item.name != 'rod') {
+			if (_item.name == 'dot') {
+				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.position);
+				hitDot(_item);
+			} else {
+				_item.rotate(angularPerFrame(tripleParent(_item)), doubleParent(_item).position);
 			}
-		} else {
-			// this is inside dotContainer
-			_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).data.anchor);
-		}
-		if (_item.name == 'dot') {
-			hitDot(_item);
 		}
 	}
 }
 
 // when a dot is hit..
 function hitDot(_item) {
-	if (_item.intersects(path2rod(_item))) {
+	if (_item.intersects(dot2rod(_item))) {
 		if (!_item.data.hit) {
 			// dot2rod(_item).visible = true;
-			path2rod(_item).dashArray = [];
+			dot2rod(_item).dashArray = [];
 			_item.data.hit = true;
 			if (doubleParent(_item).data.octave == 4) {
 				playSample('Grand Piano', 'F4', audioContext.destination);
@@ -52,7 +49,7 @@ function hitDot(_item) {
 	} else if (_item.data.hit) {
 		_item.data.hit = false;
 		// dot2rod(_item).visible = false;
-		path2rod(_item).dashArray = mDashArray;
+		dot2rod(_item).dashArray = mDashArray;
 	}
 }
 
