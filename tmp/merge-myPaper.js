@@ -264,9 +264,12 @@ function intersections() {
 				var intersectionPath = new Path.Circle({
 					center: path.getPointAt(offset * i),
 					radius: 4,
-					fillColor: 'white',
 					parent: intersectionGroup
 				});
+				if (i == 0)
+					intersectionPath.fillColor = 'red';		// starting point
+				else
+					intersectionPath.fillColor = 'white';
 			}
 		}
 	}
