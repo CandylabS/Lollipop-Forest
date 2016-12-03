@@ -176,7 +176,7 @@ function referenceInit() {
 	mReference = new Group();
 	mReference.addChild(circle);
 	var center = circle.position;
-	var rr = circle.bounds.width / 2;	// must be ceiled to make sure reference touch with outer circle
+	var rr = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
 		geometry = new Path.RegularPolygon(center, i, rr);
 		geometry.strokeColor = "black";
@@ -196,10 +196,12 @@ function showGeo(_item, _index) {
 
 function hideGeo(ref) {
 	// var ref = _item.parent.children[_index];
-	if (ref.visible) {
-		ref.visible = false;
+	if (ref) {
+		if (ref.visible) {
+			ref.visible = false;
+		}
+		if (intersectionGroup.hasChildren()) intersectionGroup.removeChildren(); // make sure all reference dots are removed)
 	}
-	if (intersectionGroup.hasChildren()) intersectionGroup.removeChildren();	// make sure all reference dots are removed)
 }
 
 
@@ -239,13 +241,21 @@ function setOctave(_lollipopContainer) {
 	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.firstChild.position.y / bandWidth);
 }
 
+// // We're going to be working with a third of the length
+// // of the path as the offset:
+// var offset = path.length / 3;
+
+// // Find the point on the path:
+// var point = path.getPointAt(offset);
+
 function intersections() {
-	if (path) {
+	if (hitResult) {
 		if (Key.modifiers.shift) {
-			var _path1 = path.parent.children[5];
-			var _path2 = path;
+			var _path1 = hitResult.item.parent.children[5];
+			var _path2 = hitResult.item;
 			var intersections = _path1.getIntersections(_path2);
-            console.log("intersects: " + intersections.length);
+			// console.log("sides: " + _path1.sides);
+			console.log("intersects: " + intersections.length);
 			intersectionGroup.removeChildren();
 
 			for (var i = 0; i < intersections.length; i++) {
