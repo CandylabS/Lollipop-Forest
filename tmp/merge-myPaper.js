@@ -44,9 +44,8 @@ _dotContainer.data = {
 
 /*********** GLOBAL VARIABLES *************/
 // common instance
-var mLollipopContainer, mDotContainer;
+var mLollipopContainer, mDotContainer, mReference;
 var circle, mRod;
-var mReference;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
@@ -111,12 +110,12 @@ var deltaAngle = 0; // use rod position;
  * ===========================================================================================
  */
 
-// definition of mGeometry Group
+//definition of mGeometry Group
 // mGeometry.style = {
 // 	visible: false;
 // }
 
-// // generate instances of unit polygon
+// generate instances of unit polygon
 // for (var i = 3; i < 8; i++) {
 // 	_geometry = new Path.RegularPolygon(center, i, 1);
 // };
@@ -142,6 +141,7 @@ function setPlayback(_lollipopContainer) {
 // initialization
 function lollipopInit(_lollipopContainer) {
 	_lollipopContainer.data = {
+		anchor : circle.position,
 		rod: 90,
 		playback: 1,
 		speed: 1,
@@ -150,6 +150,40 @@ function lollipopInit(_lollipopContainer) {
 	setOctave(_lollipopContainer);
 	console.log("octave: " + _lollipopContainer.data.octave);
 }
+
+function referenceInit(_reference) {
+	// console.log(_reference.nextSibling);
+	var center = circle.position;
+	var rr = circle.bounds.width/2;
+	for (var i = 3; i < 8; i++) {
+		geometry = new Path.RegularPolygon(center, i, rr);
+		geometry.strokeColor = "black";
+		// geometry.visible = false;
+		_reference.addChild(geometry);
+	}
+}
+
+// function showGeo(_item, _index) {
+// 	// radius = _item.bounds.width/2;
+// 	doubleParent(_item).firstChild.children[_index].visible = true;
+// 	// doubleParent(_item).firstChild.children[_index].scale(100);
+// }
+function showGeo(_item, _index) {
+	var ref = doubleParent(_item).firstChild.children[_index];
+	if (!ref.visible) {
+		ref.visible = true;
+		ref.scale(_item.bounds.width / 2, ref.position);
+	}
+}
+
+function hideGeo(_item, _index) {
+	var ref = doubleParent(_item).firstChild.children[_index];
+	if (ref.visible) {
+		ref.visible = false;
+		ref.scale(2 / _item.bounds.width);
+	}
+}
+
 
 function createRod(_lollipopContainer) {
 	var length = _lollipopContainer.firstChild.lastChild.toShape(false).radius;
@@ -164,7 +198,6 @@ function createRod(_lollipopContainer) {
 		dashArray: mDashArray,
 		visible: true
 	}
-	mRod.data.from = from;
 	return mRod;
 }
 
@@ -223,6 +256,7 @@ draw.onMouseUp = function(event) {
         mRod = createRod(mLollipopContainer);
         mReference.addChild(mRod);
         mLollipopContainer.appendBottom(mReference);
+        referenceInit(mReference);  // add geometry refernce
         // dotContainerInit(mDotContainer);
         // draw state
         drawState = false;
@@ -384,6 +418,7 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
+            showGeo(hitResult.item, 1);
         }
     }
 }
@@ -393,6 +428,7 @@ edit.onKeyUp = function(event) {
     if (hitResult) {
         if (!Key.modifiers.shift) {
             hitResult.item.selected = true;
+            // hideGeo(hitResult.item, 1);
         }
     }
 };
@@ -425,11 +461,11 @@ function rotationStep(_item) {
 		if (_item.parent.index == 0) {
 			// this is inside reference group, but do not rotate rod 
 			if (_item.index != 0) {
-				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.nextSibling.position);
+				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).data.anchor);
 			}
 		} else {
 			// this is inside dotContainer
-			_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.position);
+			_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).data.anchor);
 		}
 		if (_item.name == 'dot') {
 			hitDot(_item);

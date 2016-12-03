@@ -109,6 +109,7 @@ edit.onKeyDown = function(event) {
         // press shift to show reference
         if (Key.modifiers.shift) {
             hitResult.item.selected = false;
+            showGeo(hitResult.item, 1);
         }
     }
 }
@@ -118,6 +119,7 @@ edit.onKeyUp = function(event) {
     if (hitResult) {
         if (!Key.modifiers.shift) {
             hitResult.item.selected = true;
+            // hideGeo(hitResult.item, 1);
         }
     }
 }

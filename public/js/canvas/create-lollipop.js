@@ -28,6 +28,7 @@ draw.onMouseUp = function(event) {
         mRod = createRod(mLollipopContainer);
         mReference.addChild(mRod);
         mLollipopContainer.appendBottom(mReference);
+        referenceInit(mReference);  // add geometry refernce
         // dotContainerInit(mDotContainer);
         // draw state
         drawState = false;

@@ -20,11 +20,11 @@ function rotationStep(_item) {
 		if (_item.parent.index == 0) {
 			// this is inside reference group, but do not rotate rod 
 			if (_item.index != 0) {
-				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.nextSibling.position);
+				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).data.anchor);
 			}
 		} else {
 			// this is inside dotContainer
-			_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.position);
+			_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).data.anchor);
 		}
 		if (_item.name == 'dot') {
 			hitDot(_item);

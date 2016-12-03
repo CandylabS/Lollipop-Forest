@@ -13,6 +13,7 @@ function setPlayback(_lollipopContainer) {
 // initialization
 function lollipopInit(_lollipopContainer) {
 	_lollipopContainer.data = {
+		anchor : circle.position,
 		rod: 90,
 		playback: 1,
 		speed: 1,
@@ -21,6 +22,40 @@ function lollipopInit(_lollipopContainer) {
 	setOctave(_lollipopContainer);
 	console.log("octave: " + _lollipopContainer.data.octave);
 }
+
+function referenceInit(_reference) {
+	// console.log(_reference.nextSibling);
+	var center = circle.position;
+	var rr = circle.bounds.width/2;
+	for (var i = 3; i < 8; i++) {
+		geometry = new Path.RegularPolygon(center, i, rr);
+		geometry.strokeColor = "black";
+		// geometry.visible = false;
+		_reference.addChild(geometry);
+	}
+}
+
+// function showGeo(_item, _index) {
+// 	// radius = _item.bounds.width/2;
+// 	doubleParent(_item).firstChild.children[_index].visible = true;
+// 	// doubleParent(_item).firstChild.children[_index].scale(100);
+// }
+function showGeo(_item, _index) {
+	var ref = doubleParent(_item).firstChild.children[_index];
+	if (!ref.visible) {
+		ref.visible = true;
+		ref.scale(_item.bounds.width / 2, ref.position);
+	}
+}
+
+function hideGeo(_item, _index) {
+	var ref = doubleParent(_item).firstChild.children[_index];
+	if (ref.visible) {
+		ref.visible = false;
+		ref.scale(2 / _item.bounds.width);
+	}
+}
+
 
 function createRod(_lollipopContainer) {
 	var length = _lollipopContainer.firstChild.lastChild.toShape(false).radius;
@@ -34,6 +69,7 @@ function createRod(_lollipopContainer) {
 		strokeColor: '#9C9C9A',
 		dashArray: mDashArray,
 		visible: true
+	}
 	return mRod;
 }
 
