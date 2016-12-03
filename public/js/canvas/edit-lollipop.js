@@ -54,6 +54,7 @@ edit.onMouseMove = function(event) {
         if (hitResult.item.name != 'rod') {
             hitResult.item.selected = true;
         }
+
 }
 
 edit.onMouseDrag = function(event) {
@@ -105,8 +106,16 @@ edit.onKeyDown = function(event) {
             // playback: 1-play, 0-pause
             setPlayback(doubleParent(hitResult.item));
         }
-        if (event.key == 'a') {
-            console.log("angle now:" + doubleParent(hitResult.item).data.rod);
+        if (Key.modifiers.shift) {
+            hitResult.item.selected = false;
+        }
+    }
+}
+
+edit.onKeyUp = function(event) {
+    if (hitResult) {
+        if (!Key.modifiers.shift) {
+            hitResult.item.selected = true;
         }
     }
 }
