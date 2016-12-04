@@ -22,6 +22,22 @@ function setPlayback(_lollipopContainer) {
 	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
 }
 
+function drawDot(_point, _path) {
+	// Move the circle to the nearest point:
+	var mDot = new SymbolItem(dot);
+	mDot.removeOnDrag();
+	mDot.position = _point;
+	mDot.data.hit = false;
+	mDot.data.initAngle = (mDot.position - _path.position).angle - tripleParent(_path).data.rod;
+	console.log(mDot.data.initAngle);
+	console.log(mDot.data.hit);
+
+	// form a group
+	console.log(hitResult.item);
+	doubleParent(hitResult.item).appendBottom(mDot);
+	mDot.name = 'dot';
+}
+
 // initialization
 function lollipopInit() {
 	mLollipopContainer = new Group();
@@ -58,7 +74,13 @@ function referenceInit() {
 	mReference.addChild(circle);
 }
 
+function iterateRef(delta) {
+
+}
+
 function showGeo(_item, _index) {
+	hideGeo();
+	_index = (_index + 5) % 5;	// do not exceed bounds
 	var ref = _item.parent.children[_index];
 	console.log("geolength: " + _item.parent.children.length);
 	if (!ref.visible) {
@@ -68,8 +90,8 @@ function showGeo(_item, _index) {
 	}
 }
 
-function hideGeo(ref) {
-	// var ref = _item.parent.children[_index];
+function hideGeo() {
+	var ref = lastGeo;
 	if (ref) {
 		if (ref.visible) {
 			ref.visible = false;
@@ -126,13 +148,9 @@ function intersections() {
 	intersectionGroup.removeChildren();
 	if (hitResult) {
 		if (Key.modifiers.shift) {
-			var index = 3; // sides
+			var index = (lastGeo)?(lastGeo.index + 3):3;
 			var path = hitResult.item.parent.children[index - 3];
 			var offset = path.length / index;
-			// var _path2 = hitResult.item;
-			// var intersections = _path1.getIntersections(_path2);
-			// // console.log("sides: " + _path1.sides);
-			// console.log("intersects: " + intersections.length);
 
 			for (var i = 0; i < index; i++) {
 				var intersectionPath = new Path.Circle({
@@ -140,10 +158,7 @@ function intersections() {
 					radius: 4,
 					parent: intersectionGroup
 				});
-				if (i == 0)
-					intersectionPath.fillColor = 'red';		// starting point
-				else
-					intersectionPath.fillColor = 'white';
+				intersectionPath.fillColor = (i==0)?'red':'white';
 			}
 		}
 	}

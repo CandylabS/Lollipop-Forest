@@ -21,10 +21,10 @@ function rotationStep(_item) {
 		// this is inside reference group, but do not rotate rod 
 		if (_item.name != 'rod') {
 			if (_item.name == 'dot') {
-				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.position);
+				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
 				hitDot(_item);
 			} else {
-				_item.rotate(angularPerFrame(tripleParent(_item)), doubleParent(_item).position);
+				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
 		}
 	}

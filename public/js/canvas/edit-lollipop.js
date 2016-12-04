@@ -22,21 +22,20 @@ edit.onMouseDown = function(event) {
             hitResult.item.bringToFront();
 
             // draw dots
-            var nearestPoint = path.getNearestPoint(event.point);
-
-            // Move the circle to the nearest point:
-            var mDot = new SymbolItem(dot);
-            mDot.removeOnDrag();
-            mDot.position = nearestPoint;
-            mDot.data.hit = false;
-            mDot.data.initAngle = (mDot.position - path.position).angle - tripleParent(path).data.rod;
-            console.log(mDot.data.initAngle);
-            console.log(mDot.data.hit);
-
-            // form a group
-            console.log(hitResult.item);
-            doubleParent(hitResult.item).appendBottom(mDot);
-            mDot.name = 'dot';
+            if (Key.modifiers.shift) {
+                if (intersectionGroup.hasChildren())
+                    for (var i = 0; i < intersectionGroup.children.length; i++) {
+                        if (event.point.isClose(intersectionGroup.children[i].position, 50)) {
+                            var nearestPoint = path.getNearestPoint(intersectionGroup.children[i].position);
+                            drawDot(nearestPoint, path);
+                        }
+                    }
+                    // var nearestPoint = path.getNearestPoint(event.point);
+                console.log('shift!');
+            } else {
+                var nearestPoint = path.getNearestPoint(event.point);
+                drawDot(nearestPoint, path);
+            }
             // console.log(tripleParent(path).children.length);
         } else if (path.name == 'dot') {
             // remove dots
@@ -61,10 +60,7 @@ edit.onMouseMove = function(event) {
 edit.onMouseDrag = function(event) {
     mBands.visible = true;
     mBands.sendToBack();
-    if (segment) {
-        segment.point += event.delta;
-        path.smooth();
-    } else if (path) {
+    if (path && path.name == 'circle') {
         if (MODE == 1) {
             doubleParent(path).position += event.delta;
         } else {
@@ -111,8 +107,14 @@ edit.onKeyDown = function(event) {
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
+            var index = (lastGeo)?(lastGeo.index):0;
+            if (Key.isDown('left')) {
+                index -= 1;
+            } else if (Key.isDown('right')) {
+                index += 1;
+            }
             hitResult.item.selected = false;
-            showGeo(hitResult.item, 0);
+            showGeo(hitResult.item, index);
         }
     }
 }
@@ -121,6 +123,6 @@ edit.onKeyDown = function(event) {
 edit.onKeyUp = function(event) {
     if (!Key.modifiers.shift) {
         if (hitResult) hitResult.item.selected = true;
-        hideGeo(lastGeo);
+        hideGeo();
     }
 }
