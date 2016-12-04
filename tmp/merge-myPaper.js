@@ -153,6 +153,10 @@ function setPlayback(_lollipopContainer) {
 	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
 }
 
+function setOrientation(_lollipopContainer) {
+	_lollipopContainer.data.orientation *= -1;
+}
+
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
 	var mDot = new SymbolItem(dot);
@@ -424,6 +428,7 @@ edit.onKeyDown = function(event) {
         draw.activate();
     }
     if (hitResult) {
+        // add circle
         if (event.key == '=') {
             console.log(hitResult.item.parent);
             // console.log(hitResult.item.parent.children.length);
@@ -434,6 +439,7 @@ edit.onKeyDown = function(event) {
             dotContainerInit();
             tripleParent(hitResult.item).appendTop(mDotContainer);
         }
+        // remove circle
         if (event.key == '-') {
             if (tripleParent(hitResult.item).children.length <= 2) {
                 tripleParent(hitResult.item).remove();
@@ -442,9 +448,14 @@ edit.onKeyDown = function(event) {
                 tripleParent(hitResult.item).removeChildren(tripleParent(hitResult.item).children.length - 1);
             }
         }
+        // stop playing
         if (event.key == 'space') {
             // playback: 1-play, 0-pause
             setPlayback(tripleParent(hitResult.item));
+        }
+        // reverse playing
+        if (event.key == 'r') {
+            setOrientation(tripleParent(hitResult.item));
         }
         // press shift to show reference
         if (Key.modifiers.shift) {

@@ -22,6 +22,10 @@ function setPlayback(_lollipopContainer) {
 	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
 }
 
+function setOrientation(_lollipopContainer) {
+	_lollipopContainer.data.orientation *= -1;
+}
+
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
 	var mDot = new SymbolItem(dot);
