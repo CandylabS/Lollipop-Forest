@@ -50,7 +50,8 @@ var _dot = new Path.Circle({
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
 var intersectionGroup = new Group();
-var lastGeo;
+var divisionGroup = new Group();
+var lastGeo, div;
 
 // MODE section
 var MODE = 0;   // if inner cicle can be dragged

@@ -56,7 +56,8 @@ var _dot = new Path.Circle({
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
 
 var intersectionGroup = new Group();
-var lastGeo;
+var divisionGroup = new Group();
+var lastGeo, div;
 
 // MODE section
 var MODE = 0;   // if inner cicle can be dragged
@@ -199,25 +200,24 @@ function dotContainerInit() {
 function referenceInit() {
 	mReference = new Group();
 	var center = circle.position;
-	var rr = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
+	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
-		geometry = new Path.RegularPolygon(center, i, rr);
+		geometry = new Path.RegularPolygon(center, i, rad);
 		geometry.strokeColor = "black";
 		geometry.visible = false;
 		mReference.addChild(geometry);
 	}
+	// circle.data.gap = offsetGap(circle, geometry);
 	mReference.addChild(circle);
-}
-
-function iterateRef(delta) {
-
+	// console.log("circle offset " + circle.data.gap);
+	// console.log("geo offset " + geometry.getPointAt(0));
 }
 
 function showGeo(_item, _index) {
 	hideGeo();
 	_index = (_index + 5) % 5;	// do not exceed bounds
 	var ref = _item.parent.children[_index];
-	console.log("geolength: " + _item.parent.children.length);
+	// console.log("geolength: " + _item.parent.children.length);
 	if (!ref.visible) {
 		ref.visible = true;
 		lastGeo = ref;
@@ -269,34 +269,7 @@ function setRod() {
 }
 
 function setOctave(_lollipopContainer) {
-	_lollipopContainer.data.octave = bandCeil - Math.round(_lollipopContainer.lastChild.firstChild.position.y / bandWidth);
-}
-
-// // We're going to be working with a third of the length
-// // of the path as the offset:
-// var offset = path.length / 3;
-
-// // Find the point on the path:
-// var point = path.getPointAt(offset);
-
-function intersections() {
-	intersectionGroup.removeChildren();
-	if (hitResult) {
-		if (Key.modifiers.shift) {
-			var index = (lastGeo)?(lastGeo.index + 3):3;
-			var path = hitResult.item.parent.children[index - 3];
-			var offset = path.length / index;
-
-			for (var i = 0; i < index; i++) {
-				var intersectionPath = new Path.Circle({
-					center: path.getPointAt(offset * i),
-					radius: 4,
-					parent: intersectionGroup
-				});
-				intersectionPath.fillColor = (i==0)?'red':'white';
-			}
-		}
-	}
+	_lollipopContainer.data.octave = bandCeil - Math.round(tripleLastChild(_lollipopContainer).position.y / bandWidth);
 };
 
 /*
@@ -315,7 +288,7 @@ draw.onMouseDrag = function(event) {
     });
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    if (circle.area > 100) drawState = true;
+    if (circle.area > 500) drawState = true;
 }
 
 draw.onMouseUp = function(event) {
@@ -368,10 +341,18 @@ edit.onMouseDown = function(event) {
 
             // draw dots
             if (Key.modifiers.shift) {
+                console.log("bounds: " + path.bounds.width);
                 if (intersectionGroup.hasChildren())
                     for (var i = 0; i < intersectionGroup.children.length; i++) {
-                        if (event.point.isClose(intersectionGroup.children[i].position, 50)) {
+                        if (event.point.isClose(intersectionGroup.children[i].position, path.bounds.width / 5)) {
                             var nearestPoint = path.getNearestPoint(intersectionGroup.children[i].position);
+                            drawDot(nearestPoint, path);
+                        }
+                    }
+                if (divisionGroup.hasChildren())
+                    for (var i = 0; i < divisionGroup.children.length; i++) {
+                        if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 5)) {
+                            var nearestPoint = divisionGroup.children[i].position;
                             drawDot(nearestPoint, path);
                         }
                     }
@@ -427,7 +408,7 @@ edit.onKeyDown = function(event) {
     if (event.key == 'enter') {
         draw.activate();
     }
-    if (hitResult) {
+    if (hitResult && hitResult.item.name == 'circle') {
         // add circle
         if (event.key == '=') {
             console.log(hitResult.item.parent);
@@ -457,13 +438,28 @@ edit.onKeyDown = function(event) {
         if (event.key == 'r') {
             setOrientation(tripleParent(hitResult.item));
         }
+        if (event.key == 'o') {
+            console.log("circle offset " + circle.getPointAt(0));
+            console.log("geo offset " + geometry.getPointAt(0));
+        }
         // press shift to show reference
         if (Key.modifiers.shift) {
-            var index = (lastGeo)?(lastGeo.index):0;
+            var index = (lastGeo) ? (lastGeo.index) : 0;
+            div = 1;
             if (Key.isDown('left')) {
                 index -= 1;
             } else if (Key.isDown('right')) {
                 index += 1;
+            }
+            if (Key.isDown('@')) {
+                div = 2;
+                console.log('2');
+            }
+            if (Key.isDown('#')) {
+                div = 3;
+            }
+            if (Key.isDown('$')) {
+                div = 4;
             }
             hitResult.item.selected = false;
             showGeo(hitResult.item, index);
@@ -487,9 +483,9 @@ edit.onKeyUp = function(event) {
 
 function onFrame(event) {
 	// iterate each lollipop in the view
-	rotationLoop(mForest);		// defalut
-	setRod();					// when key == "up" || key == "down"
-	intersections();			// when key.modifier.shift
+	rotationLoop(mForest); // defalut
+	setRod(); // when key == "up" || key == "down"
+	intersections(); // when key.modifier.shift
 }
 
 function rotationLoop(_item) {
@@ -546,4 +542,43 @@ function angularPerFrame(_item) {
 	var orientation = _item.data.orientation;
 	var speed = _item.data.speed;
 	return playback * orientation * speed;
+}
+
+
+
+function intersections() {
+	intersectionGroup.removeChildren();
+	divisionGroup.removeChildren();
+	if (hitResult && hitResult.item.name == 'circle') {
+		if (Key.modifiers.shift) {
+			// reference geometry vertex points
+			var index = (lastGeo) ? (lastGeo.index + 3) : 3;
+			var path1 = hitResult.item.parent.children[index - 3];
+			var path2 = hitResult.item;
+			var offset1 = path1.length / index;
+			var offset2 = path2.length / (index * div);
+
+			for (var i = 0; i < index; i++) {
+				// var center = path1.getPointAt(offset1 * i)
+				var intersectionPath = new Path.Circle({
+					center: path1.getPointAt(offset1 * i),
+					radius: 4,
+					parent: intersectionGroup
+				});
+				intersectionPath.fillColor = (i == 0) ? 'red' : 'white';
+				if (div > 1) {
+					var start = path2.getOffsetOf(path2.getNearestPoint(path1.getPointAt(offset1 * i)));
+					for (var j = 1; j < div; j++) {
+						start = ((start + offset2 * j )> path2.length) ? (start-path2.length):start;
+						var divisionPath = new Path.Circle({
+							center: path2.getPointAt(start + offset2 * j),
+							radius: 3,
+							fillColor: 'white',
+							parent: divisionGroup
+						});
+					}
+				}
+			}
+		}
+	}
 };

@@ -1,8 +1,8 @@
 function onFrame(event) {
 	// iterate each lollipop in the view
-	rotationLoop(mForest);		// defalut
-	setRod();					// when key == "up" || key == "down"
-	intersections();			// when key.modifier.shift
+	rotationLoop(mForest); // defalut
+	setRod(); // when key == "up" || key == "down"
+	intersections(); // when key.modifier.shift
 }
 
 function rotationLoop(_item) {
@@ -59,4 +59,43 @@ function angularPerFrame(_item) {
 	var orientation = _item.data.orientation;
 	var speed = _item.data.speed;
 	return playback * orientation * speed;
+}
+
+
+
+function intersections() {
+	intersectionGroup.removeChildren();
+	divisionGroup.removeChildren();
+	if (hitResult && hitResult.item.name == 'circle') {
+		if (Key.modifiers.shift) {
+			// reference geometry vertex points
+			var index = (lastGeo) ? (lastGeo.index + 3) : 3;
+			var path1 = hitResult.item.parent.children[index - 3];
+			var path2 = hitResult.item;
+			var offset1 = path1.length / index;
+			var offset2 = path2.length / (index * div);
+
+			for (var i = 0; i < index; i++) {
+				// var center = path1.getPointAt(offset1 * i)
+				var intersectionPath = new Path.Circle({
+					center: path1.getPointAt(offset1 * i),
+					radius: 4,
+					parent: intersectionGroup
+				});
+				intersectionPath.fillColor = (i == 0) ? 'red' : 'white';
+				if (div > 1) {
+					var start = path2.getOffsetOf(path2.getNearestPoint(path1.getPointAt(offset1 * i)));
+					for (var j = 1; j < div; j++) {
+						start = ((start + offset2 * j )> path2.length) ? (start-path2.length):start;
+						var divisionPath = new Path.Circle({
+							center: path2.getPointAt(start + offset2 * j),
+							radius: 3,
+							fillColor: 'white',
+							parent: divisionGroup
+						});
+					}
+				}
+			}
+		}
+	}
 }

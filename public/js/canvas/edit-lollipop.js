@@ -23,10 +23,18 @@ edit.onMouseDown = function(event) {
 
             // draw dots
             if (Key.modifiers.shift) {
+                console.log("bounds: " + path.bounds.width);
                 if (intersectionGroup.hasChildren())
                     for (var i = 0; i < intersectionGroup.children.length; i++) {
-                        if (event.point.isClose(intersectionGroup.children[i].position, 50)) {
+                        if (event.point.isClose(intersectionGroup.children[i].position, path.bounds.width / 5)) {
                             var nearestPoint = path.getNearestPoint(intersectionGroup.children[i].position);
+                            drawDot(nearestPoint, path);
+                        }
+                    }
+                if (divisionGroup.hasChildren())
+                    for (var i = 0; i < divisionGroup.children.length; i++) {
+                        if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 5)) {
+                            var nearestPoint = divisionGroup.children[i].position;
                             drawDot(nearestPoint, path);
                         }
                     }
@@ -82,7 +90,7 @@ edit.onKeyDown = function(event) {
     if (event.key == 'enter') {
         draw.activate();
     }
-    if (hitResult) {
+    if (hitResult && hitResult.item.name == 'circle') {
         // add circle
         if (event.key == '=') {
             console.log(hitResult.item.parent);
@@ -112,13 +120,28 @@ edit.onKeyDown = function(event) {
         if (event.key == 'r') {
             setOrientation(tripleParent(hitResult.item));
         }
+        if (event.key == 'o') {
+            console.log("circle offset " + circle.getPointAt(0));
+            console.log("geo offset " + geometry.getPointAt(0));
+        }
         // press shift to show reference
         if (Key.modifiers.shift) {
-            var index = (lastGeo)?(lastGeo.index):0;
+            var index = (lastGeo) ? (lastGeo.index) : 0;
+            div = 1;
             if (Key.isDown('left')) {
                 index -= 1;
             } else if (Key.isDown('right')) {
                 index += 1;
+            }
+            if (Key.isDown('@')) {
+                div = 2;
+                console.log('2');
+            }
+            if (Key.isDown('#')) {
+                div = 3;
+            }
+            if (Key.isDown('$')) {
+                div = 4;
             }
             hitResult.item.selected = false;
             showGeo(hitResult.item, index);
