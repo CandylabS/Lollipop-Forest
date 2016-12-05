@@ -45,7 +45,7 @@ _dotContainer.data = {
 /*********** GLOBAL VARIABLES *************/
 // common instance
 var mLollipopContainer, mDotContainer, mReference;
-var circle, mRod, mTimer;
+var circle, mRod, mDot, mTimer;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
@@ -54,30 +54,38 @@ var _dot = new Path.Circle({
     strokeWidth: 0.5
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
-var mDot;
+var _dot2 = new Path.Star({
+    center: new Point(0, 0),
+    points: 5,
+    radius1: 5,
+    radius2: 8,
+    strokeColor: 'red',
+    strokeWidth: 1
+}); // Class for dots, presets
+var dot2 = new SymbolDefinition(_dot2);
 
 var intersectionGroup = new Group();
 var divisionGroup = new Group();
 var lastGeo, div;
 
 // MODE section
-var MODE = 0;   // if inner cicle can be dragged
+var MODE = 0; // if inner cicle can be dragged
 var forestButton = 0;
 
 
 // global mouseEvent tools
 var draw = new Tool(); //create-lollipop.js
 var edit = new Tool(); // edit-lollipop.js
-var drawState = false;  // use when drawing, if circle is too small then it's not a lollipop
+var drawState = false; // use when drawing, if circle is too small then it's not a lollipop
 
 // global color
 var mColor = {
-    hue: 360 * Math.random(),
-    saturation: 0.5,
-    brightness: 1,
-    alpha: 0.3
-}
-// global styles
+        hue: 360 * Math.random(),
+        saturation: 0.5,
+        brightness: 1,
+        alpha: 0.3
+    }
+    // global styles
 mDashArray = [5, 5];
 
 /*********** GLOBAL INITIALIZE *************/
@@ -92,7 +100,11 @@ function bandsInit(num) {
         band = new Shape.Rectangle({
             point: [0, bandWidth * i],
             size: [view.size.width, bandWidth],
-            fillColor: { hue: 43, saturation: 6/100, brightness: (94-i*2)/100 }
+            fillColor: {
+                hue: 43,
+                saturation: 6 / 100,
+                brightness: (94 - i * 2) / 100
+            }
         });
         mBands.addChild(band);
     }
@@ -134,11 +146,11 @@ var deltaAngle = 0; // use rod position;
  */
 
 function path2rod(_path) {
-	return tripleParent(_path).firstChild;
+	return doubleFirstChild(tripleParent(_path));
 }
 
 function dot2rod(_dot) {
-	return doubleParent(_dot).firstChild;
+	return doubleFirstChild(doubleParent(_dot));
 }
 
 function doubleParent(_item) {
@@ -177,10 +189,10 @@ function drawDot(_point, _path) {
 
 	if (tripleParent(hitResult.item).data.dotNum == 0) {
 		//drawVeryFristDot();
-		var startPoint = new SymbolItem(dot);
+		var startPoint = new SymbolItem(dot2);
 		startPoint.name = 'start';
-		startPoint.scale(0.1);
-		startPoint.visible = false;
+		// startPoint.scale(1.1);
+		// startPoint.visible = false;
 		startPoint.position = _point;
 		startPoint.data.initAngle = mDot.data.initAngle;
 		tripleParent(hitResult.item).firstChild.appendTop(startPoint);
@@ -594,7 +606,7 @@ function rotationStep(_item) {
 				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
 				hitDot(_item);
 			} else if (_item.name == 'start') {
-				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
+				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).lastChild.lastChild.position);
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}

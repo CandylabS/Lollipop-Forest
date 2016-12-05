@@ -1,9 +1,9 @@
 function path2rod(_path) {
-	return tripleParent(_path).firstChild;
+	return doubleFirstChild(tripleParent(_path));
 }
 
 function dot2rod(_dot) {
-	return doubleParent(_dot).firstChild;
+	return doubleFirstChild(doubleParent(_dot));
 }
 
 function doubleParent(_item) {
@@ -42,10 +42,10 @@ function drawDot(_point, _path) {
 
 	if (tripleParent(hitResult.item).data.dotNum == 0) {
 		//drawVeryFristDot();
-		var startPoint = new SymbolItem(dot);
+		var startPoint = new SymbolItem(dot2);
 		startPoint.name = 'start';
-		startPoint.scale(0.1);
-		startPoint.visible = false;
+		// startPoint.scale(1.1);
+		// startPoint.visible = false;
 		startPoint.position = _point;
 		startPoint.data.initAngle = mDot.data.initAngle;
 		tripleParent(hitResult.item).firstChild.appendTop(startPoint);

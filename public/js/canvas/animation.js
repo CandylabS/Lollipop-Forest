@@ -24,7 +24,7 @@ function rotationStep(_item) {
 				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
 				hitDot(_item);
 			} else if (_item.name == 'start') {
-				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
+				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).lastChild.lastChild.position);
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
