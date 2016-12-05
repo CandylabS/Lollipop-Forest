@@ -26,6 +26,11 @@ function setPlayback(_lollipopContainer, _playback) {
 	_lollipopContainer.data.playback = _playback;
 }
 
+function setSpeed(_lollipopContainer, _speed) {
+	if (_speed > 0)
+		_lollipopContainer.data.speed = _speed;
+}
+
 function setOrientation(_lollipopContainer) {
 	_lollipopContainer.data.orientation *= -1;
 }
@@ -42,7 +47,7 @@ function drawDot(_point, _path) {
 
 	if (tripleParent(hitResult.item).data.dotNum == 0) {
 		//drawVeryFristDot();
-		var startPoint = new SymbolItem(dot2);
+		var startPoint = new SymbolItem(marker);
 		startPoint.name = 'start';
 		// startPoint.scale(1.1);
 		// startPoint.visible = false;
@@ -103,7 +108,7 @@ function lollipopInit() {
 	mLollipopContainer.data = {
 		rod: 90,
 		playback: 1,
-		speed: 1,
+		speed: forestSpeed,
 		orientation: 1,
 		dotNum: 0
 	}

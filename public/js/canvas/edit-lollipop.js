@@ -115,6 +115,16 @@ edit.onKeyDown = function(event) {
         if (event.key == 'r') {
             setOrientation(tripleParent(hitResult.item));
         }
+
+        if (event.key == 'a') {
+            var speed = tripleParent(hitResult.item).data.speed + 0.1;
+            setSpeed(tripleParent(hitResult.item), speed);
+        }
+        if (event.key == 'z') {
+            var speed = tripleParent(hitResult.item).data.speed - 0.1;
+            setSpeed(tripleParent(hitResult.item), speed);
+        }
+
         if (event.key == 'o') {
             console.log("first dot rotation: " + doubleParent(hitResult.item).firstChild.rotation)
             console.log("init rotation " + tripleParent(hitResult.item).firstChild.lastChild.rotation);
@@ -148,6 +158,18 @@ edit.onKeyDown = function(event) {
                 setPlayback(mForest.children[i], forestButton);
             }
             forestButton = 1 - forestButton;
+        }
+        if (event.key == 'a') {
+            forestSpeed += 0.1;
+            for (var i = 0; i < mForest.children.length; i++) {
+                setSpeed(mForest.children[i], forestSpeed)
+            }
+        }
+        if (event.key == 'z') {
+            forestSpeed -= 0.1;
+            for (var i = 0; i < mForest.children.length; i++) {
+                setSpeed(mForest.children[i], forestSpeed)
+            }
         }
     }
 }

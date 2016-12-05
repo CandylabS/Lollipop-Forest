@@ -48,15 +48,15 @@ var _dot = new Path.Circle({
     strokeWidth: 0.5
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
-var _dot2 = new Path.Star({
+var _marker = new Path.Star({
     center: new Point(0, 0),
     points: 5,
-    radius1: 5,
+    radius1: 4,
     radius2: 8,
     strokeColor: 'red',
     strokeWidth: 2
 }); // Class for dots, presets
-var dot2 = new SymbolDefinition(_dot2);
+var marker = new SymbolDefinition(_marker);
 
 var intersectionGroup = new Group();
 var divisionGroup = new Group();
@@ -65,6 +65,7 @@ var lastGeo, div;
 // MODE section
 var MODE = 0; // if inner cicle can be dragged
 var forestButton = 0;
+var forestSpeed = 1;
 
 
 // global mouseEvent tools

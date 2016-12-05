@@ -54,15 +54,15 @@ var _dot = new Path.Circle({
     strokeWidth: 0.5
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
-var _dot2 = new Path.Star({
+var _marker = new Path.Star({
     center: new Point(0, 0),
     points: 5,
-    radius1: 5,
+    radius1: 4,
     radius2: 8,
     strokeColor: 'red',
-    strokeWidth: 1
+    strokeWidth: 2
 }); // Class for dots, presets
-var dot2 = new SymbolDefinition(_dot2);
+var marker = new SymbolDefinition(_marker);
 
 var intersectionGroup = new Group();
 var divisionGroup = new Group();
@@ -71,6 +71,7 @@ var lastGeo, div;
 // MODE section
 var MODE = 0; // if inner cicle can be dragged
 var forestButton = 0;
+var forestSpeed = 1;
 
 
 // global mouseEvent tools
@@ -173,6 +174,11 @@ function setPlayback(_lollipopContainer, _playback) {
 	_lollipopContainer.data.playback = _playback;
 }
 
+function setSpeed(_lollipopContainer, _speed) {
+	if (_speed > 0)
+		_lollipopContainer.data.speed = _speed;
+}
+
 function setOrientation(_lollipopContainer) {
 	_lollipopContainer.data.orientation *= -1;
 }
@@ -189,7 +195,7 @@ function drawDot(_point, _path) {
 
 	if (tripleParent(hitResult.item).data.dotNum == 0) {
 		//drawVeryFristDot();
-		var startPoint = new SymbolItem(dot2);
+		var startPoint = new SymbolItem(marker);
 		startPoint.name = 'start';
 		// startPoint.scale(1.1);
 		// startPoint.visible = false;
@@ -250,7 +256,7 @@ function lollipopInit() {
 	mLollipopContainer.data = {
 		rod: 90,
 		playback: 1,
-		speed: 1,
+		speed: forestSpeed,
 		orientation: 1,
 		dotNum: 0
 	}
@@ -529,6 +535,16 @@ edit.onKeyDown = function(event) {
         if (event.key == 'r') {
             setOrientation(tripleParent(hitResult.item));
         }
+
+        if (event.key == 'a') {
+            var speed = tripleParent(hitResult.item).data.speed + 0.1;
+            setSpeed(tripleParent(hitResult.item), speed);
+        }
+        if (event.key == 'z') {
+            var speed = tripleParent(hitResult.item).data.speed - 0.1;
+            setSpeed(tripleParent(hitResult.item), speed);
+        }
+
         if (event.key == 'o') {
             console.log("first dot rotation: " + doubleParent(hitResult.item).firstChild.rotation)
             console.log("init rotation " + tripleParent(hitResult.item).firstChild.lastChild.rotation);
@@ -562,6 +578,18 @@ edit.onKeyDown = function(event) {
                 setPlayback(mForest.children[i], forestButton);
             }
             forestButton = 1 - forestButton;
+        }
+        if (event.key == 'up') {
+            forestSpeed += 0.1;
+            for (var i = 0; i < mForest.children.length; i++) {
+                setSpeed(mForest.children[i], forestSpeed)
+            }
+        }
+        if (event.key == 'down') {
+            forestSpeed -= 0.1;
+            for (var i = 0; i < mForest.children.length; i++) {
+                setSpeed(mForest.children[i], forestSpeed)
+            }
         }
     }
 }
