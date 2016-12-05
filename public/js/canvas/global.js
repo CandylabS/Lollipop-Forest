@@ -66,6 +66,8 @@ var lastGeo, div;
 var MODE = 0; // if inner cicle can be dragged
 var forestButton = 0;
 var forestSpeed = 1;
+var metaBall;
+var meta = false;
 
 
 // global mouseEvent tools
@@ -117,3 +119,8 @@ var hitOptions = {
 };
 var segment, path, hitResult;
 var deltaAngle = 0; // use rod position
+
+/*********** metaBalls.js ************/
+var connections = new Group();
+var handle_len_rate = 2.4;
+var circlePaths = [];

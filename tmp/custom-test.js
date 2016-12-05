@@ -38,7 +38,7 @@
             // var i = paths.length-1;
             // for (var i = 0, l = paths.length; i < l; i++) {
                 for (var i = paths.length-1, j = i - 1; j >= 0; j--) {
-                    var path = metaball(paths[i], paths[j], 0.5, handle_len_rate, 300);
+                    var path = metaball(paths[i], paths[j], 0.5, handle_len_rate, 200);
                     if (path) {
                         connections.appendTop(path);
                         path.removeOnMove();

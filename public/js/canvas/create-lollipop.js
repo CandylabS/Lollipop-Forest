@@ -18,6 +18,7 @@ draw.onMouseUp = function(event) {
         dotContainerInit();
         lollipopInit();
         mForest.addChild(mLollipopContainer);
+        circlePaths.push(circle);
         drawState = false;
     }
     console.log(project.layers);

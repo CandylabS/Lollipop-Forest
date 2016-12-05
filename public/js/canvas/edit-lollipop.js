@@ -97,6 +97,17 @@ edit.onKeyDown = function(event) {
     if (event.key == 'enter') {
         draw.activate();
     }
+    if (Key.modifiers.control) {
+        if (Key.isDown('m')) {
+            if (meta) {
+                metaBall.remove();
+            } else {
+                generateMeta();
+                console.log("metaBall!");
+            }
+            meta = !meta;
+        }
+    }
     if (hitResult && hitResult.item.name == 'circle') {
         // add circle
         if (event.key == '=') {
@@ -151,6 +162,7 @@ edit.onKeyDown = function(event) {
             hitResult.item.selected = false;
             showGeo(hitResult.item, index);
         }
+
     } else if (!hitResult) {
         if (event.key == 'space') {
             console.log('start or stop all');

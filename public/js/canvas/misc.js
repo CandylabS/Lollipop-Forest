@@ -206,11 +206,11 @@ function createRod(_lollipopContainer) {
 function setRod() {
 	if (hitResult) {
 		if (Key.isDown('up')) {
-			path2rod(hitResult.item).rotate(-1, path2rod(hitResult.item).nextSibling.position);
+			path2rod(hitResult.item).rotate(-1, tripleLastChild(tripleParent(hitResult.item)).position);
 			tripleParent(hitResult.item).data.rod -= 1;
 		}
 		if (Key.isDown('down')) {
-			path2rod(hitResult.item).rotate(1, path2rod(hitResult.item).nextSibling.position);
+			path2rod(hitResult.item).rotate(1, tripleLastChild(tripleParent(hitResult.item)).position);
 			tripleParent(hitResult.item).data.rod += 1;
 		}
 	}
@@ -220,8 +220,4 @@ function setRod() {
 
 function setOctave(_lollipopContainer) {
 	_lollipopContainer.data.octave = bandCeil - Math.round(tripleLastChild(_lollipopContainer).position.y / bandWidth);
-}
-
-function resetAll() {
-	console.log('reset');
 }
