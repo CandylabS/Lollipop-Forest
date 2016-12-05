@@ -39,7 +39,7 @@ _dotContainer.data = {
 /*********** GLOBAL VARIABLES *************/
 // common instance
 var mLollipopContainer, mDotContainer, mReference;
-var circle, mRod;
+var circle, mRod, mTimer;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,

@@ -14,6 +14,10 @@ function tripleParent(_item) {
 	return _item.parent.parent.parent;
 }
 
+function doubleFirstChild(_item) {
+	return _item.firstChild.firstChild;
+}
+
 function tripleLastChild(_item) {
 	return _item.lastChild.lastChild.lastChild;
 }
@@ -28,24 +32,29 @@ function setOrientation(_lollipopContainer) {
 
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
-	if (tripleParent(hitResult.item).data.dotNum == 0) {
-		//drawVeryFristDot();
-		var mDot = new Path.Circle({
-			radius: 5,
-			fillColor: 'red'
-		});
-	} else {
-		var mDot = new SymbolItem(dot);
-	}
-	if (doubleParent(hitResult.item).data.dotNum == 0) {
-		// setReference
-	}
-	mDot.removeOnDrag();
+	var mDot = new SymbolItem(dot);
+	// mDot.removeOnDrag();
 	mDot.position = _point;
 	mDot.data.hit = false;
 	mDot.data.initAngle = (mDot.position - _path.position).angle - tripleParent(_path).data.rod;
 	console.log(mDot.data.initAngle);
-	console.log(mDot.data.hit);
+
+	if (tripleParent(hitResult.item).data.dotNum == 0) {
+		//drawVeryFristDot();
+		var startPoint = new SymbolItem(dot);
+		startPoint.name = 'start';
+		startPoint.scale(0.1);
+		startPoint.visible = false;
+		startPoint.position = _point;
+		startPoint.data.initAngle = mDot.data.initAngle;
+		tripleParent(hitResult.item).firstChild.appendTop(startPoint);
+		console.log("start point " + startPoint.data.initAngle);
+	}
+
+	if (doubleParent(hitResult.item).data.dotNum == 0) {
+		// setReference
+
+	}
 
 	// form a group
 	console.log(hitResult.item);
@@ -70,7 +79,9 @@ function lollipopInit() {
 	console.log("octave: " + mLollipopContainer.data.octave);
 
 	mRod = createRod(mLollipopContainer);
-	mLollipopContainer.appendBottom(mRod);
+	mTimer = new Group();
+	mTimer.addChild(mRod);
+	mLollipopContainer.appendBottom(mTimer);
 }
 
 function dotContainerInit() {

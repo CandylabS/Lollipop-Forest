@@ -45,7 +45,7 @@ _dotContainer.data = {
 /*********** GLOBAL VARIABLES *************/
 // common instance
 var mLollipopContainer, mDotContainer, mReference;
-var circle, mRod;
+var circle, mRod, mTimer;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
     radius: 5,
@@ -147,6 +147,10 @@ function tripleParent(_item) {
 	return _item.parent.parent.parent;
 }
 
+function doubleFirstChild(_item) {
+	return _item.firstChild.firstChild;
+}
+
 function tripleLastChild(_item) {
 	return _item.lastChild.lastChild.lastChild;
 }
@@ -161,24 +165,29 @@ function setOrientation(_lollipopContainer) {
 
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
-	if (tripleParent(hitResult.item).data.dotNum == 0) {
-		//drawVeryFristDot();
-		var mDot = new Path.Circle({
-			radius: 5,
-			fillColor: 'red'
-		});
-	} else {
-		var mDot = new SymbolItem(dot);
-	}
-	if (doubleParent(hitResult.item).data.dotNum == 0) {
-		// setReference
-	}
-	mDot.removeOnDrag();
+	var mDot = new SymbolItem(dot);
+	// mDot.removeOnDrag();
 	mDot.position = _point;
 	mDot.data.hit = false;
 	mDot.data.initAngle = (mDot.position - _path.position).angle - tripleParent(_path).data.rod;
 	console.log(mDot.data.initAngle);
-	console.log(mDot.data.hit);
+
+	if (tripleParent(hitResult.item).data.dotNum == 0) {
+		//drawVeryFristDot();
+		var startPoint = new SymbolItem(dot);
+		startPoint.name = 'start';
+		startPoint.scale(0.1);
+		startPoint.visible = false;
+		startPoint.position = _point;
+		startPoint.data.initAngle = mDot.data.initAngle;
+		tripleParent(hitResult.item).firstChild.appendTop(startPoint);
+		console.log("start point " + startPoint.data.initAngle);
+	}
+
+	if (doubleParent(hitResult.item).data.dotNum == 0) {
+		// setReference
+
+	}
 
 	// form a group
 	console.log(hitResult.item);
@@ -203,7 +212,9 @@ function lollipopInit() {
 	console.log("octave: " + mLollipopContainer.data.octave);
 
 	mRod = createRod(mLollipopContainer);
-	mLollipopContainer.appendBottom(mRod);
+	mTimer = new Group();
+	mTimer.addChild(mRod);
+	mLollipopContainer.appendBottom(mTimer);
 }
 
 function dotContainerInit() {
@@ -462,6 +473,8 @@ edit.onKeyDown = function(event) {
                 var index = tripleParent(hitResult.item).children.length - 1;
                 tripleParent(hitResult.item).data.dotNum -= tripleParent(hitResult.item).children[index].data.dotNum;
                 tripleParent(hitResult.item).removeChildren(index);
+                if (tripleParent(hitResult.item).data.dotNum <= 0) 
+                    tripleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
             }
         }
         // stop playing
@@ -474,7 +487,8 @@ edit.onKeyDown = function(event) {
             setOrientation(tripleParent(hitResult.item));
         }
         if (event.key == 'o') {
-            console.log("circle rotation " + hitResult.item.parent.parent.firstChild.rotation);
+            console.log("first dot rotation: " + doubleParent(hitResult.item).firstChild.rotation)
+            console.log("init rotation " + tripleParent(hitResult.item).firstChild.lastChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
@@ -540,6 +554,8 @@ function rotationStep(_item) {
 			if (_item.name == 'dot') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
 				hitDot(_item);
+			} else if (_item.name == 'start') {
+				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}

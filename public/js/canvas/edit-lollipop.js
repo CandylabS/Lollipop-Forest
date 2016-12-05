@@ -115,6 +115,8 @@ edit.onKeyDown = function(event) {
                 var index = tripleParent(hitResult.item).children.length - 1;
                 tripleParent(hitResult.item).data.dotNum -= tripleParent(hitResult.item).children[index].data.dotNum;
                 tripleParent(hitResult.item).removeChildren(index);
+                if (tripleParent(hitResult.item).data.dotNum <= 0) 
+                    tripleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
             }
         }
         // stop playing
@@ -127,7 +129,8 @@ edit.onKeyDown = function(event) {
             setOrientation(tripleParent(hitResult.item));
         }
         if (event.key == 'o') {
-            console.log("circle rotation " + hitResult.item.parent.parent.firstChild.rotation);
+            console.log("first dot rotation: " + doubleParent(hitResult.item).firstChild.rotation)
+            console.log("init rotation " + tripleParent(hitResult.item).firstChild.lastChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
