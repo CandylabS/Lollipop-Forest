@@ -28,7 +28,18 @@ function setOrientation(_lollipopContainer) {
 
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
-	var mDot = new SymbolItem(dot);
+	if (tripleParent(hitResult.item).data.dotNum == 0) {
+		//drawVeryFristDot();
+		var mDot = new Path.Circle({
+			radius: 5,
+			fillColor: 'red'
+		});
+	} else {
+		var mDot = new SymbolItem(dot);
+	}
+	if (doubleParent(hitResult.item).data.dotNum == 0) {
+		// setReference
+	}
 	mDot.removeOnDrag();
 	mDot.position = _point;
 	mDot.data.hit = false;
@@ -40,18 +51,20 @@ function drawDot(_point, _path) {
 	console.log(hitResult.item);
 	doubleParent(hitResult.item).appendBottom(mDot);
 	mDot.name = 'dot';
+	doubleParent(hitResult.item).data.dotNum += 1;
+	tripleParent(hitResult.item).data.dotNum += 1;
 }
 
 // initialization
 function lollipopInit() {
 	mLollipopContainer = new Group();
 	mLollipopContainer.addChild(mDotContainer);
-
 	mLollipopContainer.data = {
 		rod: 90,
 		playback: 1,
 		speed: 1,
 		orientation: 1,
+		dotNum: 0
 	}
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
@@ -63,32 +76,35 @@ function lollipopInit() {
 function dotContainerInit() {
 	mDotContainer = new Group();
 	mDotContainer.addChild(mReference);
-	var offset = mReference.firstChild.length/3;
-	var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
-	console.log("new center: "+ center);
-	var beginner = new Path.Star({
-		center: center,
-		points: 5,
-		radius1: 1,
-		radius2: 10,
-		fillColor: 'red'
-	});
-	beginner.name = 'cross';
-	mDotContainer.appendBottom(beginner);
+	mDotContainer.data = {
+			dotNum: 0
+		}
+		// var offset = mReference.firstChild.length / 3;
+		// var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
+		// var beginner = new Path.Star({
+		// 	center: center,
+		// 	points: 5,
+		// 	radius1: 1,
+		// 	radius2: 10,
+		// 	fillColor: 'red'
+		// });
+		// beginner.name = 'cross';
+		// mDotContainer.appendBottom(beginner);
 }
 
 function referenceInit() {
 	mReference = new Group();
-	var center = circle.position;
-	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
-	for (var i = 3; i < 8; i++) {
-		var center = circle.position;
-		geometry = new Path.RegularPolygon(center, i, rad);
-		geometry.strokeColor = "black";
-		geometry.visible = false;
-		if (i==4) geometry.rotate(45);
-		mReference.addChild(geometry);
-	}
+	// var center = circle.position;
+	// var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
+	// for (var i = 3; i < 8; i++) {
+	// 	var center = circle.position;
+	// 	geometry = new Path.RegularPolygon(center, i, rad);
+	// 	geometry.strokeColor = "black";
+	// 	geometry.visible = false;
+	// 	if (i == 4) geometry.rotate(45);
+	// 	geometry.rotate(_rotation);
+	// 	mReference.addChild(geometry);
+	// }
 	// circle.data.gap = offsetGap(circle, geometry);
 	mReference.addChild(circle);
 }

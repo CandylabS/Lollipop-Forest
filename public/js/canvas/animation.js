@@ -20,9 +20,9 @@ function rotationStep(_item) {
 	if (doubleParent(_item) != null) {
 		// this is inside reference group, but do not rotate rod 
 		if (_item.name != 'rod') {
-			if (_item.name == 'dot' || _item.name == 'cross') {
+			if (_item.name == 'dot') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
-				if (_item.name == 'dot') hitDot(_item);
+				hitDot(_item);
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
@@ -70,7 +70,7 @@ function intersections() {
 		if (Key.modifiers.shift) {
 			// reference geometry vertex points
 			var index = (lastGeo) ? (lastGeo.index + 3) : 3;
-			var path1 = hitResult.item.parent.children[index - 3];
+			var path1 = hitResult.item.parent.children[index - 3];	// triangle is the first one
 			var path2 = hitResult.item;
 			var offset1 = path1.length / index;
 			var offset2 = path2.length / (index * div);

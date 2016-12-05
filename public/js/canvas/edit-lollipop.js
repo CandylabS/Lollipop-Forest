@@ -47,6 +47,8 @@ edit.onMouseDown = function(event) {
             // console.log(tripleParent(path).children.length);
         } else if (path.name == 'dot') {
             // remove dots
+            path.parent.data.dotNum -= 1;
+            doubleParent(path).data.dotNum -= 1;
             path.remove();
         }
     }
@@ -98,6 +100,8 @@ edit.onKeyDown = function(event) {
             circle = tripleLastChild(tripleParent(hitResult.item)).clone();
             circle.name = 'circle';
             circle.scale(0.8);
+            // var angle = tripleParent(hitResult.item).children[1].firstChild.rotation;
+            // console.log("angle: " + angle);
             referenceInit();
             dotContainerInit();
             tripleParent(hitResult.item).appendTop(mDotContainer);
@@ -108,7 +112,9 @@ edit.onKeyDown = function(event) {
                 tripleParent(hitResult.item).remove();
                 if (!mForest.hasChildren()) draw.activate(); // when there is no lollipop, switch into draw tool
             } else {
-                tripleParent(hitResult.item).removeChildren(tripleParent(hitResult.item).children.length - 1);
+                var index = tripleParent(hitResult.item).children.length - 1;
+                tripleParent(hitResult.item).data.dotNum -= tripleParent(hitResult.item).children[index].data.dotNum;
+                tripleParent(hitResult.item).removeChildren(index);
             }
         }
         // stop playing
@@ -121,7 +127,7 @@ edit.onKeyDown = function(event) {
             setOrientation(tripleParent(hitResult.item));
         }
         if (event.key == 'o') {
-            console.log("circle rotation " + hitResult.item.parent.lastChild.rotation);
+            console.log("circle rotation " + hitResult.item.parent.parent.firstChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {

@@ -161,7 +161,18 @@ function setOrientation(_lollipopContainer) {
 
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
-	var mDot = new SymbolItem(dot);
+	if (tripleParent(hitResult.item).data.dotNum == 0) {
+		//drawVeryFristDot();
+		var mDot = new Path.Circle({
+			radius: 5,
+			fillColor: 'red'
+		});
+	} else {
+		var mDot = new SymbolItem(dot);
+	}
+	if (doubleParent(hitResult.item).data.dotNum == 0) {
+		// setReference
+	}
 	mDot.removeOnDrag();
 	mDot.position = _point;
 	mDot.data.hit = false;
@@ -173,18 +184,20 @@ function drawDot(_point, _path) {
 	console.log(hitResult.item);
 	doubleParent(hitResult.item).appendBottom(mDot);
 	mDot.name = 'dot';
+	doubleParent(hitResult.item).data.dotNum += 1;
+	tripleParent(hitResult.item).data.dotNum += 1;
 }
 
 // initialization
 function lollipopInit() {
 	mLollipopContainer = new Group();
 	mLollipopContainer.addChild(mDotContainer);
-
 	mLollipopContainer.data = {
 		rod: 90,
 		playback: 1,
 		speed: 1,
 		orientation: 1,
+		dotNum: 0
 	}
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
@@ -196,32 +209,35 @@ function lollipopInit() {
 function dotContainerInit() {
 	mDotContainer = new Group();
 	mDotContainer.addChild(mReference);
-	var offset = mReference.firstChild.length/3;
-	var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
-	console.log("new center: "+ center);
-	var beginner = new Path.Star({
-		center: center,
-		points: 5,
-		radius1: 1,
-		radius2: 10,
-		fillColor: 'red'
-	});
-	beginner.name = 'cross';
-	mDotContainer.appendBottom(beginner);
+	mDotContainer.data = {
+			dotNum: 0
+		}
+		// var offset = mReference.firstChild.length / 3;
+		// var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
+		// var beginner = new Path.Star({
+		// 	center: center,
+		// 	points: 5,
+		// 	radius1: 1,
+		// 	radius2: 10,
+		// 	fillColor: 'red'
+		// });
+		// beginner.name = 'cross';
+		// mDotContainer.appendBottom(beginner);
 }
 
 function referenceInit() {
 	mReference = new Group();
-	var center = circle.position;
-	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
-	for (var i = 3; i < 8; i++) {
-		var center = circle.position;
-		geometry = new Path.RegularPolygon(center, i, rad);
-		geometry.strokeColor = "black";
-		geometry.visible = false;
-		if (i==4) geometry.rotate(45);
-		mReference.addChild(geometry);
-	}
+	// var center = circle.position;
+	// var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
+	// for (var i = 3; i < 8; i++) {
+	// 	var center = circle.position;
+	// 	geometry = new Path.RegularPolygon(center, i, rad);
+	// 	geometry.strokeColor = "black";
+	// 	geometry.visible = false;
+	// 	if (i == 4) geometry.rotate(45);
+	// 	geometry.rotate(_rotation);
+	// 	mReference.addChild(geometry);
+	// }
 	// circle.data.gap = offsetGap(circle, geometry);
 	mReference.addChild(circle);
 }
@@ -378,6 +394,8 @@ edit.onMouseDown = function(event) {
             // console.log(tripleParent(path).children.length);
         } else if (path.name == 'dot') {
             // remove dots
+            path.parent.data.dotNum -= 1;
+            doubleParent(path).data.dotNum -= 1;
             path.remove();
         }
     }
@@ -429,6 +447,8 @@ edit.onKeyDown = function(event) {
             circle = tripleLastChild(tripleParent(hitResult.item)).clone();
             circle.name = 'circle';
             circle.scale(0.8);
+            // var angle = tripleParent(hitResult.item).children[1].firstChild.rotation;
+            // console.log("angle: " + angle);
             referenceInit();
             dotContainerInit();
             tripleParent(hitResult.item).appendTop(mDotContainer);
@@ -439,7 +459,9 @@ edit.onKeyDown = function(event) {
                 tripleParent(hitResult.item).remove();
                 if (!mForest.hasChildren()) draw.activate(); // when there is no lollipop, switch into draw tool
             } else {
-                tripleParent(hitResult.item).removeChildren(tripleParent(hitResult.item).children.length - 1);
+                var index = tripleParent(hitResult.item).children.length - 1;
+                tripleParent(hitResult.item).data.dotNum -= tripleParent(hitResult.item).children[index].data.dotNum;
+                tripleParent(hitResult.item).removeChildren(index);
             }
         }
         // stop playing
@@ -452,7 +474,7 @@ edit.onKeyDown = function(event) {
             setOrientation(tripleParent(hitResult.item));
         }
         if (event.key == 'o') {
-            console.log("circle rotation " + hitResult.item.parent.lastChild.rotation);
+            console.log("circle rotation " + hitResult.item.parent.parent.firstChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
@@ -515,9 +537,9 @@ function rotationStep(_item) {
 	if (doubleParent(_item) != null) {
 		// this is inside reference group, but do not rotate rod 
 		if (_item.name != 'rod') {
-			if (_item.name == 'dot' || _item.name == 'cross') {
+			if (_item.name == 'dot') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
-				if (_item.name == 'dot') hitDot(_item);
+				hitDot(_item);
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
@@ -565,7 +587,7 @@ function intersections() {
 		if (Key.modifiers.shift) {
 			// reference geometry vertex points
 			var index = (lastGeo) ? (lastGeo.index + 3) : 3;
-			var path1 = hitResult.item.parent.children[index - 3];
+			var path1 = hitResult.item.parent.children[index - 3];	// triangle is the first one
 			var path2 = hitResult.item;
 			var offset1 = path1.length / index;
 			var offset2 = path2.length / (index * div);
