@@ -49,6 +49,10 @@ edit.onMouseDown = function(event) {
             // remove dots
             path.parent.data.dotNum -= 1;
             doubleParent(path).data.dotNum -= 1;
+            if (doubleParent(hitResult.item).data.dotNum <= 0){
+                doubleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
+                doubleParent(hitResult.item).data.dotNum = 0;
+            }
             path.remove();
         }
     }
@@ -95,29 +99,11 @@ edit.onKeyDown = function(event) {
     if (hitResult && hitResult.item.name == 'circle') {
         // add circle
         if (event.key == '=') {
-            console.log(hitResult.item.parent);
-            // console.log(hitResult.item.parent.children.length);
-            circle = tripleLastChild(tripleParent(hitResult.item)).clone();
-            circle.name = 'circle';
-            circle.scale(0.8);
-            // var angle = tripleParent(hitResult.item).children[1].firstChild.rotation;
-            // console.log("angle: " + angle);
-            referenceInit();
-            dotContainerInit();
-            tripleParent(hitResult.item).appendTop(mDotContainer);
+            addCircle();
         }
         // remove circle
         if (event.key == '-') {
-            if (tripleParent(hitResult.item).children.length <= 2) {
-                tripleParent(hitResult.item).remove();
-                if (!mForest.hasChildren()) draw.activate(); // when there is no lollipop, switch into draw tool
-            } else {
-                var index = tripleParent(hitResult.item).children.length - 1;
-                tripleParent(hitResult.item).data.dotNum -= tripleParent(hitResult.item).children[index].data.dotNum;
-                tripleParent(hitResult.item).removeChildren(index);
-                if (tripleParent(hitResult.item).data.dotNum <= 0) 
-                    tripleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
-            }
+            removeCircle();
         }
         // stop playing
         if (event.key == 'space') {

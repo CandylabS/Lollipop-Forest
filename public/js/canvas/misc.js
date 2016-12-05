@@ -49,11 +49,11 @@ function drawDot(_point, _path) {
 		startPoint.data.initAngle = mDot.data.initAngle;
 		tripleParent(hitResult.item).firstChild.appendTop(startPoint);
 		console.log("start point " + startPoint.data.initAngle);
-	}
 
-	if (doubleParent(hitResult.item).data.dotNum == 0) {
-		// setReference
-
+		var len = tripleParent(hitResult.item).children.length;
+		for (var i = 1; i < len; i++) {
+			addReference(tripleParent(hitResult.item).children[i])
+		}
 	}
 
 	// form a group
@@ -62,6 +62,37 @@ function drawDot(_point, _path) {
 	mDot.name = 'dot';
 	doubleParent(hitResult.item).data.dotNum += 1;
 	tripleParent(hitResult.item).data.dotNum += 1;
+}
+
+function addCircle() {
+	console.log(hitResult.item.parent);
+	// console.log(hitResult.item.parent.children.length);
+	circle = tripleLastChild(tripleParent(hitResult.item)).clone();
+	circle.name = 'circle';
+	circle.scale(0.8);
+	// var angle = tripleParent(hitResult.item).children[1].firstChild.rotation;
+	// console.log("angle: " + angle);
+	referenceInit();
+	dotContainerInit();
+	tripleParent(hitResult.item).appendTop(mDotContainer);
+	if (tripleParent(hitResult.item).data.dotNum > 0) {
+		addReference(mDotContainer);
+	}
+}
+
+function removeCircle() {
+	if (tripleParent(hitResult.item).children.length <= 2) {
+		tripleParent(hitResult.item).remove();
+		if (!mForest.hasChildren()) draw.activate(); // when there is no lollipop, switch into draw tool
+	} else {
+		var index = tripleParent(hitResult.item).children.length - 1;
+		tripleParent(hitResult.item).data.dotNum -= tripleParent(hitResult.item).children[index].data.dotNum;
+		tripleParent(hitResult.item).removeChildren(index);
+		if (tripleParent(hitResult.item).data.dotNum <= 0) {
+			tripleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
+			tripleParent(hitResult.item).data.dotNum = 0;
+		}
+	}
 }
 
 // initialization
@@ -88,36 +119,42 @@ function dotContainerInit() {
 	mDotContainer = new Group();
 	mDotContainer.addChild(mReference);
 	mDotContainer.data = {
-			dotNum: 0
-		}
-		// var offset = mReference.firstChild.length / 3;
-		// var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
-		// var beginner = new Path.Star({
-		// 	center: center,
-		// 	points: 5,
-		// 	radius1: 1,
-		// 	radius2: 10,
-		// 	fillColor: 'red'
-		// });
-		// beginner.name = 'cross';
-		// mDotContainer.appendBottom(beginner);
+		dotNum: 0
+	};
+	// var offset = mReference.firstChild.length / 3;
+	// var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
+	// var beginner = new Path.Star({
+	// 	center: center,
+	// 	points: 5,
+	// 	radius1: 1,
+	// 	radius2: 10,
+	// 	fillColor: 'red'
+	// });
+	// beginner.name = 'cross';
+	// mDotContainer.appendBottom(beginner);
 }
 
 function referenceInit() {
 	mReference = new Group();
-	// var center = circle.position;
-	// var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
-	// for (var i = 3; i < 8; i++) {
-	// 	var center = circle.position;
-	// 	geometry = new Path.RegularPolygon(center, i, rad);
-	// 	geometry.strokeColor = "black";
-	// 	geometry.visible = false;
-	// 	if (i == 4) geometry.rotate(45);
-	// 	geometry.rotate(_rotation);
-	// 	mReference.addChild(geometry);
-	// }
-	// circle.data.gap = offsetGap(circle, geometry);
 	mReference.addChild(circle);
+}
+
+function addReference(_dotContainer) {
+	var ref = _dotContainer.parent.firstChild.lastChild;
+	console.log(ref.name);
+	var rotation = ref.data.initAngle + ref.rotation + 180;
+	circle = _dotContainer.lastChild.lastChild;
+	var center = circle.position;
+	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
+	for (var i = 7; i >= 3; i--) {
+		var center = circle.position;
+		geometry = new Path.RegularPolygon(center, i, rad);
+		geometry.strokeColor = "black";
+		geometry.visible = false;
+		if (i == 4) geometry.rotate(45);
+		geometry.rotate(rotation, circle.position);
+		_dotContainer.lastChild.appendBottom(geometry);
+	}
 }
 
 function showGeo(_item, _index) {
