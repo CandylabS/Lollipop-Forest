@@ -55,7 +55,8 @@ var lastGeo, div;
 
 // MODE section
 var MODE = 0;   // if inner cicle can be dragged
-var load = false;
+var forestButton = 0;
+
 
 // global mouseEvent tools
 var draw = new Tool(); //create-lollipop.js

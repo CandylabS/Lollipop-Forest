@@ -22,8 +22,8 @@ function tripleLastChild(_item) {
 	return _item.lastChild.lastChild.lastChild;
 }
 
-function setPlayback(_lollipopContainer) {
-	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
+function setPlayback(_lollipopContainer, _playback) {
+	_lollipopContainer.data.playback = _playback;
 }
 
 function setOrientation(_lollipopContainer) {

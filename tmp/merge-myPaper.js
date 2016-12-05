@@ -61,7 +61,8 @@ var lastGeo, div;
 
 // MODE section
 var MODE = 0;   // if inner cicle can be dragged
-var load = false;
+var forestButton = 0;
+
 
 // global mouseEvent tools
 var draw = new Tool(); //create-lollipop.js
@@ -155,8 +156,8 @@ function tripleLastChild(_item) {
 	return _item.lastChild.lastChild.lastChild;
 }
 
-function setPlayback(_lollipopContainer) {
-	_lollipopContainer.data.playback = 1 - _lollipopContainer.data.playback;
+function setPlayback(_lollipopContainer, _playback) {
+	_lollipopContainer.data.playback = _playback;
 }
 
 function setOrientation(_lollipopContainer) {
@@ -444,7 +445,7 @@ edit.onMouseDown = function(event) {
             // remove dots
             path.parent.data.dotNum -= 1;
             doubleParent(path).data.dotNum -= 1;
-            if (doubleParent(hitResult.item).data.dotNum <= 0){
+            if (doubleParent(hitResult.item).data.dotNum <= 0) {
                 doubleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
                 doubleParent(hitResult.item).data.dotNum = 0;
             }
@@ -503,7 +504,7 @@ edit.onKeyDown = function(event) {
         // stop playing
         if (event.key == 'space') {
             // playback: 1-play, 0-pause
-            setPlayback(tripleParent(hitResult.item));
+            setPlayback(tripleParent(hitResult.item), 1 - tripleParent(hitResult.item).data.playback);
         }
         // reverse playing
         if (event.key == 'r') {
@@ -534,6 +535,14 @@ edit.onKeyDown = function(event) {
             }
             hitResult.item.selected = false;
             showGeo(hitResult.item, index);
+        }
+    } else if (!hitResult) {
+        if (event.key == 'space') {
+            console.log('start or stop all');
+            for (var i = 0; i < mForest.children.length; i++) {
+                setPlayback(mForest.children[i], forestButton);
+            }
+            forestButton = 1 - forestButton;
         }
     }
 }
