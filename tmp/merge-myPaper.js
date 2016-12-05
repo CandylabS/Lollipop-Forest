@@ -61,6 +61,7 @@ var lastGeo, div;
 
 // MODE section
 var MODE = 0;   // if inner cicle can be dragged
+var load = false;
 
 // global mouseEvent tools
 var draw = new Tool(); //create-lollipop.js
@@ -195,6 +196,18 @@ function lollipopInit() {
 function dotContainerInit() {
 	mDotContainer = new Group();
 	mDotContainer.addChild(mReference);
+	var offset = mReference.firstChild.length/3;
+	var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
+	console.log("new center: "+ center);
+	var beginner = new Path.Star({
+		center: center,
+		points: 5,
+		radius1: 1,
+		radius2: 10,
+		fillColor: 'red'
+	});
+	beginner.name = 'cross';
+	mDotContainer.appendBottom(beginner);
 }
 
 function referenceInit() {
@@ -202,20 +215,20 @@ function referenceInit() {
 	var center = circle.position;
 	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
+		var center = circle.position;
 		geometry = new Path.RegularPolygon(center, i, rad);
 		geometry.strokeColor = "black";
 		geometry.visible = false;
+		if (i==4) geometry.rotate(45);
 		mReference.addChild(geometry);
 	}
 	// circle.data.gap = offsetGap(circle, geometry);
 	mReference.addChild(circle);
-	// console.log("circle offset " + circle.data.gap);
-	// console.log("geo offset " + geometry.getPointAt(0));
 }
 
 function showGeo(_item, _index) {
 	hideGeo();
-	_index = (_index + 5) % 5;	// do not exceed bounds
+	_index = (_index + 5) % 5; // do not exceed bounds
 	var ref = _item.parent.children[_index];
 	// console.log("geolength: " + _item.parent.children.length);
 	if (!ref.visible) {
@@ -439,8 +452,7 @@ edit.onKeyDown = function(event) {
             setOrientation(tripleParent(hitResult.item));
         }
         if (event.key == 'o') {
-            console.log("circle offset " + circle.getPointAt(0));
-            console.log("geo offset " + geometry.getPointAt(0));
+            console.log("circle rotation " + hitResult.item.parent.lastChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
@@ -503,9 +515,9 @@ function rotationStep(_item) {
 	if (doubleParent(_item) != null) {
 		// this is inside reference group, but do not rotate rod 
 		if (_item.name != 'rod') {
-			if (_item.name == 'dot') {
+			if (_item.name == 'dot' || _item.name == 'cross') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
-				hitDot(_item);
+				if (_item.name == 'dot') hitDot(_item);
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
@@ -560,16 +572,27 @@ function intersections() {
 
 			for (var i = 0; i < index; i++) {
 				// var center = path1.getPointAt(offset1 * i)
+				var map;
+				switch (index) {
+					case 5:
+						map = 2;
+						break;
+					case 7:
+						map = 3;
+						break;
+					default:
+						map = 1;
+				};
 				var intersectionPath = new Path.Circle({
 					center: path1.getPointAt(offset1 * i),
 					radius: 4,
 					parent: intersectionGroup
 				});
-				intersectionPath.fillColor = (i == 0) ? 'red' : 'white';
+				intersectionPath.fillColor = (i == map) ? 'red' : 'white';
 				if (div > 1) {
 					var start = path2.getOffsetOf(path2.getNearestPoint(path1.getPointAt(offset1 * i)));
 					for (var j = 1; j < div; j++) {
-						start = ((start + offset2 * j )> path2.length) ? (start-path2.length):start;
+						start = ((start + offset2 * j) > path2.length) ? (start - path2.length) : start;
 						var divisionPath = new Path.Circle({
 							center: path2.getPointAt(start + offset2 * j),
 							radius: 3,

@@ -121,8 +121,7 @@ edit.onKeyDown = function(event) {
             setOrientation(tripleParent(hitResult.item));
         }
         if (event.key == 'o') {
-            console.log("circle offset " + circle.getPointAt(0));
-            console.log("geo offset " + geometry.getPointAt(0));
+            console.log("circle rotation " + hitResult.item.parent.lastChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {

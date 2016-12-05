@@ -63,6 +63,18 @@ function lollipopInit() {
 function dotContainerInit() {
 	mDotContainer = new Group();
 	mDotContainer.addChild(mReference);
+	var offset = mReference.firstChild.length/3;
+	var center = circle.getNearestPoint(mReference.firstChild.getPointAt(offset));
+	console.log("new center: "+ center);
+	var beginner = new Path.Star({
+		center: center,
+		points: 5,
+		radius1: 1,
+		radius2: 10,
+		fillColor: 'red'
+	});
+	beginner.name = 'cross';
+	mDotContainer.appendBottom(beginner);
 }
 
 function referenceInit() {
@@ -70,20 +82,20 @@ function referenceInit() {
 	var center = circle.position;
 	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
 	for (var i = 3; i < 8; i++) {
+		var center = circle.position;
 		geometry = new Path.RegularPolygon(center, i, rad);
 		geometry.strokeColor = "black";
 		geometry.visible = false;
+		if (i==4) geometry.rotate(45);
 		mReference.addChild(geometry);
 	}
 	// circle.data.gap = offsetGap(circle, geometry);
 	mReference.addChild(circle);
-	// console.log("circle offset " + circle.data.gap);
-	// console.log("geo offset " + geometry.getPointAt(0));
 }
 
 function showGeo(_item, _index) {
 	hideGeo();
-	_index = (_index + 5) % 5;	// do not exceed bounds
+	_index = (_index + 5) % 5; // do not exceed bounds
 	var ref = _item.parent.children[_index];
 	// console.log("geolength: " + _item.parent.children.length);
 	if (!ref.visible) {

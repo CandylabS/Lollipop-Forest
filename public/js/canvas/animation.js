@@ -20,9 +20,9 @@ function rotationStep(_item) {
 	if (doubleParent(_item) != null) {
 		// this is inside reference group, but do not rotate rod 
 		if (_item.name != 'rod') {
-			if (_item.name == 'dot') {
+			if (_item.name == 'dot' || _item.name == 'cross') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), _item.parent.lastChild.position);
-				hitDot(_item);
+				if (_item.name == 'dot') hitDot(_item);
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
@@ -77,16 +77,27 @@ function intersections() {
 
 			for (var i = 0; i < index; i++) {
 				// var center = path1.getPointAt(offset1 * i)
+				var map;
+				switch (index) {
+					case 5:
+						map = 2;
+						break;
+					case 7:
+						map = 3;
+						break;
+					default:
+						map = 1;
+				};
 				var intersectionPath = new Path.Circle({
 					center: path1.getPointAt(offset1 * i),
 					radius: 4,
 					parent: intersectionGroup
 				});
-				intersectionPath.fillColor = (i == 0) ? 'red' : 'white';
+				intersectionPath.fillColor = (i == map) ? 'red' : 'white';
 				if (div > 1) {
 					var start = path2.getOffsetOf(path2.getNearestPoint(path1.getPointAt(offset1 * i)));
 					for (var j = 1; j < div; j++) {
-						start = ((start + offset2 * j )> path2.length) ? (start-path2.length):start;
+						start = ((start + offset2 * j) > path2.length) ? (start - path2.length) : start;
 						var divisionPath = new Path.Circle({
 							center: path2.getPointAt(start + offset2 * j),
 							radius: 3,

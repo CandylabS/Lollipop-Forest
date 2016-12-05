@@ -46,7 +46,7 @@
             }
         }
 
-        generateConnections(circlePaths);
+        // generateConnections(circlePaths);
 
         // ---------------------------------------------
         function metaball(ball1, ball2, v, handle_len_rate, maxDistance) {

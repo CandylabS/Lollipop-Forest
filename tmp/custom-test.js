@@ -102,10 +102,10 @@
                 closed: true
             });
             var segments = path.segments;
-            segments[0].handleOut = getVector(angle1a - pi2, radius1);
-            segments[1].handleIn = getVector(angle2a + pi2, radius2);
-            segments[2].handleOut = getVector(angle2b - pi2, radius2);
-            segments[3].handleIn = getVector(angle1b + pi2, radius1);
+            // segments[0].handleOut = getVector(angle1a - pi2, radius1);
+            // segments[1].handleIn = getVector(angle2a + pi2, radius2);
+            // segments[2].handleOut = getVector(angle2b - pi2, radius2);
+            // segments[3].handleIn = getVector(angle1b + pi2, radius1);
             return path;
         }
 
