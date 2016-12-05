@@ -88,6 +88,7 @@ edit.onMouseUp = function(event) {
     if (path && path.name == 'circle') {
         setOctave(tripleParent(path));
         console.log("octave: " + tripleParent(path).data.octave);
+        if (mDot) mDot.visible = true;
     }
 }
 

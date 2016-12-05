@@ -32,9 +32,10 @@ function setOrientation(_lollipopContainer) {
 
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
-	var mDot = new SymbolItem(dot);
-	// mDot.removeOnDrag();
+	mDot = new SymbolItem(dot);
+	mDot.removeOnDrag();
 	mDot.position = _point;
+	mDot.visible = false;
 	mDot.data.hit = false;
 	mDot.data.initAngle = (mDot.position - _path.position).angle - tripleParent(_path).data.rod;
 	console.log(mDot.data.initAngle);
@@ -214,4 +215,8 @@ function setRod() {
 
 function setOctave(_lollipopContainer) {
 	_lollipopContainer.data.octave = bandCeil - Math.round(tripleLastChild(_lollipopContainer).position.y / bandWidth);
+}
+
+function resetAll() {
+	console.log('reset');
 }

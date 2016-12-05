@@ -54,6 +54,7 @@ var _dot = new Path.Circle({
     strokeWidth: 0.5
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
+var mDot;
 
 var intersectionGroup = new Group();
 var divisionGroup = new Group();
@@ -166,9 +167,10 @@ function setOrientation(_lollipopContainer) {
 
 function drawDot(_point, _path) {
 	// Move the circle to the nearest point:
-	var mDot = new SymbolItem(dot);
-	// mDot.removeOnDrag();
+	mDot = new SymbolItem(dot);
+	mDot.removeOnDrag();
 	mDot.position = _point;
+	mDot.visible = false;
 	mDot.data.hit = false;
 	mDot.data.initAngle = (mDot.position - _path.position).angle - tripleParent(_path).data.rod;
 	console.log(mDot.data.initAngle);
@@ -348,6 +350,10 @@ function setRod() {
 
 function setOctave(_lollipopContainer) {
 	_lollipopContainer.data.octave = bandCeil - Math.round(tripleLastChild(_lollipopContainer).position.y / bandWidth);
+}
+
+function resetAll() {
+	console.log('reset');
 };
 
 /*
@@ -484,6 +490,7 @@ edit.onMouseUp = function(event) {
     if (path && path.name == 'circle') {
         setOctave(tripleParent(path));
         console.log("octave: " + tripleParent(path).data.octave);
+        if (mDot) mDot.visible = true;
     }
 }
 

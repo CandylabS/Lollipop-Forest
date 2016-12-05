@@ -48,6 +48,7 @@ var _dot = new Path.Circle({
     strokeWidth: 0.5
 }); // Class for dots, presets
 var dot = new SymbolDefinition(_dot); // Create a symbol definition from the path
+var mDot;
 
 var intersectionGroup = new Group();
 var divisionGroup = new Group();
