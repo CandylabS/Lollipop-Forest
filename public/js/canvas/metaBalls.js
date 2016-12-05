@@ -31,6 +31,7 @@ function initMetaData(_path) {
             tripleParent(_path).data.rod = angle;
             tripleParent(_path).data.playback = metaBall.data.playback;
             tripleParent(_path).data.speed = metaBall.data.speed;
+            tripleParent(_path).data.mute = true;
         }
     }
 }

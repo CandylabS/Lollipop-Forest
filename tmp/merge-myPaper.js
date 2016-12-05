@@ -266,7 +266,8 @@ function lollipopInit() {
 		playback: 1,
 		speed: forestSpeed,
 		orientation: 1,
-		dotNum: 0
+		dotNum: 0,
+		mute: false
 	}
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
@@ -653,6 +654,7 @@ function rotationStep(_item) {
 				hitDot(_item);
 			} else if (_item.name == 'start') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).lastChild.lastChild.position);
+				if (_item.intersects(dot2rod(_item))) doubleParent(_item).data.mute = false;
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
@@ -666,13 +668,15 @@ function hitDot(_item) {
 		if (!_item.data.hit) {
 			// dot2rod(_item).visible = true;
 			dot2rod(_item).dashArray = [];
-			_item.data.hit = true;
-			if (doubleParent(_item).data.octave == 4) {
-				playSample('Grand Piano', 'F4', audioContext.destination);
-			} else if (doubleParent(_item).data.octave == 5) {
-				playSample('Grand Piano', 'F5', audioContext.destination);
-			} else {
-				playSample('Grand Piano', 'F6', audioContext.destination);
+			if (!doubleParent(_item).data.mute) {
+				_item.data.hit = true;
+				if (doubleParent(_item).data.octave == 4) {
+					playSample('Grand Piano', 'F4', audioContext.destination);
+				} else if (doubleParent(_item).data.octave == 5) {
+					playSample('Grand Piano', 'F5', audioContext.destination);
+				} else {
+					playSample('Grand Piano', 'F6', audioContext.destination);
+				}
 			}
 			console.log('hit');
 			console.log(_item.rotation + _item.data.initAngle);
@@ -700,7 +704,7 @@ function intersections() {
 		if (Key.modifiers.shift) {
 			// reference geometry vertex points
 			var index = (lastGeo) ? (lastGeo.index + 3) : 3;
-			var path1 = hitResult.item.parent.children[index - 3];	// triangle is the first one
+			var path1 = hitResult.item.parent.children[index - 3]; // triangle is the first one
 			var path2 = hitResult.item;
 			var offset1 = path1.length / index;
 			var offset2 = path2.length / (index * div);
@@ -780,6 +784,7 @@ function initMetaData(_path) {
             tripleParent(_path).data.rod = angle;
             tripleParent(_path).data.playback = metaBall.data.playback;
             tripleParent(_path).data.speed = metaBall.data.speed;
+            tripleParent(_path).data.mute = true;
         }
     }
 }

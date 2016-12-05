@@ -111,7 +111,8 @@ function lollipopInit() {
 		playback: 1,
 		speed: forestSpeed,
 		orientation: 1,
-		dotNum: 0
+		dotNum: 0,
+		mute: false
 	}
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
