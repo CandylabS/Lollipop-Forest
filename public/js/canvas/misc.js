@@ -42,7 +42,7 @@ function drawDot(_point, _path) {
 	mDot.position = _point;
 	mDot.visible = false;
 	mDot.data.hit = false;
-	mDot.data.initAngle = (mDot.position - _path.position).angle - tripleParent(_path).data.rod;
+	mDot.data.initAngle = (mDot.position - _path.position).angle;// - tripleParent(_path).data.rod;
 	console.log(mDot.data.initAngle);
 
 	if (tripleParent(hitResult.item).data.dotNum == 0) {
@@ -68,6 +68,7 @@ function drawDot(_point, _path) {
 	mDot.name = 'dot';
 	doubleParent(hitResult.item).data.dotNum += 1;
 	tripleParent(hitResult.item).data.dotNum += 1;
+	console.log("dotRemain: "+ tripleParent(path).data.dotNum);
 }
 
 function addCircle() {
@@ -148,7 +149,7 @@ function referenceInit() {
 function addReference(_dotContainer) {
 	var ref = _dotContainer.parent.firstChild.lastChild;
 	console.log(ref.name);
-	var rotation = ref.data.initAngle + ref.rotation + 180;
+	var rotation = ref.data.initAngle + ref.rotation + 90;
 	circle = _dotContainer.lastChild.lastChild;
 	var center = circle.position;
 	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
@@ -203,7 +204,7 @@ function createRod(_lollipopContainer) {
 	return mRod;
 }
 
-function setRod() {
+function rotateRod() {
 	if (hitResult) {
 		if (Key.isDown('up')) {
 			path2rod(hitResult.item).rotate(-1, tripleLastChild(tripleParent(hitResult.item)).position);

@@ -1,7 +1,8 @@
 function onFrame(event) {
 	// iterate each lollipop in the view
 	rotationLoop(mForest); // defalut
-	setRod(); // when key == "up" || key == "down"
+	rotateRod(); // when key == "up" || key == "down"
+	setMetaData();
 	intersections(); // when key.modifier.shift
 }
 

@@ -6,12 +6,42 @@ function generateMeta() {
         fillColor: 'white',
         opacity: 0.5
     });
+    metaBall.data.fire = false;
     metaBall.onMouseMove = function(event) {
         this.position = event.point;
         generateConnections(circlePaths);
         console.log("circlepath: " + circlePaths.length);
     }
 }
+
+function initMetaData(_path) {
+    if (tripleParent(_path).data.dotNum > 0) {
+        var ref = tripleParent(_path).firstChild.lastChild;
+        if (!metaBall.data.fire) {
+            metaBall.data.delta = tripleParent(_path).data.rod - (ref.data.initAngle + ref.rotation);
+            metaBall.data.playback = tripleParent(_path).data.playback;
+            metaBall.data.speed = tripleParent(_path).data.speed;
+            console.log("meta delta: " + metaBall.data.delta);
+            console.log("meta playback: " + metaBall.data.playback);
+            console.log("meta speed: " + metaBall.data.playback);
+            metaBall.data.fire = true;
+        } else {
+            var angle = metaBall.data.delta + (ref.data.initAngle + ref.rotation);
+            path2rod(_path).rotate(angle - tripleParent(_path).data.rod, tripleLastChild(tripleParent(_path)).position);
+            tripleParent(_path).data.rod = angle;
+            tripleParent(_path).data.playback = metaBall.data.playback;
+            tripleParent(_path).data.speed = metaBall.data.speed;
+        }
+    }
+}
+
+function setMetaData() {
+    if (meta && metaBall.data.fire) {
+        metaBall.data.delta -= metaBall.data.playback * metaBall.data.speed;
+        metaBall.data.delta = (metaBall.data.delta + 360) % 360; // how many angles before hit the rod
+    }
+}
+
 var connections = new Group();
 
 function generateConnections(paths) {
@@ -19,11 +49,12 @@ function generateConnections(paths) {
     connections.removeChildren();
     // var i = paths.length-1;
     // for (var i = 0, l = paths.length; i < l; i++) {
-    for (var i = 0 ; i< paths.length; i++) {
+    for (var i = 0; i < paths.length; i++) {
         var path = metaball(paths[i], metaBall, 0.5, handle_len_rate, 300);
         if (path) {
             connections.appendTop(path);
             path.removeOnMove();
+            initMetaData(paths[i]);
         }
     }
     // }

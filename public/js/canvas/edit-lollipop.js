@@ -49,6 +49,7 @@ edit.onMouseDown = function(event) {
             // remove dots
             path.parent.data.dotNum -= 1;
             doubleParent(path).data.dotNum -= 1;
+            console.log("dotRemain: " + doubleParent(path).data.dotNum);
             if (doubleParent(hitResult.item).data.dotNum <= 0) {
                 doubleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
                 doubleParent(hitResult.item).data.dotNum = 0;
@@ -108,6 +109,10 @@ edit.onKeyDown = function(event) {
             meta = !meta;
         }
     }
+    //test key
+    if (event.key == 'o') {
+        console.log("init rotation " + metaBall.data.delta);
+    }
     if (hitResult && hitResult.item.name == 'circle') {
         // add circle
         if (event.key == '=') {
@@ -134,11 +139,6 @@ edit.onKeyDown = function(event) {
         if (event.key == 'z') {
             var speed = tripleParent(hitResult.item).data.speed - 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
-        }
-
-        if (event.key == 'o') {
-            console.log("first dot rotation: " + doubleParent(hitResult.item).firstChild.rotation)
-            console.log("init rotation " + tripleParent(hitResult.item).firstChild.lastChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {

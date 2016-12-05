@@ -197,7 +197,7 @@ function drawDot(_point, _path) {
 	mDot.position = _point;
 	mDot.visible = false;
 	mDot.data.hit = false;
-	mDot.data.initAngle = (mDot.position - _path.position).angle - tripleParent(_path).data.rod;
+	mDot.data.initAngle = (mDot.position - _path.position).angle;// - tripleParent(_path).data.rod;
 	console.log(mDot.data.initAngle);
 
 	if (tripleParent(hitResult.item).data.dotNum == 0) {
@@ -223,6 +223,7 @@ function drawDot(_point, _path) {
 	mDot.name = 'dot';
 	doubleParent(hitResult.item).data.dotNum += 1;
 	tripleParent(hitResult.item).data.dotNum += 1;
+	console.log("dotRemain: "+ tripleParent(path).data.dotNum);
 }
 
 function addCircle() {
@@ -303,7 +304,7 @@ function referenceInit() {
 function addReference(_dotContainer) {
 	var ref = _dotContainer.parent.firstChild.lastChild;
 	console.log(ref.name);
-	var rotation = ref.data.initAngle + ref.rotation + 180;
+	var rotation = ref.data.initAngle + ref.rotation + 90;
 	circle = _dotContainer.lastChild.lastChild;
 	var center = circle.position;
 	var rad = circle.bounds.width / 2; // must be ceiled to make sure reference touch with outer circle
@@ -358,7 +359,7 @@ function createRod(_lollipopContainer) {
 	return mRod;
 }
 
-function setRod() {
+function rotateRod() {
 	if (hitResult) {
 		if (Key.isDown('up')) {
 			path2rod(hitResult.item).rotate(-1, tripleLastChild(tripleParent(hitResult.item)).position);
@@ -393,7 +394,7 @@ draw.onMouseDrag = function(event) {
     });
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    if (circle.area > 500) drawState = true;
+    if (circle.area > 1000) drawState = true;
 }
 
 draw.onMouseUp = function(event) {
@@ -473,6 +474,7 @@ edit.onMouseDown = function(event) {
             // remove dots
             path.parent.data.dotNum -= 1;
             doubleParent(path).data.dotNum -= 1;
+            console.log("dotRemain: " + doubleParent(path).data.dotNum);
             if (doubleParent(hitResult.item).data.dotNum <= 0) {
                 doubleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
                 doubleParent(hitResult.item).data.dotNum = 0;
@@ -532,6 +534,10 @@ edit.onKeyDown = function(event) {
             meta = !meta;
         }
     }
+    //test key
+    if (event.key == 'o') {
+        console.log("init rotation " + metaBall.data.delta);
+    }
     if (hitResult && hitResult.item.name == 'circle') {
         // add circle
         if (event.key == '=') {
@@ -558,11 +564,6 @@ edit.onKeyDown = function(event) {
         if (event.key == 'z') {
             var speed = tripleParent(hitResult.item).data.speed - 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
-        }
-
-        if (event.key == 'o') {
-            console.log("first dot rotation: " + doubleParent(hitResult.item).firstChild.rotation)
-            console.log("init rotation " + tripleParent(hitResult.item).firstChild.lastChild.rotation);
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
@@ -627,7 +628,8 @@ edit.onKeyUp = function(event) {
 function onFrame(event) {
 	// iterate each lollipop in the view
 	rotationLoop(mForest); // defalut
-	setRod(); // when key == "up" || key == "down"
+	rotateRod(); // when key == "up" || key == "down"
+	setMetaData();
 	intersections(); // when key.modifier.shift
 }
 
@@ -753,12 +755,42 @@ function generateMeta() {
         fillColor: 'white',
         opacity: 0.5
     });
+    metaBall.data.fire = false;
     metaBall.onMouseMove = function(event) {
         this.position = event.point;
         generateConnections(circlePaths);
         console.log("circlepath: " + circlePaths.length);
     }
 }
+
+function initMetaData(_path) {
+    if (tripleParent(_path).data.dotNum > 0) {
+        var ref = tripleParent(_path).firstChild.lastChild;
+        if (!metaBall.data.fire) {
+            metaBall.data.delta = tripleParent(_path).data.rod - (ref.data.initAngle + ref.rotation);
+            metaBall.data.playback = tripleParent(_path).data.playback;
+            metaBall.data.speed = tripleParent(_path).data.speed;
+            console.log("meta delta: " + metaBall.data.delta);
+            console.log("meta playback: " + metaBall.data.playback);
+            console.log("meta speed: " + metaBall.data.playback);
+            metaBall.data.fire = true;
+        } else {
+            var angle = metaBall.data.delta + (ref.data.initAngle + ref.rotation);
+            path2rod(_path).rotate(angle - tripleParent(_path).data.rod, tripleLastChild(tripleParent(_path)).position);
+            tripleParent(_path).data.rod = angle;
+            tripleParent(_path).data.playback = metaBall.data.playback;
+            tripleParent(_path).data.speed = metaBall.data.speed;
+        }
+    }
+}
+
+function setMetaData() {
+    if (meta && metaBall.data.fire) {
+        metaBall.data.delta -= metaBall.data.playback * metaBall.data.speed;
+        metaBall.data.delta = (metaBall.data.delta + 360) % 360; // how many angles before hit the rod
+    }
+}
+
 var connections = new Group();
 
 function generateConnections(paths) {
@@ -766,11 +798,12 @@ function generateConnections(paths) {
     connections.removeChildren();
     // var i = paths.length-1;
     // for (var i = 0, l = paths.length; i < l; i++) {
-    for (var i = 0 ; i< paths.length; i++) {
+    for (var i = 0; i < paths.length; i++) {
         var path = metaball(paths[i], metaBall, 0.5, handle_len_rate, 300);
         if (path) {
             connections.appendTop(path);
             path.removeOnMove();
+            initMetaData(paths[i]);
         }
     }
     // }

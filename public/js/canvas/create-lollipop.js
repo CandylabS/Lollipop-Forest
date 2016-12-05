@@ -8,7 +8,7 @@ draw.onMouseDrag = function(event) {
     });
     // Remove this path on the next drag event:
     circle.removeOnDrag();
-    if (circle.area > 500) drawState = true;
+    if (circle.area > 1000) drawState = true;
 }
 
 draw.onMouseUp = function(event) {
