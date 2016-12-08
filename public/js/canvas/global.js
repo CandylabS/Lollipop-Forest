@@ -23,7 +23,7 @@ _lollipopContainer.data = {
 	orientation: [1, -1],
     octave: [2, 3, 4, 5, 6],
     key: 	[C, F, G, A],
-    chord: 	[1, 3, 5],
+    scale: 	[1, 3, 5],
     instrument: ['piano']
 };
 _dotContainer.data = {
