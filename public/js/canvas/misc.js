@@ -89,6 +89,7 @@ function addCircle() {
 
 function removeCircle() {
 	if (tripleParent(hitResult.item).children.length <= 2) {
+		circlePaths.splice(tripleParent(hitResult.item).index, 1);
 		tripleParent(hitResult.item).remove();
 		if (!mForest.hasChildren()) draw.activate(); // when there is no lollipop, switch into draw tool
 	} else {

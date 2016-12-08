@@ -33,7 +33,7 @@ edit.onMouseDown = function(event) {
                     }
                 if (divisionGroup.hasChildren())
                     for (var i = 0; i < divisionGroup.children.length; i++) {
-                        if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 5)) {
+                        if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 10)) {
                             var nearestPoint = divisionGroup.children[i].position;
                             drawDot(nearestPoint, path);
                         }

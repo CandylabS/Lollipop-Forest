@@ -42,12 +42,21 @@ function hitDot(_item) {
 			dot2rod(_item).dashArray = [];
 			if (!doubleParent(_item).data.mute) {
 				_item.data.hit = true;
-				if (doubleParent(_item).data.octave == 4) {
-					playSample('Grand Piano', 'F4', audioContext.destination);
-				} else if (doubleParent(_item).data.octave == 5) {
-					playSample('Grand Piano', 'F5', audioContext.destination);
+				// if (doubleParent(_item).data.octave == 4) {
+				// 	playSample('Grand Piano', 'F4', audioContext.destination);
+				// } else if (doubleParent(_item).data.octave == 5) {
+				// 	playSample('Grand Piano', 'F5', audioContext.destination);
+				// } else {
+				// 	playSample('Grand Piano', 'F6', audioContext.destination);
+				// }
+				if (_item.parent.index == 1) {
+					playSample('Drum', 'C4', audioContext.destination);
+				} else if (_item.parent.index == 2) {
+					playSample('Drum', 'D4', audioContext.destination);
+				} else if (_item.parent.index == 3) {
+					playSample('Drum', 'F4', audioContext.destination);
 				} else {
-					playSample('Grand Piano', 'F6', audioContext.destination);
+					playSample('Drum', 'A4', audioContext.destination);
 				}
 			}
 			console.log('hit');
