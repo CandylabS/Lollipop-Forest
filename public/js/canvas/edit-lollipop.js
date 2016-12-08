@@ -130,21 +130,21 @@ edit.onKeyDown = function(event) {
             var speed = tripleParent(hitResult.item).data.speed - 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
         }
-        if (Key.modifiers.control) {
-            // meta ball sync
-            if (Key.isDown('b')) {
-                if (!meta) {
-                    generateMeta(hitResult.item.position);
-                    console.log("metaBall!");
-                }
-                meta = !meta;
+
+        // meta ball sync
+        if (Key.isDown('b')) {
+            if (!meta) {
+                generateMeta(hitResult.item.position);
+                console.log("metaBall!");
             }
-            // show menu
-            if (Key.isDown('m')) {
-                mGUI.visible = true;
-                mGUI.bringToFront();
-            }
+            meta = !meta;
         }
+        // show menu
+        if (Key.isDown('m')) {
+            mGUI.visible = true;
+            mGUI.bringToFront();
+        }
+
         // press shift to show reference
         if (Key.modifiers.shift) {
             var index = (lastGeo) ? (lastGeo.index) : 0;
