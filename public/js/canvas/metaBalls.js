@@ -1,7 +1,7 @@
 // metaballs
-function generateMeta() {
+function generateMeta(_center) {
     metaBall = new Path.Circle({
-        center: view.center,
+        center: _center,
         radius: 50,
         fillColor: 'white',
         opacity: 0.5
@@ -11,6 +11,11 @@ function generateMeta() {
         this.position = event.point;
         generateConnections(circlePaths);
         console.log("circlepath: " + circlePaths.length);
+    }
+    metaBall.onClick = function(event) {
+        metaBall.remove();
+        connections.removeChildren();
+        meta = !meta;
     }
 }
 

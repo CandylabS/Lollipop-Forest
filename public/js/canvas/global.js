@@ -8,6 +8,7 @@
 // 		</dotContainer>
 // 	</lollipopContainer>
 // </layer>
+var mGUI = new Layer();
 var mLayer = new Layer();
 var mForest = new Group();
 var mBands = new Group();

@@ -7,7 +7,8 @@ F.merge(
 	'/js/canvas/create-lollipop.js', 
 	'/js/canvas/edit-lollipop.js',
 	'/js/canvas/animation.js',
-	'/js/canvas/metaBalls.js'
+	'/js/canvas/metaBalls.js',
+	'/js/canvas/gui/gui.js'
 );
 
 F.merge(

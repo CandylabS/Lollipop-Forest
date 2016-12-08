@@ -98,17 +98,6 @@ edit.onKeyDown = function(event) {
     if (event.key == 'enter') {
         draw.activate();
     }
-    if (Key.modifiers.control) {
-        if (Key.isDown('m')) {
-            if (meta) {
-                metaBall.remove();
-            } else {
-                generateMeta();
-                console.log("metaBall!");
-            }
-            meta = !meta;
-        }
-    }
     //test key
     if (event.key == 'o') {
         console.log("init rotation " + metaBall.data.delta);
@@ -131,14 +120,30 @@ edit.onKeyDown = function(event) {
         if (event.key == 'r') {
             setOrientation(tripleParent(hitResult.item));
         }
-
+        // speed up
         if (event.key == 'a') {
             var speed = tripleParent(hitResult.item).data.speed + 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
         }
+        // speed down
         if (event.key == 'z') {
             var speed = tripleParent(hitResult.item).data.speed - 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
+        }
+        if (Key.modifiers.control) {
+            // meta ball sync
+            if (Key.isDown('b')) {
+                if (!meta) {
+                    generateMeta(hitResult.item.position);
+                    console.log("metaBall!");
+                }
+                meta = !meta;
+            }
+            // show menu
+            if (Key.isDown('m')) {
+                mGUI.visible = true;
+                mGUI.bringToFront();
+            }
         }
         // press shift to show reference
         if (Key.modifiers.shift) {

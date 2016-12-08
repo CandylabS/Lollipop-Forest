@@ -14,6 +14,7 @@
 // 		</dotContainer>
 // 	</lollipopContainer>
 // </layer>
+var mGUI = new Layer();
 var mLayer = new Layer();
 var mForest = new Group();
 var mBands = new Group();
@@ -411,6 +412,8 @@ draw.onMouseUp = function(event) {
     console.log(project.layers);
     // change tool to edit mode
     edit.activate();
+    mGUI.visible = true;
+    mGUI.bringToFront();
 }
 
 // change color on next lollipop
@@ -524,17 +527,6 @@ edit.onKeyDown = function(event) {
     if (event.key == 'enter') {
         draw.activate();
     }
-    if (Key.modifiers.control) {
-        if (Key.isDown('m')) {
-            if (meta) {
-                metaBall.remove();
-            } else {
-                generateMeta();
-                console.log("metaBall!");
-            }
-            meta = !meta;
-        }
-    }
     //test key
     if (event.key == 'o') {
         console.log("init rotation " + metaBall.data.delta);
@@ -557,14 +549,30 @@ edit.onKeyDown = function(event) {
         if (event.key == 'r') {
             setOrientation(tripleParent(hitResult.item));
         }
-
+        // speed up
         if (event.key == 'a') {
             var speed = tripleParent(hitResult.item).data.speed + 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
         }
+        // speed down
         if (event.key == 'z') {
             var speed = tripleParent(hitResult.item).data.speed - 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
+        }
+        if (Key.modifiers.control) {
+            // meta ball sync
+            if (Key.isDown('b')) {
+                if (!meta) {
+                    generateMeta(hitResult.item.position);
+                    console.log("metaBall!");
+                }
+                meta = !meta;
+            }
+            // show menu
+            if (Key.isDown('m')) {
+                mGUI.visible = true;
+                mGUI.bringToFront();
+            }
         }
         // press shift to show reference
         if (Key.modifiers.shift) {
@@ -752,9 +760,9 @@ function intersections() {
  */
 
 // metaballs
-function generateMeta() {
+function generateMeta(_center) {
     metaBall = new Path.Circle({
-        center: view.center,
+        center: _center,
         radius: 50,
         fillColor: 'white',
         opacity: 0.5
@@ -764,6 +772,11 @@ function generateMeta() {
         this.position = event.point;
         generateConnections(circlePaths);
         console.log("circlepath: " + circlePaths.length);
+    }
+    metaBall.onClick = function(event) {
+        metaBall.remove();
+        connections.removeChildren();
+        meta = !meta;
     }
 }
 
@@ -880,4 +893,32 @@ function getVector(radians, length) {
         angle: radians * 180 / Math.PI,
         length: length
     });
+};
+
+/*
+ * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/canvas/gui/gui.js
+ * ===========================================================================================
+ */
+
+var panel = new Path.Rectangle({
+ 	topLeft: view.center - 300,
+    bottomRight: view.center + 300,
+    radius: 10,
+    fillColor: 'White',
+    opacity: 0.5
+});
+panel.seleted = false;
+var close = new Path.Circle({
+	center: view.center -285,
+	radius: 5,
+	fillColor: 'red'
+});
+mGUI.addChild(panel);
+mGUI.addChild(close);
+mGUI.visible = false;
+
+close.onMouseDown = function(){
+	mGUI.visible = false;
+	mGUI.sendToBack();
 };
