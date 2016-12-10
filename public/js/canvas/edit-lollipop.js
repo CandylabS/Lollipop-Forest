@@ -141,7 +141,7 @@ edit.onKeyDown = function(event) {
         }
         // show menu
         if (Key.isDown('m')) {
-            showGUI(hitResult.item, false);
+            showGUI(tripleParent(hitResult.item), false);
         }
 
         // press shift to show reference

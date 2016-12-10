@@ -42,6 +42,8 @@ function hitDot(_item) {
 			dot2rod(_item).dashArray = [];
 			if (!doubleParent(_item).data.mute) {
 				_item.data.hit = true;
+				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item);
+				else if (doubleParent(_item).data.instrument == 'piano') playPiano(doubleParent(_item).data.octave);
 				// if (doubleParent(_item).data.octave == 4) {
 				// 	playSample('Grand Piano', 'F4', audioContext.destination);
 				// } else if (doubleParent(_item).data.octave == 5) {
@@ -49,15 +51,6 @@ function hitDot(_item) {
 				// } else {
 				// 	playSample('Grand Piano', 'F6', audioContext.destination);
 				// }
-				if (_item.parent.index == 1) {
-					playSample('Drum', 'C4', audioContext.destination);
-				} else if (_item.parent.index == 2) {
-					playSample('Drum', 'D4', audioContext.destination);
-				} else if (_item.parent.index == 3) {
-					playSample('Drum', 'F4', audioContext.destination);
-				} else {
-					playSample('Drum', 'A4', audioContext.destination);
-				}
 			}
 			console.log('hit');
 			console.log(_item.rotation + _item.data.initAngle);

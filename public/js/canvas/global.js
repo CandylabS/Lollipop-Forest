@@ -79,9 +79,9 @@ var drawState = false; // use when drawing, if circle is too small then it's not
 // global color
 var mColor = {
         hue: 360 * Math.random(),
-        saturation: 0.5,
-        brightness: 1,
-        alpha: 0.3
+        saturation: 0.2,
+        brightness: 0.98,
+        alpha: 0.4
     }
     // global styles
 mDashArray = [5, 5];

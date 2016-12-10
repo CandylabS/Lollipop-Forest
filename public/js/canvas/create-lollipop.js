@@ -30,4 +30,5 @@ draw.onMouseUp = function(event) {
 // change color on next lollipop
 draw.onMouseDown = function(event) {
     mColor.hue = 360 * Math.random();
+    mColor.saturation = 0.2;
 }
