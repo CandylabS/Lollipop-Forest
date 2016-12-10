@@ -19,7 +19,7 @@ mGUI.visible = false;
 
 var steps;
 // first step:
-function selectInstrument() {
+function selectInstrument(_item, _isNew) {
 	var text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
@@ -29,23 +29,29 @@ function selectInstrument() {
 		fontWeight: 'bold',
 		fontSize: 18
 	});
-	var button = new Path.Rectangle({
-		topLeft: view.center + new Point(-50, 220),
-		bottomRight: view.center + new Point(50, 260),
-		radius: 5,
-		fillColor: '#ECE9E6'
-	});
-	button.onClick = function(){
-		selectScale();
-	}
 	var mStep = new Group();
 	mStep.addChild(text);
-	mStep.addChild(button);
+	if (_isNew) {
+		var button = new Path.Rectangle({
+			topLeft: view.center + new Point(-50, 220),
+			bottomRight: view.center + new Point(50, 260),
+			radius: 5,
+			fillColor: '#ECE9E6'
+		});
+		button.onClick = function() {
+			selectScale();
+		}
+		mStep.addChild(button);
+	}
 	steps.push(mStep);
-	menu.addChild(steps[0]);
+	if (_isNew) menu.addChild(steps[0]);
+	else {
+		menu.lastChild.remove();
+		menu.addChild(steps[2]);
+	}
 }
 
-function selectScale() {
+function selectScale(_item, _isNew) {
 	var text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
@@ -61,8 +67,15 @@ function selectScale() {
 		radius: 5,
 		fillColor: '#ECE9E6'
 	});
-	button.onClick = function(){
-		selectBPM();
+	// old menu
+	if (_isNew) {
+		button.onClick = function() {
+			selectBPM();
+		}
+	} else {
+		button.onClick = function() {
+			selectInstrument();
+		}
 	}
 	var mStep = new Group();
 	mStep.addChild(text);
@@ -72,7 +85,7 @@ function selectScale() {
 	menu.addChild(steps[1]);
 }
 
-function selectBPM() {
+function selectBPM(_item, _isNew) {
 	var text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
@@ -84,17 +97,35 @@ function selectBPM() {
 	});
 	var mStep = new Group();
 	mStep.addChild(text);
-	// mStep.addChild(button);
+	// old menu
+
+	if (!_isNew) {
+		var button = new Path.Rectangle({
+			topLeft: view.center + new Point(-50, 220),
+			bottomRight: view.center + new Point(50, 260),
+			radius: 5,
+			fillColor: '#ECE9E6'
+		});
+		button.onClick = function() {
+			selectScale(_item, _isNew);
+		}
+		mStep.addChild(button);
+	}
+
 	steps.push(mStep);
-	menu.lastChild.remove();
-	menu.addChild(steps[2]);
+
+	if (_isNew) {
+		menu.lastChild.remove();
+		menu.addChild(steps[2]);
+	} else menu.addChild(steps[0]);
 }
 
-function showGUI() {
+function showGUI(_item, _isNew) {
 	mGUI.visible = true;
 	mGUI.bringToFront();
 	steps = [];
-	selectInstrument();
+	if (_isNew) selectInstrument(_item, _isNew);
+	else selectBPM(_item, _isNew);
 }
 
 close.onMouseDown = function() {

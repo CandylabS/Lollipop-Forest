@@ -24,7 +24,7 @@ draw.onMouseUp = function(event) {
     console.log(project.layers);
     // change tool to edit mode
     edit.activate();
-    showGUI();
+    showGUI(mLollipopContainer, true);
 }
 
 // change color on next lollipop
