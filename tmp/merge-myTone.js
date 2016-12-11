@@ -109,6 +109,7 @@ function getNearestSample(sampleBank, note, octave) {
 		let distanceB = Math.abs(getNoteDistance(note, octave, sampleB.note, sampleB.octave));
 		return distanceA - distanceB;
 	});
+	console.log("sortedBank "+sortedBank[0].note + sortedBank[0].octave);
 	return sortedBank[0];
 }
 
@@ -129,7 +130,7 @@ function getSample(instrument, noteAndOctave) {
 
 	let sampleBank = SAMPLE_LIBRARY[instrument];
 	let sample = getNearestSample(sampleBank, requestedNote, requestedOctave);
-	let distance = getNoteDistance(sample.note, sample.octave, requestedNote, requestedOctave);
+	let distance = getNoteDistance(requestedNote, requestedOctave, sample.note, sample.octave);
 
 
 	return fetchSample(sample.file).then(audioBuffer => ({
@@ -198,15 +199,52 @@ function playDrum(_item) {
 }
 
 // piano and similar
-function playPiano(_octave) {
-	console.log(_octave);
-	if (_octave == 4) {
-		playSample('Grand Piano', 'F4', audioContext.destination);
-	} else if (_octave == 5) {
-		playSample('Grand Piano', 'F5', audioContext.destination);
+function playPiano(_item, _data) {
+	// console.log(_item.parent.index);
+	var octave = _data.octave;
+	var keyArray = findKey(_data.key);
+	var index = _item.parent.index + _data.root;
+	if (index > 7) {
+		note = keyArray[index - 8];
+		octave += 1;
 	} else {
-		playSample('Grand Piano', 'F6', audioContext.destination);
+		note = keyArray[index - 1];
 	}
+	console.log('note+octave'+note+octave);
+	playSample('Grand Piano', note + octave, audioContext.destination);
+}
+
+function findKey(_key) {
+	var keyArray;
+	switch (_key) {
+		case 'F':
+			keyArray = F_MAJOR;
+			break;
+		case 'Dm':
+			keyArray = D_MINOR;
+			break;
+		case 'C':
+			keyArray = C_MAJOR;
+			break;
+		case 'Am':
+			keyArray = A_MINOR;
+			break;
+		case 'G':
+			keyArray = G_MAJOR;
+			break;
+		case 'Em':
+			keyArray = E_MINOR;
+			break;
+		case 'D':
+			keyArray = F_MAJOR;
+			break;
+		case 'Bm':
+			keyArray = B_MINOR;
+			break;
+		default:
+			keyArray = [];
+	};
+	return keyArray;
 };
 
 /*

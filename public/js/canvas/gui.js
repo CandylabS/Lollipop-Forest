@@ -281,36 +281,3 @@ function createRootButton(_index, _center) {
 	}
 	return _button;
 }
-
-function findKey(_key) {
-	var keyArray;
-	switch (_key) {
-		case 'F':
-			keyArray = F_MAJOR;
-			break;
-		case 'Dm':
-			keyArray = D_MINOR;
-			break;
-		case 'C':
-			keyArray = C_MAJOR;
-			break;
-		case 'Am':
-			keyArray = A_MINOR;
-			break;
-		case 'G':
-			keyArray = G_MAJOR;
-			break;
-		case 'Em':
-			keyArray = E_MINOR;
-			break;
-		case 'D':
-			keyArray = F_MAJOR;
-			break;
-		case 'Bm':
-			keyArray = D_MINOR;
-			break;
-		default:
-			keyArray = [];
-	};
-	return keyArray;
-}

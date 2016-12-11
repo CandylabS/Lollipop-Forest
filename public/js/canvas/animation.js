@@ -43,14 +43,7 @@ function hitDot(_item) {
 			if (!doubleParent(_item).data.mute) {
 				_item.data.hit = true;
 				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item);
-				else if (doubleParent(_item).data.instrument == 'piano') playPiano(doubleParent(_item).data.octave);
-				// if (doubleParent(_item).data.octave == 4) {
-				// 	playSample('Grand Piano', 'F4', audioContext.destination);
-				// } else if (doubleParent(_item).data.octave == 5) {
-				// 	playSample('Grand Piano', 'F5', audioContext.destination);
-				// } else {
-				// 	playSample('Grand Piano', 'F6', audioContext.destination);
-				// }
+				else if (doubleParent(_item).data.instrument == 'piano') playPiano(_item, doubleParent(_item).data);
 			}
 			console.log('hit');
 			console.log(_item.rotation + _item.data.initAngle);

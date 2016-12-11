@@ -385,7 +385,7 @@ function rotateRod() {
 }
 
 function setOctave(_lollipopContainer) {
-	_lollipopContainer.data.octave = bandCeil - Math.round(tripleLastChild(_lollipopContainer).position.y / bandWidth);
+	_lollipopContainer.data.octave = bandCeil - Math.floor(tripleLastChild(_lollipopContainer).position.y / bandWidth);
 };
 
 /*
@@ -689,14 +689,7 @@ function hitDot(_item) {
 			if (!doubleParent(_item).data.mute) {
 				_item.data.hit = true;
 				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item);
-				else if (doubleParent(_item).data.instrument == 'piano') playPiano(doubleParent(_item).data.octave);
-				// if (doubleParent(_item).data.octave == 4) {
-				// 	playSample('Grand Piano', 'F4', audioContext.destination);
-				// } else if (doubleParent(_item).data.octave == 5) {
-				// 	playSample('Grand Piano', 'F5', audioContext.destination);
-				// } else {
-				// 	playSample('Grand Piano', 'F6', audioContext.destination);
-				// }
+				else if (doubleParent(_item).data.instrument == 'piano') playPiano(_item, doubleParent(_item).data);
 			}
 			console.log('hit');
 			console.log(_item.rotation + _item.data.initAngle);
@@ -1195,37 +1188,4 @@ function createRootButton(_index, _center) {
 		mLollipopContainer.data.root = _index;
 	}
 	return _button;
-}
-
-function findKey(_key) {
-	var keyArray;
-	switch (_key) {
-		case 'F':
-			keyArray = F_MAJOR;
-			break;
-		case 'Dm':
-			keyArray = D_MINOR;
-			break;
-		case 'C':
-			keyArray = C_MAJOR;
-			break;
-		case 'Am':
-			keyArray = A_MINOR;
-			break;
-		case 'G':
-			keyArray = G_MAJOR;
-			break;
-		case 'Em':
-			keyArray = E_MINOR;
-			break;
-		case 'D':
-			keyArray = F_MAJOR;
-			break;
-		case 'Bm':
-			keyArray = D_MINOR;
-			break;
-		default:
-			keyArray = [];
-	};
-	return keyArray;
 };

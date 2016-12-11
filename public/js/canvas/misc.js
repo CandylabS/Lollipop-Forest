@@ -225,5 +225,5 @@ function rotateRod() {
 }
 
 function setOctave(_lollipopContainer) {
-	_lollipopContainer.data.octave = bandCeil - Math.round(tripleLastChild(_lollipopContainer).position.y / bandWidth);
+	_lollipopContainer.data.octave = bandCeil - Math.floor(tripleLastChild(_lollipopContainer).position.y / bandWidth);
 }

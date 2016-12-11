@@ -103,6 +103,7 @@ function getNearestSample(sampleBank, note, octave) {
 		let distanceB = Math.abs(getNoteDistance(note, octave, sampleB.note, sampleB.octave));
 		return distanceA - distanceB;
 	});
+	console.log("sortedBank "+sortedBank[0].note + sortedBank[0].octave);
 	return sortedBank[0];
 }
 
@@ -123,7 +124,7 @@ function getSample(instrument, noteAndOctave) {
 
 	let sampleBank = SAMPLE_LIBRARY[instrument];
 	let sample = getNearestSample(sampleBank, requestedNote, requestedOctave);
-	let distance = getNoteDistance(sample.note, sample.octave, requestedNote, requestedOctave);
+	let distance = getNoteDistance(requestedNote, requestedOctave, sample.note, sample.octave);
 
 
 	return fetchSample(sample.file).then(audioBuffer => ({
