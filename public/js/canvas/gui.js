@@ -45,13 +45,13 @@ function selectInstrument() {
 	var mStep = new Group();
 	mStep.addChild(text);
 	// drum
-	var drum = createInstrumentButton('drum', '#d6ecfa', view.center + new Point(0, -120));
+	var drum = createInstrumentButton('drum', '#ECE9E6', view.center + new Point(0, -120));
 	mStep.addChildren(drum);
 	// piano
-	var piano = createInstrumentButton('piano', '#feee7d', view.center + new Point(0, -20));
+	var piano = createInstrumentButton('piano', '#ECE9E6', view.center + new Point(0, -20));
 	mStep.addChildren(piano);
 	// other
-	var other = createInstrumentButton('other', '#BDB7D1', view.center + new Point(0, 80));
+	var other = createInstrumentButton('other', '#ECE9E6', view.center + new Point(0, 80));
 	mStep.addChildren(other);
 	// menu old
 	if (isNew) {
@@ -159,21 +159,63 @@ var updateInstrument = function(_ins) {
 	_item = mLollipopContainer;
 	if (_ins == 'drum') {
 		_item.data.instrument = 'drum';
-		mColor.hue = 202;
-		mColor.saturation = 0.2;
+		mColor.hue = 28;
+		mColor.brightness = 0.2;
 	} else if (_ins == 'piano') {
 		_item.data.instrument = 'piano';
-		mColor.hue = 52;
-		mColor.saturation = 0.4;
+		mColor.hue = 1;
+		mColor.brightness = 0.98;
 	} else {
 		_item.data.instrument = 'other';
 		mColor.hue = 255;
-		mColor.saturation = 0.2;
+		mColor.brightness = 0.5;
 	}
 	for (var i = 1; i < _item.children.length; i++)
 		_item.children[i].lastChild.lastChild.fillColor = mColor;
 	// mColor.saturation = 0.2;
 }
+
+var updateRoot = function(_root) { // name 
+	_item = mLollipopContainer;
+	switch (_root) {
+		case 'C':
+			mColor.hue = 1;
+			break;
+		case 'C#':
+			mColor.hue = 10;
+			break;
+		case 'D':
+			mColor.hue = 28;
+			break;
+		case 'E':
+			mColor.hue = 50;
+			break;
+		case 'F':
+			mColor.hue = 88;
+			break;
+		case 'F#':
+			mColor.hue = 100;
+			break;
+		case 'G':
+			mColor.hue = 200;
+			break;
+		case 'A':
+			mColor.hue = 330;
+			break;
+		case 'A#':
+			mColor.hue = 300;
+			break;
+		case 'B':
+			mColor.hue = 240;
+			break;
+		default:
+			mColor.hue = 52;
+	};
+	for (var i = 1; i < _item.children.length; i++)
+		_item.children[i].lastChild.lastChild.fillColor = mColor;
+	// mColor.saturation = 0.2;
+}
+
 
 function createInstrumentButton(_name, _color, _center) {
 	var _button = new Path.Rectangle({
@@ -278,6 +320,8 @@ function createRootButton(_index, _center) {
 	_button.onClick = function() {
 		rootSelector.position = _center;
 		mLollipopContainer.data.root = _index;
+		var keyArray = findKey(mLollipopContainer.data.key);
+		updateRoot(keyArray[_index]);
 	}
 	return _button;
 }

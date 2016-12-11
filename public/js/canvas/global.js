@@ -17,15 +17,6 @@ mLayer.addChild(mForest);
 mLayer.addChild(mBands);
 
 /*
-_lollipopContainer.data = {
-	playback: [0, 1],
-	speed: 	[1x, 2x, 3x],
-	orientation: [1, -1],
-    octave: [2, 3, 4, 5, 6],
-    key: 	[C, F, G, A],
-    scale: 	[1, 3, 5],
-    instrument: ['piano']
-};
 _dotContainer.data = {
     rod : 0,
     audioBuffer: 'sound.wav',
@@ -79,7 +70,7 @@ var drawState = false; // use when drawing, if circle is too small then it's not
 // global color
 var mColor = {
         hue: 360 * Math.random(),
-        saturation: 0.2,
+        saturation: 0.35,
         brightness: 0.98,
         alpha: 0.4
     }
