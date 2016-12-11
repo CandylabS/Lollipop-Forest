@@ -276,6 +276,7 @@ function lollipopInit() {
 		mute: false,
 		// instrument: 'piano'
 		key: 'C',
+		root: 0
 	}
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
@@ -934,9 +935,13 @@ var keySelector = new Path.Rectangle({
 	strokeWidth: 3,
 	visible: false
 });
-menu.addChild(panel);
-menu.addChild(close);
-menu.addChild(keySelector);
+var rootSelector = new Path.Circle({
+	center: view.center,
+	radius: 10,
+	fillColor: 'red',
+	visible: false
+});
+menu.addChildren([panel, close, keySelector, rootSelector]);
 mGUI.addChild(menu);
 mGUI.visible = false;
 
@@ -971,6 +976,7 @@ function selectInstrument() {
 	// show current menu
 	steps.push(mStep);
 	keySelector.visible = false;
+	rootSelector.visible = false;
 	if (isNew) menu.addChild(steps[0]);
 	else {
 		menu.lastChild.remove();
@@ -1005,7 +1011,16 @@ function selectScale() {
 	keys.push(createKeyButton('Bm', view.center + new Point(120, -60)));
 	for (var i = 0; i < keys.length; i++) mStep.addChildren(keys[i]);
 	// roots
+	var middleText = text.clone();
+	middleText.content = 'and root';
+	middleText.point = view.center + new Point(0, 50);
+	mStep.addChild(middleText);
 	var roots = [];
+	var scaleNum = 7;
+	for (var i = 0; i < scaleNum; i++) {
+		roots.push(createRootButton(i, view.center + new Point(-120 + i * 40, 120)));
+		mStep.addChild(roots[i]);
+	}
 	// show current menu2
 	steps.push(mStep);
 	menu.lastChild.remove();
@@ -1033,6 +1048,7 @@ function selectBPM() {
 
 	steps.push(mStep);
 	keySelector.visible = false;
+	rootSelector.visible = false;
 	if (isNew) {
 		menu.lastChild.remove();
 		menu.addChild(steps[2]);
@@ -1150,4 +1166,66 @@ function createKeyButton(_name, _center) {
 		mLollipopContainer.data.key = _text.content;
 	}
 	return [_button, _text];
+}
+
+function createRootButton(_index, _center) {
+	var _button = new Path.Circle({
+		center: _center,
+		radius: 6,
+		fillColor: 'black',
+	});
+	var _text = text.clone();
+	_text.content = _index;
+	_text.point = _center + new Point(0, -15);
+	_text.visible = false;
+	_button.onMouseEnter = function() {
+		var keyArray = findKey(mLollipopContainer.data.key);
+		_text.content = keyArray[_index];
+		_text.visible = true;
+	}
+	_button.onMouseLeave = function() {
+		_text.visible = false;
+	}
+	if (mLollipopContainer.data.root == _index) {
+		rootSelector.position = _center;
+		rootSelector.visible = true;
+	}
+	_button.onClick = function() {
+		rootSelector.position = _center;
+		mLollipopContainer.data.root = _index;
+	}
+	return _button;
+}
+
+function findKey(_key) {
+	var keyArray;
+	switch (_key) {
+		case 'F':
+			keyArray = F_MAJOR;
+			break;
+		case 'Dm':
+			keyArray = D_MINOR;
+			break;
+		case 'C':
+			keyArray = C_MAJOR;
+			break;
+		case 'Am':
+			keyArray = A_MINOR;
+			break;
+		case 'G':
+			keyArray = G_MAJOR;
+			break;
+		case 'Em':
+			keyArray = E_MINOR;
+			break;
+		case 'D':
+			keyArray = F_MAJOR;
+			break;
+		case 'Bm':
+			keyArray = D_MINOR;
+			break;
+		default:
+			keyArray = [];
+	};
+	return keyArray;
 };
