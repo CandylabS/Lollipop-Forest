@@ -143,7 +143,8 @@ edit.onKeyDown = function(event) {
         }
         // show menu
         if (Key.isDown('m')) {
-            showGUI(tripleParent(hitResult.item), false);
+            mLollipopContainer = tripleParent(hitResult.item);
+            showGUI(false);
         }
 
         // press shift to show reference

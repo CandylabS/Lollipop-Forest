@@ -128,3 +128,4 @@ var circlePaths = [];
 
 // gui
 var text;
+var isNew;

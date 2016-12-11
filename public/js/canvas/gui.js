@@ -28,7 +28,7 @@ mGUI.visible = false;
 
 var steps;
 // first step:
-function selectInstrument(_item, _isNew) {
+function selectInstrument() {
 	text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
@@ -41,47 +41,23 @@ function selectInstrument(_item, _isNew) {
 	var mStep = new Group();
 	mStep.addChild(text);
 	// drum
-	var drum = createButton('drum', '#d6ecfa', view.center + new Point(0, -120));
-	drum[0].onClick = function() {
-		updateInstrument(_item, 'drum');
-	}
-	drum[1].onClick = function() {
-		updateInstrument(_item, 'drum');
-	}
+	var drum = createInstrumentButton('drum', '#d6ecfa', view.center + new Point(0, -120));
 	mStep.addChildren(drum);
 	// piano
-	var piano = createButton('piano', '#feee7d', view.center + new Point(0, -20));
-	piano[0].onClick = function() {
-		updateInstrument(_item, 'piano');
-	}
-	piano[1].onClick = function() {
-		updateInstrument(_item, 'piano');
-	}
+	var piano = createInstrumentButton('piano', '#feee7d', view.center + new Point(0, -20));
 	mStep.addChildren(piano);
 	// other
-	var other = createButton('other', '#BDB7D1', view.center + new Point(0, 80));
-	other[0].onClick = function() {
-		updateInstrument(_item, 'other');
-	}
-	other[1].onClick = function() {
-		updateInstrument(_item, 'other');
-	}
+	var other = createInstrumentButton('other', '#BDB7D1', view.center + new Point(0, 80));
 	mStep.addChildren(other);
 	// menu old
-	if (_isNew) {
-		var next = createButton('next', '#ECE9E6', view.center + new Point(0, 240));
-		next[0].onClick = function() {
-			selectScale(_item, _isNew);
-		}
-		next[1].onClick = function() {
-			selectScale(_item, _isNew);
-		}
+	if (isNew) {
+		var next = createNextButton('next', '#ECE9E6', view.center + new Point(0, 240), 0);
 		mStep.addChildren(next);
 	}
 	// show current menu
 	steps.push(mStep);
 	keySelector.visible = false;
-	if (_isNew) menu.addChild(steps[0]);
+	if (isNew) menu.addChild(steps[0]);
 	else {
 		menu.lastChild.remove();
 		menu.addChild(steps[2]);
@@ -89,7 +65,7 @@ function selectInstrument(_item, _isNew) {
 }
 
 // second step
-function selectScale(_item, _isNew) {
+function selectScale() {
 	text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
@@ -101,7 +77,7 @@ function selectScale(_item, _isNew) {
 	});
 	var mStep = new Group();
 	mStep.addChild(text);
-	var next = createButton('next', '#ECE9E6', view.center + new Point(0, 240));
+	var next = createNextButton('next', '#ECE9E6', view.center + new Point(0, 240), 1);
 	mStep.addChildren(next);
 	// keys
 	var keys = [];
@@ -114,29 +90,15 @@ function selectScale(_item, _isNew) {
 	keys.push(createKeyButton('D', view.center + new Point(120, -120)));
 	keys.push(createKeyButton('Bm', view.center + new Point(120, -60)));
 	for (var i = 0; i < keys.length; i++) mStep.addChildren(keys[i]);
-	// old menu
-	if (_isNew) {
-		next[0].onClick = function() {
-			selectBPM(_item, _isNew);
-		}
-		next[1].onClick = function() {
-			selectBPM(_item, _isNew);
-		}
-	} else {
-		next[0].onClick = function() {
-			selectInstrument(_item, _isNew);
-		}
-		next[1].onClick = function() {
-			selectInstrument(_item, _isNew);
-		}
-	}
+	// roots
+	var roots = [];
 	// show current menu2
 	steps.push(mStep);
 	menu.lastChild.remove();
 	menu.addChild(steps[1]);
 }
 
-function selectBPM(_item, _isNew) {
+function selectBPM() {
 	text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
@@ -150,32 +112,26 @@ function selectBPM(_item, _isNew) {
 	mStep.addChild(text);
 	// old menu
 
-	if (!_isNew) {
-		var next = createButton('next', '#ECE9E6', view.center + new Point(0, 240));
+	if (!isNew) {
+		var next = createNextButton('next', '#ECE9E6', view.center + new Point(0, 240), 0);
 		mStep.addChildren(next);
-		next[0].onClick = function() {
-			selectScale(_item, _isNew);
-		}
-		next[1].onClick = function() {
-			selectScale(_item, _isNew);
-		}
 	}
 
 	steps.push(mStep);
 	keySelector.visible = false;
-	if (_isNew) {
+	if (isNew) {
 		menu.lastChild.remove();
 		menu.addChild(steps[2]);
 	} else menu.addChild(steps[0]);
 }
 
-function showGUI(_item, _isNew) {
+function showGUI(_isNew) {
 	mGUI.visible = true;
 	mGUI.bringToFront();
 	steps = [];
-	console.log(_item.data.instrument);
-	if (_isNew) selectInstrument(_item, _isNew);
-	else selectBPM(_item, _isNew);
+	isNew = _isNew;
+	if (_isNew) selectInstrument();
+	else selectBPM();
 }
 
 close.onMouseDown = function() {
@@ -184,7 +140,8 @@ close.onMouseDown = function() {
 	mGUI.sendToBack();
 }
 
-function updateInstrument(_item, _ins) {
+var updateInstrument = function(_ins) {
+	_item = mLollipopContainer;
 	if (_ins == 'drum') {
 		_item.data.instrument = 'drum';
 		mColor.hue = 202;
@@ -203,7 +160,7 @@ function updateInstrument(_item, _ins) {
 	// mColor.saturation = 0.2;
 }
 
-function createButton(_name, _color, _center) {
+function createInstrumentButton(_name, _color, _center) {
 	var _button = new Path.Rectangle({
 		topLeft: _center + new Point(-50, -20),
 		bottomRight: _center + new Point(50, 20),
@@ -213,6 +170,49 @@ function createButton(_name, _color, _center) {
 	var _text = text.clone();
 	_text.content = _name;
 	_text.point = _center + new Point(0, 5);
+	_button.onClick = function() {
+		updateInstrument(_name);
+	}
+	_text.onClick = function() {
+		updateInstrument(_name);
+	}
+	return [_button, _text];
+}
+
+function createNextButton(_name, _color, _center, _id) {
+	var _button = new Path.Rectangle({
+		topLeft: _center + new Point(-50, -20),
+		bottomRight: _center + new Point(50, 20),
+		radius: 5,
+		fillColor: _color
+	});
+	var _text = text.clone();
+	_text.content = _name;
+	_text.point = _center + new Point(0, 5);
+	if (_id == 1) {
+		if (isNew) {
+			_button.onClick = function() {
+				selectBPM();
+			}
+			_text.onClick = function() {
+				selectBPM();
+			}
+		} else {
+			_button.onClick = function() {
+				selectInstrument();
+			}
+			_text.onClick = function() {
+				selectInstrument();
+			}
+		}
+	} else {
+		_button.onClick = function() {
+			selectScale();
+		}
+		_text.onClick = function() {
+			selectScale();
+		}
+	}
 	return [_button, _text];
 }
 
@@ -227,9 +227,13 @@ function createKeyButton(_name, _center) {
 	var _text = text.clone();
 	_text.content = _name;
 	_text.point = _center + new Point(0, 5);
-	_text.onClick = function() {
+	if (mLollipopContainer.data.key == _name) {
 		keySelector.position = _center;
 		keySelector.visible = true;
+	}
+	_text.onClick = function() {
+		keySelector.position = _center;
+		mLollipopContainer.data.key = _text.content;
 	}
 	return [_button, _text];
 }
