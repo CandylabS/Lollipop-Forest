@@ -76,7 +76,7 @@ function addCircle() {
 	// console.log(hitResult.item.parent.children.length);
 	circle = tripleLastChild(tripleParent(hitResult.item)).clone();
 	circle.name = 'circle';
-	circle.scale(0.8);
+	circle.scale(0.9);
 	// var angle = tripleParent(hitResult.item).children[1].firstChild.rotation;
 	// console.log("angle: " + angle);
 	referenceInit();

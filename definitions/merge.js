@@ -14,5 +14,6 @@ F.merge(
 F.merge(
 	'myTone.js',
 	'/js/web_audio/sampler.js',
-	'/js/web_audio/player.js'
+	'/js/web_audio/player.js',
+	'/js/web_audio/scale.js'
 );

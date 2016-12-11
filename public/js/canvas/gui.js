@@ -20,7 +20,7 @@ mGUI.visible = false;
 var steps;
 // first step:
 function selectInstrument(_item, _isNew) {
-	var text = new PointText({
+	text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
 		content: 'Choose your instrument',
@@ -32,75 +32,28 @@ function selectInstrument(_item, _isNew) {
 	var mStep = new Group();
 	mStep.addChild(text);
 	// drum
-	var drum_button = new Path.Rectangle({
-		topLeft: view.center + new Point(-50, -100),
-		bottomRight: view.center + new Point(50, -140),
-		radius: 5,
-		fillColor: '#d6ecfa'
-	});
-	var drum_text = text.clone();
-	drum_text.content = 'DRUM';
-	drum_text.point = drum_button.position + new Point(0, 5);
-	drum_button.onClick = function() {
-		updateInstrument(_item, 'drum');
-	}
-	drum_text.onClick = function() {
-		updateInstrument(_item, 'drum');
-	}
-	mStep.addChildren([drum_button, drum_text]);
+	var drum = createButton('drum', '#d6ecfa', view.center + new Point(0, -120));
+	drum[0].onClick = function() { updateInstrument(_item, 'drum'); }
+	drum[1].onClick = function() { updateInstrument(_item, 'drum'); }
+	mStep.addChildren(drum);
 	// piano
-	var piano_button = new Path.Rectangle({
-		topLeft: view.center + new Point(-50, -40),
-		bottomRight: view.center + new Point(50, 0),
-		radius: 5,
-		fillColor: '#feee7d'
-	});
-	var piano_text = text.clone();
-	piano_text.content = 'PIANO';
-	piano_text.point = piano_button.position + new Point(0, 5);
-	piano_button.onClick = function() {
-		updateInstrument(_item, 'piano');
-	}
-	piano_text.onClick = function() {
-		updateInstrument(_item, 'piano');
-	}
-	mStep.addChildren([piano_button, piano_text]);
+	var piano = createButton('piano', '#feee7d', view.center + new Point(0, -20));
+	piano[0].onClick = function() { updateInstrument(_item, 'piano'); }
+	piano[1].onClick = function() { updateInstrument(_item, 'piano'); }
+	mStep.addChildren(piano);
 	// other
-	var other_button = new Path.Rectangle({
-		topLeft: view.center + new Point(-50, 60),
-		bottomRight: view.center + new Point(50, 100),
-		radius: 5,
-		fillColor: '#BDB7D1'
-	});
-	var other_text = text.clone();
-	other_text.content = 'OTHER';
-	other_text.point = other_button.position + new Point(0, 5);
-	other_button.onClick = function() {
-		updateInstrument(_item, 'other');
-	}
-	other_text.onClick = function() {
-		updateInstrument(_item, 'other');
-	}
-	mStep.addChildren([other_button, other_text]);
+	var other = createButton('other', '#BDB7D1', view.center + new Point(0, 80));
+	other[0].onClick = function() { updateInstrument(_item, 'other'); }
+	other[1].onClick = function() { updateInstrument(_item, 'other'); }
+	mStep.addChildren(other);
 	// menu old
 	if (_isNew) {
-		var button = new Path.Rectangle({
-			topLeft: view.center + new Point(-50, 220),
-			bottomRight: view.center + new Point(50, 260),
-			radius: 5,
-			fillColor: '#ECE9E6'
-		});
-		var next_text = text.clone();
-		next_text.content = 'NEXT';
-		next_text.point = button.position + new Point(0, 5);
-		button.onClick = function() {
-			selectScale(_item, _isNew);
-		}
-		next_text.onClick = function() {
-			selectScale(_item, _isNew);
-		}
-		mStep.addChildren([button, next_text]);
+		var next = createButton('next', '#ECE9E6', view.center + new Point(0, 240));
+		next[0].onClick = function() { selectScale(_item, _isNew); }
+		next[1].onClick = function() { selectScale(_item, _isNew); }
+		mStep.addChildren(next);
 	}
+	// show current menu
 	steps.push(mStep);
 	if (_isNew) menu.addChild(steps[0]);
 	else {
@@ -210,4 +163,17 @@ function updateInstrument(_item, _ins) {
 	for (var i = 1; i < _item.children.length; i++)
 		_item.children[i].lastChild.lastChild.fillColor = mColor;
 	// mColor.saturation = 0.2;
+}
+
+function createButton(_name, _color, _center) {
+	var _button = new Path.Rectangle({
+		topLeft: _center + new Point(-50, -20),
+		bottomRight: _center + new Point(50, 20),
+		radius: 5,
+		fillColor: _color
+	});
+	var _text = text.clone();
+	_text.content = _name;
+	_text.point = _button.position + new Point(0, 5);
+	return [_button, _text];
 }
