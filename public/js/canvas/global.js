@@ -128,12 +128,3 @@ var circlePaths = [];
 
 // gui
 var text;
-// var gtext = new PointText({
-//     point: view.center,
-//     justification: 'center',
-//     fillColor: 'black',
-//     fontFamily: 'Courier New',
-//     fontWeight: 'bold',
-//     fontSize: 18
-// });
-// var text = new SymbolDefinition(gtext); // Create a symbol definition from the path

@@ -73,8 +73,10 @@ edit.onMouseMove = function(event) {
 // if (tripleParent(hitResult.item).data.playback == 0)
 
 edit.onMouseDrag = function(event) {
-    mBands.visible = true;
-    mBands.sendToBack();
+    if (!mGUI.visible) {
+        mBands.visible = true;
+        mBands.sendToBack();
+    }
     if (path && path.name == 'circle') {
         if (MODE == 1) {
             doubleParent(path).position += event.delta;

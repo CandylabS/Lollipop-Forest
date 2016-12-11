@@ -134,15 +134,6 @@ var circlePaths = [];
 
 // gui
 var text;
-// var gtext = new PointText({
-//     point: view.center,
-//     justification: 'center',
-//     fillColor: 'black',
-//     fontFamily: 'Courier New',
-//     fontWeight: 'bold',
-//     fontSize: 18
-// });
-// var text = new SymbolDefinition(gtext); // Create a symbol definition from the path;
 
 /*
  * ===========================================================================================
@@ -516,8 +507,10 @@ edit.onMouseMove = function(event) {
 // if (tripleParent(hitResult.item).data.playback == 0)
 
 edit.onMouseDrag = function(event) {
-    mBands.visible = true;
-    mBands.sendToBack();
+    if (!mGUI.visible) {
+        mBands.visible = true;
+        mBands.sendToBack();
+    }
     if (path && path.name == 'circle') {
         if (MODE == 1) {
             doubleParent(path).position += event.delta;
@@ -930,8 +923,17 @@ var close = new Path.Circle({
 	radius: 5,
 	fillColor: 'red'
 });
+var keySelector = new Path.Rectangle({
+	topLeft: view.center + new Point(-22, -22),
+	bottomRight: view.center + new Point(22, 22),
+	radius: 5,
+	strokeColor: 'red',
+	strokeWidth: 3,
+	visible: false
+});
 menu.addChild(panel);
 menu.addChild(close);
+menu.addChild(keySelector);
 mGUI.addChild(menu);
 mGUI.visible = false;
 
@@ -951,28 +953,45 @@ function selectInstrument(_item, _isNew) {
 	mStep.addChild(text);
 	// drum
 	var drum = createButton('drum', '#d6ecfa', view.center + new Point(0, -120));
-	drum[0].onClick = function() { updateInstrument(_item, 'drum'); }
-	drum[1].onClick = function() { updateInstrument(_item, 'drum'); }
+	drum[0].onClick = function() {
+		updateInstrument(_item, 'drum');
+	}
+	drum[1].onClick = function() {
+		updateInstrument(_item, 'drum');
+	}
 	mStep.addChildren(drum);
 	// piano
 	var piano = createButton('piano', '#feee7d', view.center + new Point(0, -20));
-	piano[0].onClick = function() { updateInstrument(_item, 'piano'); }
-	piano[1].onClick = function() { updateInstrument(_item, 'piano'); }
+	piano[0].onClick = function() {
+		updateInstrument(_item, 'piano');
+	}
+	piano[1].onClick = function() {
+		updateInstrument(_item, 'piano');
+	}
 	mStep.addChildren(piano);
 	// other
 	var other = createButton('other', '#BDB7D1', view.center + new Point(0, 80));
-	other[0].onClick = function() { updateInstrument(_item, 'other'); }
-	other[1].onClick = function() { updateInstrument(_item, 'other'); }
+	other[0].onClick = function() {
+		updateInstrument(_item, 'other');
+	}
+	other[1].onClick = function() {
+		updateInstrument(_item, 'other');
+	}
 	mStep.addChildren(other);
 	// menu old
 	if (_isNew) {
 		var next = createButton('next', '#ECE9E6', view.center + new Point(0, 240));
-		next[0].onClick = function() { selectScale(_item, _isNew); }
-		next[1].onClick = function() { selectScale(_item, _isNew); }
+		next[0].onClick = function() {
+			selectScale(_item, _isNew);
+		}
+		next[1].onClick = function() {
+			selectScale(_item, _isNew);
+		}
 		mStep.addChildren(next);
 	}
 	// show current menu
 	steps.push(mStep);
+	keySelector.visible = false;
 	if (_isNew) menu.addChild(steps[0]);
 	else {
 		menu.lastChild.remove();
@@ -980,42 +999,56 @@ function selectInstrument(_item, _isNew) {
 	}
 }
 
+// second step
 function selectScale(_item, _isNew) {
-	var text = new PointText({
+	text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
-		content: 'Choose your scale',
+		content: 'Choose your key',
 		fillColor: 'black',
 		fontFamily: 'Courier New',
 		fontWeight: 'bold',
 		fontSize: 18
 	});
-	var button = new Path.Rectangle({
-		topLeft: view.center + new Point(-50, 220),
-		bottomRight: view.center + new Point(50, 260),
-		radius: 5,
-		fillColor: '#ECE9E6'
-	});
+	var mStep = new Group();
+	mStep.addChild(text);
+	var next = createButton('next', '#ECE9E6', view.center + new Point(0, 240));
+	mStep.addChildren(next);
+	// keys
+	var keys = [];
+	keys.push(createKeyButton('F', view.center + new Point(-120, -120)));
+	keys.push(createKeyButton('Dm', view.center + new Point(-120, -60)));
+	keys.push(createKeyButton('C', view.center + new Point(-40, -120)));
+	keys.push(createKeyButton('Am', view.center + new Point(-40, -60)));
+	keys.push(createKeyButton('G', view.center + new Point(40, -120)));
+	keys.push(createKeyButton('Em', view.center + new Point(40, -60)));
+	keys.push(createKeyButton('D', view.center + new Point(120, -120)));
+	keys.push(createKeyButton('Bm', view.center + new Point(120, -60)));
+	for (var i = 0; i < keys.length; i++) mStep.addChildren(keys[i]);
 	// old menu
 	if (_isNew) {
-		button.onClick = function() {
+		next[0].onClick = function() {
+			selectBPM(_item, _isNew);
+		}
+		next[1].onClick = function() {
 			selectBPM(_item, _isNew);
 		}
 	} else {
-		button.onClick = function() {
+		next[0].onClick = function() {
+			selectInstrument(_item, _isNew);
+		}
+		next[1].onClick = function() {
 			selectInstrument(_item, _isNew);
 		}
 	}
-	var mStep = new Group();
-	mStep.addChild(text);
-	mStep.addChild(button);
+	// show current menu2
 	steps.push(mStep);
 	menu.lastChild.remove();
 	menu.addChild(steps[1]);
 }
 
 function selectBPM(_item, _isNew) {
-	var text = new PointText({
+	text = new PointText({
 		point: view.center - new Point(0, 200),
 		justification: 'center',
 		content: 'Choose your BPM',
@@ -1029,20 +1062,18 @@ function selectBPM(_item, _isNew) {
 	// old menu
 
 	if (!_isNew) {
-		var button = new Path.Rectangle({
-			topLeft: view.center + new Point(-50, 220),
-			bottomRight: view.center + new Point(50, 260),
-			radius: 5,
-			fillColor: '#ECE9E6'
-		});
-		button.onClick = function() {
+		var next = createButton('next', '#ECE9E6', view.center + new Point(0, 240));
+		mStep.addChildren(next);
+		next[0].onClick = function() {
 			selectScale(_item, _isNew);
 		}
-		mStep.addChild(button);
+		next[1].onClick = function() {
+			selectScale(_item, _isNew);
+		}
 	}
 
 	steps.push(mStep);
-
+	keySelector.visible = false;
 	if (_isNew) {
 		menu.lastChild.remove();
 		menu.addChild(steps[2]);
@@ -1092,6 +1123,24 @@ function createButton(_name, _color, _center) {
 	});
 	var _text = text.clone();
 	_text.content = _name;
-	_text.point = _button.position + new Point(0, 5);
+	_text.point = _center + new Point(0, 5);
+	return [_button, _text];
+}
+
+function createKeyButton(_name, _center) {
+	var _button = new Path.Rectangle({
+		topLeft: _center + new Point(-20, -20),
+		bottomRight: _center + new Point(20, 20),
+		radius: 5,
+		strokeColor: '#ECE9E6',
+		strokeWidth: 2
+	});
+	var _text = text.clone();
+	_text.content = _name;
+	_text.point = _center + new Point(0, 5);
+	_text.onClick = function() {
+		keySelector.position = _center;
+		keySelector.visible = true;
+	}
 	return [_button, _text];
 };
