@@ -5,7 +5,7 @@
  */
 
 const CONVOLVER = [
-    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/PrimeShort.wav',
+    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/PlateSuperDry.wav',
     'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/RoomConcertHall.wav',
     'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/AirportTerminal.wav'
 ];
@@ -45,7 +45,7 @@ function getSample(instrument, noteAndOctave) {
 	}));
 }
 
-function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) {
+function playSample(instrument, note, gain, pan, convolver, delaySeconds = 0) {
 	getSample(instrument, note).then(({
 		audioBuffer,
 		distance
@@ -56,21 +56,23 @@ function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) 
 		bufferSource.playbackRate.value = playbackRate;
 		gainNode.gain.value = gain;
 		panNode.pan.value = pan;
-		bufferSource.connect(panNode);
+		if (convolver < 0) {
+			bufferSource.connect(panNode);
+		} else {
+			bufferSource.connect(mConvolver[convolver]);
+			mConvolver[convolver].connect(panNode);
+		}
 		panNode.connect(gainNode);
-		gainNode.connect(destination);
+		gainNode.connect(audioContext.destination);
 		bufferSource.start(audioContext.currentTime + delaySeconds);
 	});
 }
 
 var mConvolver = [];
-let convolver = audioContext.destination;
-mConvolver.push(convolver);
 for (var i = 0; i < CONVOLVER.length; i++) {
 	fetchSample(CONVOLVER[i]).then(convolverBuffer => {
 		let convolver = audioContext.createConvolver();
 		convolver.buffer = convolverBuffer;
-		convolver.connect(audioContext.destination);
 		mConvolver.push(convolver);
 	})
 };
@@ -84,13 +86,13 @@ for (var i = 0; i < CONVOLVER.length; i++) {
 // percussion
 function playDrum(_item, _data) {
 	if (_item.parent.index == 1) {
-		playSample('Drum', 'C4', _data.gain, _data.pan, mConvolver[_data.conv]);
+		playSample('Drum', 'C4', _data.gain, _data.pan, _data.reverb);
 	} else if (_item.parent.index == 2) {
-		playSample('Drum', 'D4', _data.gain, _data.pan, mConvolver[_data.conv]);
+		playSample('Drum', 'D4', _data.gain, _data.pan, _data.reverb);
 	} else if (_item.parent.index == 3) {
-		playSample('Drum', 'F4', _data.gain, _data.pan, mConvolver[_data.conv]);
+		playSample('Drum', 'F4', _data.gain, _data.pan, _data.reverb);
 	} else {
-		playSample('Drum', 'A4', _data.gain, _data.pan, mConvolver[_data.conv]);
+		playSample('Drum', 'A4', _data.gain, _data.pan, _data.reverb);
 	}
 }
 
@@ -107,7 +109,8 @@ function playPiano(_item, _data) {
 		note = keyArray[index - 1];
 	}
 	console.log('note+octave' + note + octave);
-	playSample('Grand Piano', note + octave, _data.gain, _data.pan, mConvolver[_data.conv]);
+	console.log('reverb'+ _data.reverb);
+	playSample('Grand Piano', note + octave, _data.gain, _data.pan, _data.reverb);
 }
 
 function findKey(_key) {

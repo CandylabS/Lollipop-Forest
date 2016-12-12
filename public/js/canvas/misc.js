@@ -118,7 +118,7 @@ function lollipopInit() {
 		key: 'C',
 		root: 0,
 		gain: 0.5,
-		conv: 1
+		reverb: 1
 	}
 	setPan(mLollipopContainer);
 	setOctave(mLollipopContainer);

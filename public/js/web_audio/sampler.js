@@ -27,7 +27,7 @@ function getSample(instrument, noteAndOctave) {
 	}));
 }
 
-function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) {
+function playSample(instrument, note, gain, pan, convolver, delaySeconds = 0) {
 	getSample(instrument, note).then(({
 		audioBuffer,
 		distance
@@ -38,21 +38,23 @@ function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) 
 		bufferSource.playbackRate.value = playbackRate;
 		gainNode.gain.value = gain;
 		panNode.pan.value = pan;
-		bufferSource.connect(panNode);
+		if (convolver < 0) {
+			bufferSource.connect(panNode);
+		} else {
+			bufferSource.connect(mConvolver[convolver]);
+			mConvolver[convolver].connect(panNode);
+		}
 		panNode.connect(gainNode);
-		gainNode.connect(destination);
+		gainNode.connect(audioContext.destination);
 		bufferSource.start(audioContext.currentTime + delaySeconds);
 	});
 }
 
 var mConvolver = [];
-let convolver = audioContext.destination;
-mConvolver.push(convolver);
 for (var i = 0; i < CONVOLVER.length; i++) {
 	fetchSample(CONVOLVER[i]).then(convolverBuffer => {
 		let convolver = audioContext.createConvolver();
 		convolver.buffer = convolverBuffer;
-		convolver.connect(audioContext.destination);
 		mConvolver.push(convolver);
 	})
 }

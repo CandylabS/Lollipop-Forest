@@ -269,7 +269,7 @@ function lollipopInit() {
 		key: 'C',
 		root: 0,
 		gain: 0.5,
-		conv: 1
+		reverb: 1
 	}
 	setPan(mLollipopContainer);
 	setOctave(mLollipopContainer);
@@ -934,7 +934,15 @@ var rootSelector = new Path.Circle({
 	fillColor: 'red',
 	visible: false
 });
-menu.addChildren([panel, close, keySelector, rootSelector]);
+var reverbSelector = new Path.Rectangle({
+	topLeft: view.center + new Point(-22, -22),
+	bottomRight: view.center + new Point(42, 22),
+	radius: 5,
+	strokeColor: 'red',
+	strokeWidth: 3,
+	visible: false
+});
+menu.addChildren([panel, close, keySelector, rootSelector, reverbSelector]);
 mGUI.addChild(menu);
 mGUI.visible = false;
 
@@ -1016,15 +1024,16 @@ function selectScale() {
 	}
 	// show current menu2
 	steps.push(mStep);
+	reverbSelector.visible = false;
 	menu.lastChild.remove();
 	menu.addChild(steps[1]);
 }
 
 function selectBPM() {
 	text = new PointText({
-		point: view.center - new Point(0, 200),
+		point: view.center + new Point(0, 50),
 		justification: 'center',
-		content: 'Choose your BPM',
+		content: 'Choose your reverb',
 		fillColor: 'black',
 		fontFamily: 'Courier New',
 		fontWeight: 'bold',
@@ -1032,8 +1041,16 @@ function selectBPM() {
 	});
 	var mStep = new Group();
 	mStep.addChild(text);
-	// old menu
+	// reverb
+	// keys
+	var reverbs = [];
+	reverbs.push(createReverbButton('None', -1, view.center + new Point(-180, 120)));
+	reverbs.push(createReverbButton('Dry', 0, view.center + new Point(-60, 120)));
+	reverbs.push(createReverbButton('Hall', 1, view.center + new Point(60, 120)));
+	reverbs.push(createReverbButton('Space', 2, view.center + new Point(180, 120)));
+	for (var i = 0; i < reverbs.length; i++) mStep.addChildren(reverbs[i]);
 
+	// old menu
 	if (!isNew) {
 		var next = createNextButton('next', '#ECE9E6', view.center + new Point(0, 240), 0);
 		mStep.addChildren(next);
@@ -1232,4 +1249,27 @@ function createRootButton(_index, _center) {
 		updateRoot(keyArray[_index]);
 	}
 	return _button;
+}
+
+function createReverbButton(_name, _index, _center) {
+	var _button = new Path.Rectangle({
+		topLeft: _center + new Point(-30, -20),
+		bottomRight: _center + new Point(30, 20),
+		radius: 5,
+		strokeColor: '#ECE9E6',
+		strokeWidth: 2
+	});
+	_button.data.index = _index;
+	var _text = text.clone();
+	_text.content = _name;
+	_text.point = _center + new Point(0, 5);
+	if (mLollipopContainer.data.reverb == _index) {
+		reverbSelector.position = _center;
+		reverbSelector.visible = true;
+	}
+	_text.onClick = function() {
+		reverbSelector.position = _center;
+		mLollipopContainer.data.reverb = _button.data.index;
+	}
+	return [_button, _text];
 };
