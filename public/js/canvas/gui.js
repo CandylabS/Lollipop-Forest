@@ -195,7 +195,7 @@ function showGUI(_isNew) {
 }
 
 close.onMouseDown = function() {
-	closeGUI;
+	closeGUI();
 }
 
 var closeGUI = function() {

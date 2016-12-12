@@ -227,7 +227,7 @@ function addCircle() {
 	// console.log(hitResult.item.parent.children.length);
 	circle = tripleLastChild(tripleParent(hitResult.item)).clone();
 	circle.name = 'circle';
-	circle.scale(0.9);
+	circle.scale(0.85);
 	// var angle = tripleParent(hitResult.item).children[1].firstChild.rotation;
 	// console.log("angle: " + angle);
 	referenceInit();
@@ -245,9 +245,10 @@ function removeCircle() {
 		if (mGUI.visible) closeGUI();
 		draw.activate(); // when there is no lollipop, switch into draw tool
 	} else {
-		var index = tripleParent(hitResult.item).children.length - 1;
-		tripleParent(hitResult.item).data.dotNum -= tripleParent(hitResult.item).children[index].data.dotNum;
-		tripleParent(hitResult.item).removeChildren(index);
+		// var index = tripleParent(hitResult.item).children.length - 1;
+		tripleParent(hitResult.item).data.dotNum -= doubleParent(hitResult.item).data.dotNum;
+		doubleParent(hitResult.item).removeChildren(0, doubleParent(hitResult.item).children.length - 1);
+		doubleParent(hitResult.item).data.dotNum = 0;
 		if (tripleParent(hitResult.item).data.dotNum <= 0) {
 			tripleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
 			tripleParent(hitResult.item).data.dotNum = 0;
@@ -1104,7 +1105,7 @@ function showGUI(_isNew) {
 }
 
 close.onMouseDown = function() {
-	closeGUI;
+	closeGUI();
 }
 
 var closeGUI = function() {
