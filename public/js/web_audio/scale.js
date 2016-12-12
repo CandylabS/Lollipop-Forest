@@ -61,24 +61,7 @@ const SAMPLE_LIBRARY = {
 		note: 'F#',
 		octave: 6,
 		file: 'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-fs6.wav'
-	}],
-	'Drum': [{
-		note: 'C',
-		octave: 4,
-		file: 'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/drum/kick.wav'
-	}, {
-		note: 'D',
-		octave: 4,
-		file: 'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/drum/snare.wav'
-	}, {
-		note: 'F',
-		octave: 4,
-		file: 'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/drum/close_hat.wav'
-	}, {
-		note: 'A',
-		octave: 4,
-		file: 'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/drum/open_hat.wav'
-	}, ]
+	}]
 };
 
 // ======================PITCH SHIFT=========================
@@ -115,6 +98,6 @@ function getNearestSample(sampleBank, note, octave) {
 		let distanceB = Math.abs(getNoteDistance(note, octave, sampleB.note, sampleB.octave));
 		return distanceA - distanceB;
 	});
-	console.log("sortedBank "+sortedBank[0].note + sortedBank[0].octave);
+	console.log("sortedBank " + sortedBank[0].note + sortedBank[0].octave);
 	return sortedBank[0];
 }

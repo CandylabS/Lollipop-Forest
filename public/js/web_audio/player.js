@@ -1,14 +1,6 @@
 // percussion
 function playDrum(_item, _data) {
-	if (_item.parent.index == 1) {
-		playSample('Drum', 'C4', _data.gain, _data.pan, _data.reverb);
-	} else if (_item.parent.index == 2) {
-		playSample('Drum', 'D4', _data.gain, _data.pan, _data.reverb);
-	} else if (_item.parent.index == 3) {
-		playSample('Drum', 'F4', _data.gain, _data.pan, _data.reverb);
-	} else {
-		playSample('Drum', 'A4', _data.gain, _data.pan, _data.reverb);
-	}
+	playDrumSample(_item.parent.index - 1, '',_data.gain, _data.pan, _data.reverb);
 }
 
 // piano and similar
@@ -24,9 +16,9 @@ function playPiano(_item, _data) {
 		note = keyArray[index - 1];
 	}
 	console.log('note+octave' + note + octave);
-	console.log('reverb'+ _data.reverb);
-	console.log('gain'+ _data.gain);
-	playSample('Grand Piano', note + octave, _data.gain, _data.pan, _data.reverb);
+	console.log('reverb' + _data.reverb);
+	console.log('gain' + _data.gain);
+	playPianoSample('Grand Piano', note + octave, _data.gain, _data.pan, _data.reverb);
 }
 
 function findKey(_key) {
