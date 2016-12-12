@@ -5,7 +5,7 @@
  */
 
 const CONVOLVER = [
-    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/PlateSmall.wav',
+    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/PlateSuperDry.wav',
     'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/RoomConcertHall.wav',
     'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/AirportTerminal.wav'
 ];
@@ -110,6 +110,7 @@ function playPiano(_item, _data) {
 	}
 	console.log('note+octave' + note + octave);
 	console.log('reverb'+ _data.reverb);
+	console.log('gain'+ _data.gain);
 	playSample('Grand Piano', note + octave, _data.gain, _data.pan, _data.reverb);
 }
 

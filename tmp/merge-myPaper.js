@@ -1031,9 +1031,9 @@ function selectScale() {
 
 function selectBPM() {
 	text = new PointText({
-		point: view.center + new Point(0, 50),
+		point: view.center - new Point(0, 200),
 		justification: 'center',
-		content: 'Choose your reverb',
+		content: 'Drag to adjust volume',
 		fillColor: 'black',
 		fontFamily: 'Courier New',
 		fontWeight: 'bold',
@@ -1041,15 +1041,43 @@ function selectBPM() {
 	});
 	var mStep = new Group();
 	mStep.addChild(text);
+	var scaling = mLollipopContainer.data.gain * 1.5 + 0.3;
+	var volume = new Path.Circle({
+		center: view.center + new Point((scaling - 1) * 200, -100),
+		radius: 30 * scaling,
+		fillColor: '#cbe86b',
+		alpha: 0.7
+	});
+	// Install a drag event handler that moves the path along.
+	volume.onMouseDrag = function(event) {
+		volume.position.x += event.delta.x;
+		if (volume.position.x > (view.center.x + 120)) volume.position.x = view.center.x + 120;
+		if (volume.position.x < (view.center.x - 120)) volume.position.x = view.center.x - 120;
+		volume.scale(1 / scaling); // 0.4~1.6, -0.6 + 0.6
+		scaling = 1 + (volume.position.x - view.center.x) / 200;
+		volume.scale(scaling);
+	}
+	volume.onMouseUp = function(event) {
+		mLollipopContainer.data.gain = (scaling - 0.3) / 1.5;
+	}
+	mStep.addChild(volume);
+	text = new PointText({
+		point: view.center + new Point(0, 50),
+		justification: 'center',
+		content: 'Choose Reverb',
+		fillColor: 'black',
+		fontFamily: 'Courier New',
+		fontWeight: 'bold',
+		fontSize: 18
+	});
+	mStep.addChild(text);
 	// reverb
-	// keys
 	var reverbs = [];
 	reverbs.push(createReverbButton('None', -1, view.center + new Point(-180, 120)));
 	reverbs.push(createReverbButton('Dry', 0, view.center + new Point(-60, 120)));
 	reverbs.push(createReverbButton('Hall', 1, view.center + new Point(60, 120)));
 	reverbs.push(createReverbButton('Space', 2, view.center + new Point(180, 120)));
 	for (var i = 0; i < reverbs.length; i++) mStep.addChildren(reverbs[i]);
-
 	// old menu
 	if (!isNew) {
 		var next = createNextButton('next', '#ECE9E6', view.center + new Point(0, 240), 0);
