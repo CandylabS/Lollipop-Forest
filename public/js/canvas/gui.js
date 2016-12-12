@@ -195,6 +195,10 @@ function showGUI(_isNew) {
 }
 
 close.onMouseDown = function() {
+	closeGUI;
+}
+
+var closeGUI = function() {
 	menu.lastChild.remove();
 	mGUI.visible = false;
 	mGUI.sendToBack();
