@@ -4,6 +4,143 @@
  * ===========================================================================================
  */
 
+// =======================SET AUDIO==============================
+let audioContext = new AudioContext();
+var gainNode = audioContext.createGain();
+gainNode.gain.value = 0.5;
+
+function fetchSample(path) {
+	return fetch(decodeURIComponent(path))
+		.then(response => response.arrayBuffer())
+		.then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer));
+}
+
+function getSample(instrument, noteAndOctave) {
+	let [, requestedNote, requestedOctave] = /^(\w[b#]?)(\d)$/.exec(noteAndOctave);
+	requestedOctave = parseInt(requestedOctave, 10);
+	requestedNote = flatToSharp(requestedNote);
+
+	let sampleBank = SAMPLE_LIBRARY[instrument];
+	let sample = getNearestSample(sampleBank, requestedNote, requestedOctave);
+	let distance = getNoteDistance(requestedNote, requestedOctave, sample.note, sample.octave);
+
+
+	return fetchSample(sample.file).then(audioBuffer => ({
+		audioBuffer: audioBuffer,
+		distance: distance
+	}));
+}
+
+function playSample(instrument, note, gain, destination, delaySeconds = 0) {
+	getSample(instrument, note).then(({
+		audioBuffer,
+		distance
+	}) => {
+		let playbackRate = Math.pow(2, distance / 12);
+		let bufferSource = audioContext.createBufferSource();
+		bufferSource.buffer = audioBuffer;
+		bufferSource.playbackRate.value = playbackRate;
+		gainNode.gain.value = gain;
+		bufferSource.connect(gainNode);
+		gainNode.connect(audioContext.destination);
+		bufferSource.start(audioContext.currentTime + delaySeconds);
+	});
+}
+
+fetchSample('Samples/AirportTerminal.wav').then(convolverBuffer => {
+	let convolver = audioContext.createConvolver();
+	convolver.buffer = convolverBuffer;
+	convolver.connect(audioContext.destination);
+	// Airport Music Eno
+	playSample('Grand Piano', note + octave, 0.5, convolver);
+});
+
+/*
+ * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/player.js
+ * ===========================================================================================
+ */
+
+// percussion
+function playDrum(_item) {
+	if (_item.parent.index == 1) {
+		playSample('Drum', 'C4', audioContext.destination);
+	} else if (_item.parent.index == 2) {
+		playSample('Drum', 'D4', audioContext.destination);
+	} else if (_item.parent.index == 3) {
+		playSample('Drum', 'F4', audioContext.destination);
+	} else {
+		playSample('Drum', 'A4', audioContext.destination);
+	}
+}
+
+// piano and similar
+function playPiano(_item, _data) {
+	// console.log(_item.parent.index);
+	var octave = _data.octave;
+	var keyArray = findKey(_data.key);
+	var index = _item.parent.index + _data.root;
+	if (index > 7) {
+		note = keyArray[index - 8];
+		octave += 1;
+	} else {
+		note = keyArray[index - 1];
+	}
+	console.log('note+octave'+note+octave);
+	playSample('Grand Piano', note + octave, 0.5, audioContext.destination);
+}
+
+function findKey(_key) {
+	var keyArray;
+	switch (_key) {
+		case 'F':
+			keyArray = F_MAJOR;
+			break;
+		case 'Dm':
+			keyArray = D_MINOR;
+			break;
+		case 'C':
+			keyArray = C_MAJOR;
+			break;
+		case 'Am':
+			keyArray = A_MINOR;
+			break;
+		case 'G':
+			keyArray = G_MAJOR;
+			break;
+		case 'Em':
+			keyArray = E_MINOR;
+			break;
+		case 'D':
+			keyArray = F_MAJOR;
+			break;
+		case 'Bm':
+			keyArray = B_MINOR;
+			break;
+		default:
+			keyArray = [];
+	};
+	return keyArray;
+};
+
+/*
+ * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/scale.js
+ * ===========================================================================================
+ */
+
+const F_MAJOR = ['F', 'G', 'A', 'A#', 'C', 'D', 'E'];
+const D_MINOR = ['D', 'E', 'F', 'G', 'A', 'A#', 'C'];
+
+const C_MAJOR = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const A_MINOR = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
+const G_MAJOR = ['G', 'A', 'B', 'C', 'D', 'E', 'F#'];
+const E_MINOR = ['E', 'F#', 'G', 'A', 'B', 'C', 'D'];
+
+const D_MAJOR = ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'];
+const B_MINOR = ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'];
+
 const OCTAVE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 const SAMPLE_LIBRARY = {
@@ -75,7 +212,7 @@ const SAMPLE_LIBRARY = {
 	}, ]
 };
 
-// ======================SAMPLER=========================
+// ======================PITCH SHIFT=========================
 function flatToSharp(note) {
 	switch (note) {
 		case 'Bb':
@@ -112,155 +249,4 @@ function getNearestSample(sampleBank, note, octave) {
 	console.log("sortedBank "+sortedBank[0].note + sortedBank[0].octave);
 	return sortedBank[0];
 }
-
-
-// =======================SET AUDIO==============================
-let audioContext = new AudioContext();
-
-function fetchSample(path) {
-	return fetch(decodeURIComponent(path))
-		.then(response => response.arrayBuffer())
-		.then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer));
-}
-
-function getSample(instrument, noteAndOctave) {
-	let [, requestedNote, requestedOctave] = /^(\w[b#]?)(\d)$/.exec(noteAndOctave);
-	requestedOctave = parseInt(requestedOctave, 10);
-	requestedNote = flatToSharp(requestedNote);
-
-	let sampleBank = SAMPLE_LIBRARY[instrument];
-	let sample = getNearestSample(sampleBank, requestedNote, requestedOctave);
-	let distance = getNoteDistance(requestedNote, requestedOctave, sample.note, sample.octave);
-
-
-	return fetchSample(sample.file).then(audioBuffer => ({
-		audioBuffer: audioBuffer,
-		distance: distance
-	}));
-}
-
-function playSample(instrument, note, destination, delaySeconds = 0) {
-	getSample(instrument, note).then(({
-		audioBuffer,
-		distance
-	}) => {
-		let playbackRate = Math.pow(2, distance / 12);
-		let bufferSource = audioContext.createBufferSource();
-		bufferSource.buffer = audioBuffer;
-		bufferSource.playbackRate.value = playbackRate;
-		bufferSource.connect(audioContext.destination);
-		bufferSource.start(audioContext.currentTime + delaySeconds);
-	});
-}
-
-// playSample('Grand Piano', 'F4',  audioContext.destination);
-
-// ========================TEST=======================
-// setTimeout(() => playSample('Grand Piano', 'C4'), 1000);
-// function startLoop(instrument, note, destination, loopLengthSeconds, delaySeconds){
-// 	playSample(instrument, note);
-// 	setInterval(
-// 		() => playSample(instrument, note, destination, delaySeconds), 
-// 		loopLengthSeconds * 1000
-// 	);
-// }
-// // startLoop('Grand Piano', 'C4', 20, 5);
-// fetchSample('Samples/AirportTerminal.wav').then(convolverBuffer => {
-// 	let convolver = audioContext.createConvolver();
-// 	convolver.buffer = convolverBuffer;
-// 	convolver.connect(audioContext.destination);
-// 	// Airport Music Eno
-// 	startLoop('Grand Piano', 'F4',  convolver, 19.7, 4.0);
-//   	startLoop('Grand Piano', 'Ab4', convolver, 17.8, 8.1);
-//   	startLoop('Grand Piano', 'C5',  convolver, 21.3, 5.6);
-//   	startLoop('Grand Piano', 'Db5', convolver, 22.1, 12.6);
-//   	startLoop('Grand Piano', 'Eb5', convolver, 18.4, 9.2);
-//   	startLoop('Grand Piano', 'F5',  convolver, 20.0, 14.1);
-//   	startLoop('Grand Piano', 'Ab5', convolver, 17.7, 3.1);
-// });
-
-/*
- * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/player.js
- * ===========================================================================================
- */
-
-// percussion
-function playDrum(_item) {
-	if (_item.parent.index == 1) {
-		playSample('Drum', 'C4', audioContext.destination);
-	} else if (_item.parent.index == 2) {
-		playSample('Drum', 'D4', audioContext.destination);
-	} else if (_item.parent.index == 3) {
-		playSample('Drum', 'F4', audioContext.destination);
-	} else {
-		playSample('Drum', 'A4', audioContext.destination);
-	}
-}
-
-// piano and similar
-function playPiano(_item, _data) {
-	// console.log(_item.parent.index);
-	var octave = _data.octave;
-	var keyArray = findKey(_data.key);
-	var index = _item.parent.index + _data.root;
-	if (index > 7) {
-		note = keyArray[index - 8];
-		octave += 1;
-	} else {
-		note = keyArray[index - 1];
-	}
-	console.log('note+octave'+note+octave);
-	playSample('Grand Piano', note + octave, audioContext.destination);
-}
-
-function findKey(_key) {
-	var keyArray;
-	switch (_key) {
-		case 'F':
-			keyArray = F_MAJOR;
-			break;
-		case 'Dm':
-			keyArray = D_MINOR;
-			break;
-		case 'C':
-			keyArray = C_MAJOR;
-			break;
-		case 'Am':
-			keyArray = A_MINOR;
-			break;
-		case 'G':
-			keyArray = G_MAJOR;
-			break;
-		case 'Em':
-			keyArray = E_MINOR;
-			break;
-		case 'D':
-			keyArray = F_MAJOR;
-			break;
-		case 'Bm':
-			keyArray = B_MINOR;
-			break;
-		default:
-			keyArray = [];
-	};
-	return keyArray;
-};
-
-/*
- * ===========================================================================================
- * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/scale.js
- * ===========================================================================================
- */
-
-const F_MAJOR = ['F', 'G', 'A', 'A#', 'C', 'D', 'E'];
-const D_MINOR = ['D', 'E', 'F', 'G', 'A', 'A#', 'C'];
-
-const C_MAJOR = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-const A_MINOR = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-
-const G_MAJOR = ['G', 'A', 'B', 'C', 'D', 'E', 'F#'];
-const E_MINOR = ['E', 'F#', 'G', 'A', 'B', 'C', 'D'];
-
-const D_MAJOR = ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'];
-const B_MINOR = ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'];
+;

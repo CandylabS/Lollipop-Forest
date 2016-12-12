@@ -24,7 +24,7 @@ function playPiano(_item, _data) {
 		note = keyArray[index - 1];
 	}
 	console.log('note+octave'+note+octave);
-	playSample('Grand Piano', note + octave, audioContext.destination);
+	playSample('Grand Piano', note + octave, 0.5, audioContext.destination);
 }
 
 function findKey(_key) {
