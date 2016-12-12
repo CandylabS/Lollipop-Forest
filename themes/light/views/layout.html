@@ -9,13 +9,15 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
 		<script type="text/javascript" src="myTone.js"></script>
 		<!-- <script type="text/paperscript" src="custom/test.js" canvas="canvas"></script> -->
-		@{import('light-theme.css')}
+		<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+		 <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+		@{import('light-theme.css', 'style.css', 'flip.js')}
 		@{favicon('myFavicon.ico')}
 	</head>
 	<body>
 		<!--     <a href="#" onclick="MODE = 1;">Free</a></br>
 		<a href="#" onclick="MODE = 0;">Default</a> -->
 		<canvas id="canvas" resize stats hidpi="off"></canvas>
-		<!-- @{body} -->
+		@{body}
 	</body>
 </html>
