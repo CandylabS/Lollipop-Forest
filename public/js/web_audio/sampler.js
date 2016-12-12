@@ -48,7 +48,7 @@ function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) 
 var mConvolver = [];
 let convolver = audioContext.destination;
 mConvolver.push(convolver);
-for (var i = 0; i < 3; i++) {
+for (var i = 0; i < CONVOLVER.length; i++) {
 	fetchSample(CONVOLVER[i]).then(convolverBuffer => {
 		let convolver = audioContext.createConvolver();
 		convolver.buffer = convolverBuffer;

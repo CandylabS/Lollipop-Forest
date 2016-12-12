@@ -90,7 +90,9 @@ edit.onMouseUp = function(event) {
     mBands.visible = false;
     if (path && path.name == 'circle') {
         setOctave(tripleParent(path));
+        setPan(tripleParent(path));
         console.log("octave: " + tripleParent(path).data.octave);
+        console.log("pan: " + tripleParent(path).data.pan);
         if (mDot) mDot.visible = true;
     }
 }

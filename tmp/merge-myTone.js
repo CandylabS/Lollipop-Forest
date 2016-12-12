@@ -5,7 +5,7 @@
  */
 
 const CONVOLVER = [
-    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/PlateSuperDry.wav',
+    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/PrimeShort.wav',
     'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/RoomConcertHall.wav',
     'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/AirportTerminal.wav'
 ];
@@ -66,7 +66,7 @@ function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) 
 var mConvolver = [];
 let convolver = audioContext.destination;
 mConvolver.push(convolver);
-for (var i = 0; i < 3; i++) {
+for (var i = 0; i < CONVOLVER.length; i++) {
 	fetchSample(CONVOLVER[i]).then(convolverBuffer => {
 		let convolver = audioContext.createConvolver();
 		convolver.buffer = convolverBuffer;
@@ -107,7 +107,7 @@ function playPiano(_item, _data) {
 		note = keyArray[index - 1];
 	}
 	console.log('note+octave' + note + octave);
-	playSample('Grand Piano', _data.gain, _data.pan, mConvolver[_data.conv]);
+	playSample('Grand Piano', note + octave, _data.gain, _data.pan, mConvolver[_data.conv]);
 }
 
 function findKey(_key) {

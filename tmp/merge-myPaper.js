@@ -193,7 +193,7 @@ function drawDot(_point, _path) {
 	mDot.position = _point;
 	mDot.visible = false;
 	mDot.data.hit = false;
-	mDot.data.initAngle = (mDot.position - _path.position).angle;// - tripleParent(_path).data.rod;
+	mDot.data.initAngle = (mDot.position - _path.position).angle; // - tripleParent(_path).data.rod;
 	console.log(mDot.data.initAngle);
 
 	if (tripleParent(hitResult.item).data.dotNum == 0) {
@@ -219,7 +219,7 @@ function drawDot(_point, _path) {
 	mDot.name = 'dot';
 	doubleParent(hitResult.item).data.dotNum += 1;
 	tripleParent(hitResult.item).data.dotNum += 1;
-	console.log("dotRemain: "+ tripleParent(path).data.dotNum);
+	console.log("dotRemain: " + tripleParent(path).data.dotNum);
 }
 
 function addCircle() {
@@ -268,10 +268,10 @@ function lollipopInit() {
 		// instrument: 'piano'
 		key: 'C',
 		root: 0,
-		pan: 0,
 		gain: 0.5,
-		conv: 2
+		conv: 1
 	}
+	setPan(mLollipopContainer);
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
 
@@ -380,6 +380,10 @@ function rotateRod() {
 
 function setOctave(_lollipopContainer) {
 	_lollipopContainer.data.octave = bandCeil - Math.floor(tripleLastChild(_lollipopContainer).position.y / bandWidth);
+}
+
+function setPan(_lollipopContainer) {
+	_lollipopContainer.data.pan = (tripleLastChild(_lollipopContainer).position.x - view.center.x) / view.size.width * 2;
 };
 
 /*
@@ -521,7 +525,9 @@ edit.onMouseUp = function(event) {
     mBands.visible = false;
     if (path && path.name == 'circle') {
         setOctave(tripleParent(path));
+        setPan(tripleParent(path));
         console.log("octave: " + tripleParent(path).data.octave);
+        console.log("pan: " + tripleParent(path).data.pan);
         if (mDot) mDot.visible = true;
     }
 }
