@@ -1,5 +1,17 @@
 /*
  * ===========================================================================================
+ * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/fx.js
+ * ===========================================================================================
+ */
+
+const CONVOLVER = [
+    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/PlateSuperDry.wav',
+    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/RoomConcertHall.wav',
+    'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/convolver/AirportTerminal.wav'
+];
+
+/*
+ * ===========================================================================================
  * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/sampler.js
  * ===========================================================================================
  */
@@ -7,7 +19,9 @@
 // =======================SET AUDIO==============================
 let audioContext = new AudioContext();
 var gainNode = audioContext.createGain();
-gainNode.gain.value = 0.5;
+var panNode = audioContext.createStereoPanner();
+// panNode.pan.value = -0.5;
+// gainNode.gain.value = 0.5;
 
 function fetchSample(path) {
 	return fetch(decodeURIComponent(path))
@@ -31,7 +45,7 @@ function getSample(instrument, noteAndOctave) {
 	}));
 }
 
-function playSample(instrument, note, gain, destination, delaySeconds = 0) {
+function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) {
 	getSample(instrument, note).then(({
 		audioBuffer,
 		distance
@@ -41,19 +55,25 @@ function playSample(instrument, note, gain, destination, delaySeconds = 0) {
 		bufferSource.buffer = audioBuffer;
 		bufferSource.playbackRate.value = playbackRate;
 		gainNode.gain.value = gain;
-		bufferSource.connect(gainNode);
-		gainNode.connect(audioContext.destination);
+		panNode.pan.value = pan;
+		bufferSource.connect(panNode);
+		panNode.connect(gainNode);
+		gainNode.connect(destination);
 		bufferSource.start(audioContext.currentTime + delaySeconds);
 	});
 }
 
-fetchSample('Samples/AirportTerminal.wav').then(convolverBuffer => {
-	let convolver = audioContext.createConvolver();
-	convolver.buffer = convolverBuffer;
-	convolver.connect(audioContext.destination);
-	// Airport Music Eno
-	playSample('Grand Piano', note + octave, 0.5, convolver);
-});
+var mConvolver = [];
+let convolver = audioContext.destination;
+mConvolver.push(convolver);
+for (var i = 0; i < 3; i++) {
+	fetchSample(CONVOLVER[i]).then(convolverBuffer => {
+		let convolver = audioContext.createConvolver();
+		convolver.buffer = convolverBuffer;
+		convolver.connect(audioContext.destination);
+		mConvolver.push(convolver);
+	})
+};
 
 /*
  * ===========================================================================================
@@ -62,15 +82,15 @@ fetchSample('Samples/AirportTerminal.wav').then(convolverBuffer => {
  */
 
 // percussion
-function playDrum(_item) {
+function playDrum(_item, _data) {
 	if (_item.parent.index == 1) {
-		playSample('Drum', 'C4', audioContext.destination);
+		playSample('Drum', 'C4', _data.gain, _data.pan, mConvolver[_data.conv]);
 	} else if (_item.parent.index == 2) {
-		playSample('Drum', 'D4', audioContext.destination);
+		playSample('Drum', 'D4', _data.gain, _data.pan, mConvolver[_data.conv]);
 	} else if (_item.parent.index == 3) {
-		playSample('Drum', 'F4', audioContext.destination);
+		playSample('Drum', 'F4', _data.gain, _data.pan, mConvolver[_data.conv]);
 	} else {
-		playSample('Drum', 'A4', audioContext.destination);
+		playSample('Drum', 'A4', _data.gain, _data.pan, mConvolver[_data.conv]);
 	}
 }
 
@@ -86,8 +106,8 @@ function playPiano(_item, _data) {
 	} else {
 		note = keyArray[index - 1];
 	}
-	console.log('note+octave'+note+octave);
-	playSample('Grand Piano', note + octave, 0.5, audioContext.destination);
+	console.log('note+octave' + note + octave);
+	playSample('Grand Piano', _data.gain, _data.pan, mConvolver[_data.conv]);
 }
 
 function findKey(_key) {

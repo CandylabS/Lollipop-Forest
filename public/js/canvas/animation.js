@@ -42,7 +42,7 @@ function hitDot(_item) {
 			dot2rod(_item).dashArray = [];
 			if (!doubleParent(_item).data.mute) {
 				_item.data.hit = true;
-				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item);
+				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item, doubleParent(_item).data);
 				else if (doubleParent(_item).data.instrument == 'piano') playPiano(_item, doubleParent(_item).data);
 			}
 			console.log('hit');

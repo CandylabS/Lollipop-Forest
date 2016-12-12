@@ -267,7 +267,10 @@ function lollipopInit() {
 		mute: false,
 		// instrument: 'piano'
 		key: 'C',
-		root: 0
+		root: 0,
+		pan: 0,
+		gain: 0.5,
+		conv: 2
 	}
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
@@ -679,7 +682,7 @@ function hitDot(_item) {
 			dot2rod(_item).dashArray = [];
 			if (!doubleParent(_item).data.mute) {
 				_item.data.hit = true;
-				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item);
+				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item, doubleParent(_item).data);
 				else if (doubleParent(_item).data.instrument == 'piano') playPiano(_item, doubleParent(_item).data);
 			}
 			console.log('hit');

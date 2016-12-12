@@ -1,7 +1,7 @@
 // =======================SET AUDIO==============================
 let audioContext = new AudioContext();
 var gainNode = audioContext.createGain();
-var panNode = audioCtx.createStereoPanner();
+var panNode = audioContext.createStereoPanner();
 // panNode.pan.value = -0.5;
 // gainNode.gain.value = 0.5;
 
@@ -27,7 +27,7 @@ function getSample(instrument, noteAndOctave) {
 	}));
 }
 
-function playSample(instrument, note, gain, destination, delaySeconds = 0) {
+function playSample(instrument, note, gain, pan, destination, delaySeconds = 0) {
 	getSample(instrument, note).then(({
 		audioBuffer,
 		distance
@@ -37,16 +37,22 @@ function playSample(instrument, note, gain, destination, delaySeconds = 0) {
 		bufferSource.buffer = audioBuffer;
 		bufferSource.playbackRate.value = playbackRate;
 		gainNode.gain.value = gain;
-		bufferSource.connect(gainNode);
-		gainNode.connect(audioContext.destination);
+		panNode.pan.value = pan;
+		bufferSource.connect(panNode);
+		panNode.connect(gainNode);
+		gainNode.connect(destination);
 		bufferSource.start(audioContext.currentTime + delaySeconds);
 	});
 }
 
-fetchSample('Samples/AirportTerminal.wav').then(convolverBuffer => {
-	let convolver = audioContext.createConvolver();
-	convolver.buffer = convolverBuffer;
-	convolver.connect(audioContext.destination);
-	// Airport Music Eno
-	playSample('Grand Piano', note + octave, 0.5, convolver);
-})
+var mConvolver = [];
+let convolver = audioContext.destination;
+mConvolver.push(convolver);
+for (var i = 0; i < 3; i++) {
+	fetchSample(CONVOLVER[i]).then(convolverBuffer => {
+		let convolver = audioContext.createConvolver();
+		convolver.buffer = convolverBuffer;
+		convolver.connect(audioContext.destination);
+		mConvolver.push(convolver);
+	})
+}

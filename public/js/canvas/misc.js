@@ -116,7 +116,10 @@ function lollipopInit() {
 		mute: false,
 		// instrument: 'piano'
 		key: 'C',
-		root: 0
+		root: 0,
+		pan: 0,
+		gain: 0.5,
+		conv: 2
 	}
 	setOctave(mLollipopContainer);
 	console.log("octave: " + mLollipopContainer.data.octave);
