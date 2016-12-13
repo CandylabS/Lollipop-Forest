@@ -247,13 +247,19 @@ function removeCircle() {
 	} else {
 		// var index = tripleParent(hitResult.item).children.length - 1;
 		tripleParent(hitResult.item).data.dotNum -= doubleParent(hitResult.item).data.dotNum;
-		doubleParent(hitResult.item).removeChildren(0, doubleParent(hitResult.item).children.length - 1);
 		doubleParent(hitResult.item).data.dotNum = 0;
+		if (doubleParent(hitResult.item).children.length > 1)
+			doubleParent(hitResult.item).removeChildren(0, doubleParent(hitResult.item).children.length - 1);
 		if (tripleParent(hitResult.item).data.dotNum <= 0) {
 			tripleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
 			tripleParent(hitResult.item).data.dotNum = 0;
 		}
 	}
+}
+
+function deleteAll() {
+	tripleParent(hitResult.item).remove();
+	draw.activate();
 }
 
 // initialization
@@ -266,7 +272,9 @@ function lollipopInit() {
 		speed: forestSpeed,
 		orientation: 1,
 		dotNum: 0,
+		wait: false,
 		mute: false,
+		zoomed: false,
 		// instrument: 'piano'
 		key: 'C',
 		root: 0,
@@ -357,7 +365,7 @@ function createRod(_lollipopContainer) {
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
 	mRod.style = {
-		strokeColor: '#9C9C9A',
+		strokeColor: '#676161',
 		dashArray: mDashArray,
 		visible: true
 	}
@@ -458,30 +466,40 @@ edit.onMouseDown = function(event) {
             }
             hitResult.item.bringToFront();
 
-            // draw dots
-            if (Key.modifiers.shift) {
-                console.log("bounds: " + path.bounds.width);
-                if (intersectionGroup.hasChildren())
-                    for (var i = 0; i < intersectionGroup.children.length; i++) {
-                        if (event.point.isClose(intersectionGroup.children[i].position, path.bounds.width / 5)) {
-                            var nearestPoint = path.getNearestPoint(intersectionGroup.children[i].position);
-                            drawDot(nearestPoint, path);
+            if (!tripleParent(hitResult.item).data.zoomed) {
+                // draw dots
+                if (Key.modifiers.shift) {
+                    console.log("bounds: " + path.bounds.width);
+                    if (intersectionGroup.hasChildren())
+                        for (var i = 0; i < intersectionGroup.children.length; i++) {
+                            if (event.point.isClose(intersectionGroup.children[i].position, path.bounds.width / 5)) {
+                                var nearestPoint = path.getNearestPoint(intersectionGroup.children[i].position);
+                                drawDot(nearestPoint, path);
+                            }
                         }
-                    }
-                if (divisionGroup.hasChildren())
-                    for (var i = 0; i < divisionGroup.children.length; i++) {
-                        if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 10)) {
-                            var nearestPoint = divisionGroup.children[i].position;
-                            drawDot(nearestPoint, path);
+                    if (divisionGroup.hasChildren())
+                        for (var i = 0; i < divisionGroup.children.length; i++) {
+                            if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 10)) {
+                                var nearestPoint = divisionGroup.children[i].position;
+                                drawDot(nearestPoint, path);
+                            }
                         }
-                    }
-                    // var nearestPoint = path.getNearestPoint(event.point);
-                console.log('shift!');
+                        // var nearestPoint = path.getNearestPoint(event.point);
+                    console.log('shift!');
+                } else {
+                    var nearestPoint = path.getNearestPoint(event.point);
+                    drawDot(nearestPoint, path);
+                }
             } else {
-                var nearestPoint = path.getNearestPoint(event.point);
-                drawDot(nearestPoint, path);
+                tripleParent(hitResult.item).data.mute = !tripleParent(hitResult.item).data.mute;
+                if (tripleParent(hitResult.item).data.mute) {
+                    var mask = hitResult.item.clone();
+                    mask.fillColor = 'white';
+                    mask.opacity = 0.5;
+                    mask.removeOnDown();
+                }
             }
-            // console.log(tripleParent(path).children.length);
+
         } else if (path.name == 'dot') {
             // remove dots
             path.parent.data.dotNum -= 1;
@@ -544,6 +562,9 @@ edit.onKeyDown = function(event) {
         console.log("init rotation " + metaBall.data.delta);
     }
     if (hitResult && hitResult.item.name == 'circle') {
+        if (event.key == 'backspace') {
+            deleteAll();
+        }
         // add circle
         if (event.key == '=') {
             addCircle();
@@ -571,7 +592,16 @@ edit.onKeyDown = function(event) {
             var speed = tripleParent(hitResult.item).data.speed - 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
         }
-
+        // zoom in/out
+        if (event.key == 'control') {
+            if (tripleParent(hitResult.item).data.zoomed) {
+                tripleParent(hitResult.item).scale(2);
+                tripleParent(hitResult.item).data.zoomed = false;
+            } else {
+                tripleParent(hitResult.item).scale(0.5);
+                tripleParent(hitResult.item).data.zoomed = true;
+            }
+        }
         // meta ball sync
         if (Key.isDown('b')) {
             if (!meta) {
@@ -674,7 +704,7 @@ function rotationStep(_item) {
 				hitDot(_item);
 			} else if (_item.name == 'start') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).lastChild.lastChild.position);
-				if (_item.intersects(dot2rod(_item))) doubleParent(_item).data.mute = false;
+				if (_item.intersects(dot2rod(_item))) doubleParent(_item).data.wait = false;
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
@@ -688,13 +718,13 @@ function hitDot(_item) {
 		if (!_item.data.hit) {
 			// dot2rod(_item).visible = true;
 			dot2rod(_item).dashArray = [];
-			if (!doubleParent(_item).data.mute) {
+			if ((!doubleParent(_item).data.wait) && (!doubleParent(_item).data.mute)) {
 				_item.data.hit = true;
 				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item, doubleParent(_item).data);
 				else if (doubleParent(_item).data.instrument == 'piano') playPiano(_item, doubleParent(_item).data);
 			}
 			console.log('hit');
-			console.log(_item.rotation + _item.data.initAngle);
+			console.log(_item.rotation + _item.data.initAnge);
 		}
 	} else if (_item.data.hit) {
 		_item.data.hit = false;
@@ -770,7 +800,7 @@ function intersections() {
 function generateMeta(_center) {
     metaBall = new Path.Circle({
         center: _center,
-        radius: 50,
+        radius: 30,
         fillColor: 'white',
         opacity: 0.5
     });
@@ -804,7 +834,7 @@ function initMetaData(_path) {
             tripleParent(_path).data.rod = angle;
             tripleParent(_path).data.playback = metaBall.data.playback;
             tripleParent(_path).data.speed = metaBall.data.speed;
-            tripleParent(_path).data.mute = true;
+            tripleParent(_path).data.wait = true;
         }
     }
 }
@@ -1015,7 +1045,7 @@ function selectScale() {
 	for (var i = 0; i < keys.length; i++) mStep.addChildren(keys[i]);
 	// roots
 	var middleText = text.clone();
-	middleText.content = 'and root';
+	middleText.content = 'and starting note';
 	middleText.point = view.center + new Point(0, 50);
 	mStep.addChild(middleText);
 	var roots = [];

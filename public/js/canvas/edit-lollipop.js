@@ -21,30 +21,40 @@ edit.onMouseDown = function(event) {
             }
             hitResult.item.bringToFront();
 
-            // draw dots
-            if (Key.modifiers.shift) {
-                console.log("bounds: " + path.bounds.width);
-                if (intersectionGroup.hasChildren())
-                    for (var i = 0; i < intersectionGroup.children.length; i++) {
-                        if (event.point.isClose(intersectionGroup.children[i].position, path.bounds.width / 5)) {
-                            var nearestPoint = path.getNearestPoint(intersectionGroup.children[i].position);
-                            drawDot(nearestPoint, path);
+            if (!tripleParent(hitResult.item).data.zoomed) {
+                // draw dots
+                if (Key.modifiers.shift) {
+                    console.log("bounds: " + path.bounds.width);
+                    if (intersectionGroup.hasChildren())
+                        for (var i = 0; i < intersectionGroup.children.length; i++) {
+                            if (event.point.isClose(intersectionGroup.children[i].position, path.bounds.width / 5)) {
+                                var nearestPoint = path.getNearestPoint(intersectionGroup.children[i].position);
+                                drawDot(nearestPoint, path);
+                            }
                         }
-                    }
-                if (divisionGroup.hasChildren())
-                    for (var i = 0; i < divisionGroup.children.length; i++) {
-                        if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 10)) {
-                            var nearestPoint = divisionGroup.children[i].position;
-                            drawDot(nearestPoint, path);
+                    if (divisionGroup.hasChildren())
+                        for (var i = 0; i < divisionGroup.children.length; i++) {
+                            if (event.point.isClose(divisionGroup.children[i].position, path.bounds.width / 10)) {
+                                var nearestPoint = divisionGroup.children[i].position;
+                                drawDot(nearestPoint, path);
+                            }
                         }
-                    }
-                    // var nearestPoint = path.getNearestPoint(event.point);
-                console.log('shift!');
+                        // var nearestPoint = path.getNearestPoint(event.point);
+                    console.log('shift!');
+                } else {
+                    var nearestPoint = path.getNearestPoint(event.point);
+                    drawDot(nearestPoint, path);
+                }
             } else {
-                var nearestPoint = path.getNearestPoint(event.point);
-                drawDot(nearestPoint, path);
+                tripleParent(hitResult.item).data.mute = !tripleParent(hitResult.item).data.mute;
+                if (tripleParent(hitResult.item).data.mute) {
+                    var mask = hitResult.item.clone();
+                    mask.fillColor = 'white';
+                    mask.opacity = 0.5;
+                    mask.removeOnDown();
+                }
             }
-            // console.log(tripleParent(path).children.length);
+
         } else if (path.name == 'dot') {
             // remove dots
             path.parent.data.dotNum -= 1;
@@ -107,6 +117,9 @@ edit.onKeyDown = function(event) {
         console.log("init rotation " + metaBall.data.delta);
     }
     if (hitResult && hitResult.item.name == 'circle') {
+        if (event.key == 'backspace') {
+            deleteAll();
+        }
         // add circle
         if (event.key == '=') {
             addCircle();
@@ -134,7 +147,16 @@ edit.onKeyDown = function(event) {
             var speed = tripleParent(hitResult.item).data.speed - 0.1;
             setSpeed(tripleParent(hitResult.item), speed);
         }
-
+        // zoom in/out
+        if (event.key == 'control') {
+            if (tripleParent(hitResult.item).data.zoomed) {
+                tripleParent(hitResult.item).scale(2);
+                tripleParent(hitResult.item).data.zoomed = false;
+            } else {
+                tripleParent(hitResult.item).scale(0.5);
+                tripleParent(hitResult.item).data.zoomed = true;
+            }
+        }
         // meta ball sync
         if (Key.isDown('b')) {
             if (!meta) {

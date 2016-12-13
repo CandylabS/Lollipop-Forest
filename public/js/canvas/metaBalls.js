@@ -2,7 +2,7 @@
 function generateMeta(_center) {
     metaBall = new Path.Circle({
         center: _center,
-        radius: 50,
+        radius: 30,
         fillColor: 'white',
         opacity: 0.5
     });
@@ -36,7 +36,7 @@ function initMetaData(_path) {
             tripleParent(_path).data.rod = angle;
             tripleParent(_path).data.playback = metaBall.data.playback;
             tripleParent(_path).data.speed = metaBall.data.speed;
-            tripleParent(_path).data.mute = true;
+            tripleParent(_path).data.wait = true;
         }
     }
 }

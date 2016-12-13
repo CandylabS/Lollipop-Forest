@@ -26,7 +26,7 @@ function rotationStep(_item) {
 				hitDot(_item);
 			} else if (_item.name == 'start') {
 				_item.rotate(angularPerFrame(doubleParent(_item)), doubleParent(_item).lastChild.lastChild.position);
-				if (_item.intersects(dot2rod(_item))) doubleParent(_item).data.mute = false;
+				if (_item.intersects(dot2rod(_item))) doubleParent(_item).data.wait = false;
 			} else {
 				_item.rotate(angularPerFrame(tripleParent(_item)), _item.parent.lastChild.position);
 			}
@@ -40,13 +40,13 @@ function hitDot(_item) {
 		if (!_item.data.hit) {
 			// dot2rod(_item).visible = true;
 			dot2rod(_item).dashArray = [];
-			if (!doubleParent(_item).data.mute) {
+			if ((!doubleParent(_item).data.wait) && (!doubleParent(_item).data.mute)) {
 				_item.data.hit = true;
 				if (doubleParent(_item).data.instrument == 'drum') playDrum(_item, doubleParent(_item).data);
 				else if (doubleParent(_item).data.instrument == 'piano') playPiano(_item, doubleParent(_item).data);
 			}
 			console.log('hit');
-			console.log(_item.rotation + _item.data.initAngle);
+			console.log(_item.rotation + _item.data.initAnge);
 		}
 	} else if (_item.data.hit) {
 		_item.data.hit = false;

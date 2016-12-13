@@ -17,6 +17,21 @@ const DRUM = [
 	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/drum/open_hat.wav'
 ];
 
+const PIANO = [
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-a4.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-a5.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-a6.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-c4.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-c5.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-c6.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-ds4.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-ds5.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-ds6.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-fs4.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-fs5.wav',
+	'https://cdn.rawgit.com/CandylabS/Lollipop-Forest/master/samples/Grand%20Piano/piano-f-fs6.wav'
+];
+
 /*
  * ===========================================================================================
  * MERGED: /Users/ssmilkshake/Lollipop-Forest/public/js/web_audio/scale.js
@@ -123,7 +138,8 @@ function getNearestSample(sampleBank, note, octave) {
 		let distanceB = Math.abs(getNoteDistance(note, octave, sampleB.note, sampleB.octave));
 		return distanceA - distanceB;
 	});
-	console.log("sortedBank " + sortedBank[0].note + sortedBank[0].octave);
+	// console.log("sortedBank " + sortedBank[0].note + sortedBank[0].octave);
+	// console.log("atSortedBank" + sampleBank.indexOf(sortedBank[0]));
 	return sortedBank[0];
 };
 
@@ -154,33 +170,79 @@ function getSample(instrument, noteAndOctave) {
 	let sampleBank = SAMPLE_LIBRARY[instrument];
 	let sample = getNearestSample(sampleBank, requestedNote, requestedOctave);
 	let distance = getNoteDistance(requestedNote, requestedOctave, sample.note, sample.octave);
-	let note = SAMPLE_LIBRARY[instrument].indexOf(sample);
+	// let note = SAMPLE_LIBRARY[instrument].indexOf(sample);
 
-	return [note, distance];
+	return fetchSample(sample.file).then(audioBuffer => ({
+		audioBuffer: audioBuffer,
+		distance: distance,
+	}));
 }
+
+// function getSample(instrument, note, octave) {
+// 	let sampleBank = SAMPLE_LIBRARY[instrument];
+// 	let sample = getNearestSample(sampleBank, note, octave);
+// 	let distance = getNoteDistance(note, octave, sample.note, sample.octave);
+// 	// let note = SAMPLE_LIBRARY[instrument].indexOf(sample);
+
+// 	return fetchSample(sample.file).then(audioBuffer => ({
+// 		audioBuffer: audioBuffer,
+// 		distance: distance,
+// 		note: sample.note,
+// 		octave: sample.octave
+// 	}));
+// }
 
 function playPianoSample(instrument, noteAndOctave, gain, pan, convolver, delaySeconds = 0) {
-	let map = getSample(instrument, noteAndOctave)
-	let bufferSource = mPiano[map[0]];
-	let distance = map[1];
-	console.log('distance: ' + distance);
-	let playbackRate = Math.pow(2, distance / 12);
-	bufferSource.playbackRate.value = playbackRate;
-	gainNode.gain.value = gain;
-	panNode.pan.value = pan;
-	if (convolver < 0) {
-		bufferSource.connect(panNode);
-	} else {
-		bufferSource.connect(mConvolver[convolver]);
-		mConvolver[convolver].connect(panNode);
-	}
-	panNode.connect(gainNode);
-	gainNode.connect(audioContext.destination);
-	bufferSource.start(audioContext.currentTime + delaySeconds);
+	getSample(instrument, noteAndOctave).then(({
+		audioBuffer,
+		distance
+	}) => {
+		let playbackRate = Math.pow(2, distance / 12);
+		let bufferSource = audioContext.createBufferSource();
+		bufferSource.buffer = audioBuffer;
+		bufferSource.playbackRate.value = playbackRate;
+		gainNode.gain.value = gain;
+		panNode.pan.value = pan;
+		if (convolver < 0) {
+			bufferSource.connect(panNode);
+		} else {
+			bufferSource.connect(mConvolver[convolver]);
+			mConvolver[convolver].connect(panNode);
+		}
+		panNode.connect(gainNode);
+		gainNode.connect(audioContext.destination);
+		bufferSource.start(audioContext.currentTime + delaySeconds);
+	});
 }
 
+// function playPianoSample(instrument, note, octave, gain, pan, convolver, delaySeconds = 0) {
+// 	// let map = getSample(instrument, noteAndOctave)
+// 	let bufferSource = audioContext.createBufferSource();
+// 	var index = OCTAVE.indexOf(note) * 3 + octave - 4;
+// 	bufferSource.buffer = mPiano[octave]; //mPiano[index];
+// 	let playbackRate = mShift[octave]; //mShift[index];
+// 	console.log("shift: " + mShift[octave]);
+// 	// let distance = map[1];
+// 	// console.log('note: ' + map[0]);
+// 	// console.log('distance: ' + distance);
+// 	// let playbackRate = Math.pow(2, distance / 12);
+// 	bufferSource.playbackRate.value = playbackRate;
+// 	gainNode.gain.value = gain;
+// 	panNode.pan.value = pan;
+// 	if (convolver < 0) {
+// 		bufferSource.connect(panNode);
+// 	} else {
+// 		bufferSource.connect(mConvolver[convolver]);
+// 		mConvolver[convolver].connect(panNode);
+// 	}
+// 	panNode.connect(gainNode);
+// 	gainNode.connect(audioContext.destination);
+// 	bufferSource.start(audioContext.currentTime + delaySeconds);
+// }
+
 function playDrumSample(note, octave, gain, pan, convolver, delaySeconds = 0) {
-	let bufferSource = mDrum[note];
+	let bufferSource = audioContext.createBufferSource();
+	bufferSource.buffer = mDrum[note];
 	gainNode.gain.value = gain;
 	panNode.pan.value = pan;
 	if (convolver < 0) {
@@ -206,20 +268,20 @@ for (var i = 0; i < CONVOLVER.length; i++) {
 var mDrum = [];
 for (var i = 0; i < DRUM.length; i++) {
 	fetchSample(DRUM[i]).then(audioBuffer => {
-		let bufferSource = audioContext.createBufferSource();
-		bufferSource.buffer = audioBuffer;
-		mDrum.push(bufferSource);
+		// let bufferSource = audioContext.createBufferSource();
+		// bufferSource.buffer = audioBuffer;
+		mDrum.push(audioBuffer);
 	});
 }
 
-var mPiano = [];
-for (var i = 0; i < SAMPLE_LIBRARY['Grand Piano'].length; i++) {
-	fetchSample(SAMPLE_LIBRARY['Grand Piano'][i].file).then(audioBuffer => {
-		let bufferSource = audioContext.createBufferSource();
-		bufferSource.buffer = audioBuffer;
-		mPiano.push(bufferSource);
-	});
-};
+// for (var i = 0; i < PIANO.length; i++) {
+// 	// console.log('LIBRARY: '+ bank[i].note + bank[i].octave);
+// 	fetchSample(PIANO[i]).then(audioBuffer => {
+// 		// let bufferSource = audioContext.createBufferSource();
+// 		// bufferSource.buffer = audioBuffer;
+// 		mPiano.push(audioBuffer);
+// 	});
+// };
 
 /*
  * ===========================================================================================
@@ -229,21 +291,23 @@ for (var i = 0; i < SAMPLE_LIBRARY['Grand Piano'].length; i++) {
 
 // percussion
 function playDrum(_item, _data) {
-	playDrumSample(_item.parent.index - 1, '',_data.gain, _data.pan, _data.reverb);
+	playDrumSample(_item.parent.index - 1, '', _data.gain, _data.pan, _data.reverb);
 }
 
 // piano and similar
 function playPiano(_item, _data) {
 	// console.log(_item.parent.index);
-	var octave = _data.octave;
 	var keyArray = findKey(_data.key);
 	var index = _item.parent.index + _data.root;
 	if (index > 7) {
-		note = keyArray[index - 8];
-		octave += 1;
+		index -= 8;
+		// octave += 1;
 	} else {
-		note = keyArray[index - 1];
+		index -= 1;
 	}
+	var note = keyArray[index];
+	var octave = _data.octave;
+	if (index >= shiftKey(_data.key)) octave += 1;
 	console.log('note+octave' + note + octave);
 	console.log('reverb' + _data.reverb);
 	console.log('gain' + _data.gain);
@@ -281,4 +345,37 @@ function findKey(_key) {
 			keyArray = [];
 	};
 	return keyArray;
+}
+
+function shiftKey(_key) {
+	var shift;
+	switch (_key) {
+		case 'F':
+			shift = 4;
+			break;
+		case 'Dm':
+			shift = 6;
+			break;
+		case 'C':
+			shift = 7;
+			break;
+		case 'Am':
+			shift = 2;
+			break;
+		case 'G':
+			shift = 3;
+			break;
+		case 'Em':
+			shift = 5;
+			break;
+		case 'D':
+			shift = 6;
+			break;
+		case 'Bm':
+			shift = 1;
+			break;
+		default:
+			shift = 7;
+	};
+	return shift;
 };

@@ -105,7 +105,7 @@ function selectScale() {
 	for (var i = 0; i < keys.length; i++) mStep.addChildren(keys[i]);
 	// roots
 	var middleText = text.clone();
-	middleText.content = 'and root';
+	middleText.content = 'and starting note';
 	middleText.point = view.center + new Point(0, 50);
 	mStep.addChild(middleText);
 	var roots = [];

@@ -96,13 +96,19 @@ function removeCircle() {
 	} else {
 		// var index = tripleParent(hitResult.item).children.length - 1;
 		tripleParent(hitResult.item).data.dotNum -= doubleParent(hitResult.item).data.dotNum;
-		doubleParent(hitResult.item).removeChildren(0, doubleParent(hitResult.item).children.length - 1);
 		doubleParent(hitResult.item).data.dotNum = 0;
+		if (doubleParent(hitResult.item).children.length > 1)
+			doubleParent(hitResult.item).removeChildren(0, doubleParent(hitResult.item).children.length - 1);
 		if (tripleParent(hitResult.item).data.dotNum <= 0) {
 			tripleParent(hitResult.item).firstChild.lastChild.remove(); // remove startpoint
 			tripleParent(hitResult.item).data.dotNum = 0;
 		}
 	}
+}
+
+function deleteAll() {
+	tripleParent(hitResult.item).remove();
+	draw.activate();
 }
 
 // initialization
@@ -115,7 +121,9 @@ function lollipopInit() {
 		speed: forestSpeed,
 		orientation: 1,
 		dotNum: 0,
+		wait: false,
 		mute: false,
+		zoomed: false,
 		// instrument: 'piano'
 		key: 'C',
 		root: 0,
@@ -206,7 +214,7 @@ function createRod(_lollipopContainer) {
 	console.log("from, to: " + from + '-' + to);
 	var mRod = new Path.Line(from, to).rotate(angle, from);
 	mRod.style = {
-		strokeColor: '#9C9C9A',
+		strokeColor: '#676161',
 		dashArray: mDashArray,
 		visible: true
 	}

@@ -98,6 +98,7 @@ function getNearestSample(sampleBank, note, octave) {
 		let distanceB = Math.abs(getNoteDistance(note, octave, sampleB.note, sampleB.octave));
 		return distanceA - distanceB;
 	});
-	console.log("sortedBank " + sortedBank[0].note + sortedBank[0].octave);
+	// console.log("sortedBank " + sortedBank[0].note + sortedBank[0].octave);
+	// console.log("atSortedBank" + sampleBank.indexOf(sortedBank[0]));
 	return sortedBank[0];
 }

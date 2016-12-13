@@ -1,20 +1,22 @@
 // percussion
 function playDrum(_item, _data) {
-	playDrumSample(_item.parent.index - 1, '',_data.gain, _data.pan, _data.reverb);
+	playDrumSample(_item.parent.index - 1, '', _data.gain, _data.pan, _data.reverb);
 }
 
 // piano and similar
 function playPiano(_item, _data) {
 	// console.log(_item.parent.index);
-	var octave = _data.octave;
 	var keyArray = findKey(_data.key);
 	var index = _item.parent.index + _data.root;
 	if (index > 7) {
-		note = keyArray[index - 8];
-		octave += 1;
+		index -= 8;
+		// octave += 1;
 	} else {
-		note = keyArray[index - 1];
+		index -= 1;
 	}
+	var note = keyArray[index];
+	var octave = _data.octave;
+	if (index >= shiftKey(_data.key)) octave += 1;
 	console.log('note+octave' + note + octave);
 	console.log('reverb' + _data.reverb);
 	console.log('gain' + _data.gain);
@@ -52,4 +54,37 @@ function findKey(_key) {
 			keyArray = [];
 	};
 	return keyArray;
+}
+
+function shiftKey(_key) {
+	var shift;
+	switch (_key) {
+		case 'F':
+			shift = 4;
+			break;
+		case 'Dm':
+			shift = 6;
+			break;
+		case 'C':
+			shift = 7;
+			break;
+		case 'Am':
+			shift = 2;
+			break;
+		case 'G':
+			shift = 3;
+			break;
+		case 'Em':
+			shift = 5;
+			break;
+		case 'D':
+			shift = 6;
+			break;
+		case 'Bm':
+			shift = 1;
+			break;
+		default:
+			shift = 7;
+	};
+	return shift;
 }
