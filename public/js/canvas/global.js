@@ -34,7 +34,7 @@ var mLollipopContainer, mDotContainer, mReference;
 var circle, mRod, mDot, mTimer;
 var _dot = new Path.Circle({
     center: new Point(0, 0),
-    radius: 5,
+    radius: 7,
     fillColor: 'white',
     strokeColor: 'black',
     strokeWidth: 0.5

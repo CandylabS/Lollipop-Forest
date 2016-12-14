@@ -2,7 +2,7 @@
 function generateMeta(_center) {
     metaBall = new Path.Circle({
         center: _center,
-        radius: 30,
+        radius: 35,
         fillColor: 'white',
         opacity: 0.5
     });
@@ -24,6 +24,7 @@ function initMetaData(_path) {
         var ref = tripleParent(_path).firstChild.lastChild;
         if (!metaBall.data.fire) {
             metaBall.data.delta = tripleParent(_path).data.rod - (ref.data.initAngle + ref.rotation);
+            metaBall.data.orientation = tripleParent(_path).data.orientation;
             metaBall.data.playback = tripleParent(_path).data.playback;
             metaBall.data.speed = tripleParent(_path).data.speed;
             console.log("meta delta: " + metaBall.data.delta);
@@ -31,7 +32,8 @@ function initMetaData(_path) {
             console.log("meta speed: " + metaBall.data.playback);
             metaBall.data.fire = true;
         } else {
-            var angle = metaBall.data.delta + (ref.data.initAngle + ref.rotation);
+            var ori = metaBall.data.orientation * tripleParent(_path).data.orientation;
+            var angle = metaBall.data.delta * ori + (ref.data.initAngle + ref.rotation);
             path2rod(_path).rotate(angle - tripleParent(_path).data.rod, tripleLastChild(tripleParent(_path)).position);
             tripleParent(_path).data.rod = angle;
             tripleParent(_path).data.playback = metaBall.data.playback;
