@@ -258,6 +258,7 @@ function removeCircle() {
 }
 
 function deleteAll() {
+	circlePaths.splice(tripleParent(hitResult.item).index, 1);
 	tripleParent(hitResult.item).remove();
 	draw.activate();
 }

@@ -70,6 +70,7 @@ function selectInstrument() {
 	steps.push(mStep);
 	keySelector.visible = false;
 	rootSelector.visible = false;
+	reverbSelector.visible = false;
 	if (isNew) menu.addChild(steps[0]);
 	else {
 		menu.lastChild.remove();
