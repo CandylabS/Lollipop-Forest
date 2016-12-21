@@ -1,6 +1,7 @@
 {
   "name": "Lollipop-Forest",
   "scripts": {
+    "start": "node debug.js"
   },
   "env": {
   },
